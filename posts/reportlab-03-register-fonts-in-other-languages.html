@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>ReportLab 如何注册使用其他语言字体 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="ReportLab 如何注册使用其他语言字体 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/reportlab-03-register-fonts-in-other-languages.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2022-12-04T13:26:20.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/ReportLab-相关-开发记录/">ReportLab 相关 - 开发记录</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>December</span>
+            <span>4,</span>
+            <span>2022</span>
+        </div>
+        
+
+        <h1 class="title">ReportLab 如何注册使用其他语言字体</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：ReportLab默认的支持的西欧字体都有哪些？如何注册并在模版中使用中日韩亚洲字体？</p>
+<p>Abstract: What are the default supported Western European fonts in ReportLab? How do I register and use CJK Asian fonts in my templates?</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h2 id="ReportLab-如何注册使用其他语言字体"><a href="#ReportLab-如何注册使用其他语言字体" class="headerlink" title="ReportLab 如何注册使用其他语言字体"></a>ReportLab 如何注册使用其他语言字体</h2><h3 id="默认语言"><a href="#默认语言" class="headerlink" title="默认语言"></a>默认语言</h3><p>ReportLab默认支持西欧语言，例如英文，德语和法语（未测试）。默认支持14种字体，该内容在文档章节3.3 Using fonts中有介绍，具体字体名称如下：</p>
+<ul>
+<li>Helvetica</li>
+<li>Helvetica-Bold</li>
+<li>Courier</li>
+<li>Courier-Bold</li>
+<li>Courier-Oblique</li>
+<li>Courier-BoldOblique</li>
+<li>Helvetica-Oblique</li>
+<li>Helvetica-BoldOblique</li>
+<li>Times-Roman</li>
+<li>Times-Bold</li>
+<li>Times-Italic</li>
+<li>Times-BoldItalic</li>
+<li>ZapfDingbats</li>
+<li>Symbol</li>
+</ul>
+<p>上述14种默认字体，也是Adobe’s Acrobat Reader默认支持的14种字体。</p>
+<h3 id="中日韩亚洲字体"><a href="#中日韩亚洲字体" class="headerlink" title="中日韩亚洲字体"></a>中日韩亚洲字体</h3><p>ReportLab支持TrueType 字体支持。未注册非西欧字体却使用非西欧字符，程序并不会报错，但是到处的PDF文件中会出现乱码，注册TrueType字体支持字体的代码，官方文档介绍如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># we know some glyphs are missing, suppress warnings</span></span><br><span class="line"><span class="keyword">import</span> reportlab.rl_config</span><br><span class="line">reportlab.rl_config.warnOnMissingFontGlyphs = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> reportlab.pdfbase <span class="keyword">import</span> pdfmetrics</span><br><span class="line"><span class="keyword">from</span> reportlab.pdfbase.ttfonts <span class="keyword">import</span> TTFont</span><br><span class="line">pdfmetrics.registerFont(TTFont(<span class="string">&#x27;Vera&#x27;</span>, <span class="string">&#x27;Vera.ttf&#x27;</span>))</span><br><span class="line">pdfmetrics.registerFont(TTFont(<span class="string">&#x27;VeraBd&#x27;</span>, <span class="string">&#x27;VeraBd.ttf&#x27;</span>))</span><br><span class="line">pdfmetrics.registerFont(TTFont(<span class="string">&#x27;VeraIt&#x27;</span>, <span class="string">&#x27;VeraIt.ttf&#x27;</span>))</span><br><span class="line">pdfmetrics.registerFont(TTFont(<span class="string">&#x27;VeraBI&#x27;</span>, <span class="string">&#x27;VeraBI.ttf&#x27;</span>))</span><br><span class="line">canvas.setFont(<span class="string">&#x27;Vera&#x27;</span>, <span class="number">32</span>)</span><br><span class="line">canvas.drawString(<span class="number">10</span>, <span class="number">150</span>, <span class="string">&quot;Some text encoded in UTF-8&quot;</span>)</span><br><span class="line">canvas.drawString(<span class="number">10</span>, <span class="number">100</span>, <span class="string">&quot;In the Vera TT Font!&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>对于相似字体可以使用如下代码注册为字体家族：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> reportlab.pdfbase.pdfmetrics <span class="keyword">import</span> registerFontFamily</span><br><span class="line">registerFontFamily(<span class="string">&#x27;Vera&#x27;</span>,normal=<span class="string">&#x27;Vera&#x27;</span>,bold=<span class="string">&#x27;VeraBd&#x27;</span>,italic=<span class="string">&#x27;VeraIt&#x27;</span>,boldItalic=<span class="string">&#x27;VeraBI&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>如在模版中使用下述代码。如果我们只有 Vera 常规字体，没有粗体或斜体，那么我们必须将所有字体映射到相同的内部字体名称。&lt;b&gt;和&lt;i&gt;标签现在可以安全使用，但会没有效果。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">font</span> <span class="attr">name</span>=<span class="string">&quot;Times-Roman&quot;</span> <span class="attr">size</span>=<span class="string">&quot;14&quot;</span>&gt;</span>This is in Times-Roman<span class="tag">&lt;/<span class="name">font</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">font</span> <span class="attr">name</span>=<span class="string">&quot;Vera&quot;</span> <span class="attr">color</span>=<span class="string">&quot;magenta&quot;</span> <span class="attr">size</span>=<span class="string">&quot;14&quot;</span>&gt;</span>and this is in magenta <span class="tag">&lt;<span class="name">b</span>&gt;</span>Vera!<span class="tag">&lt;/<span class="name">b</span>&gt;</span><span class="tag">&lt;/<span class="name">font</span>&gt;</span>,&quot;Using TTF fonts in paragraphs&quot;</span><br></pre></td></tr></table></figure>
+
+<p>在项目中，我们使用思源中文字体，将相关字体文件保存在项目文件夹fonts之后，在Python代码中头部使用下面的代码注册字符。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> reportlab.pdfbase <span class="keyword">import</span> pdfmetrics</span><br><span class="line"><span class="keyword">from</span> reportlab.pdfbase.ttfonts <span class="keyword">import</span> TTFont</span><br><span class="line"></span><br><span class="line">pdfmetrics.registerFont(TTFont(<span class="string">&#x27;SourceHanSerifSC&#x27;</span>, <span class="string">&#x27;../fonts/SourceHanSerifSC-VF.ttf&#x27;</span>))  <span class="comment">#注册字体</span></span><br><span class="line">pdfmetrics.registerFont(TTFont(<span class="string">&#x27;SourceHanSerifSCBold&#x27;</span>, <span class="string">&#x27;../fonts/SourceHanSerifCN-Bold.ttf&#x27;</span>))  <span class="comment">#注册字体</span></span><br></pre></td></tr></table></figure>
+
+<p>上述代码中TTFont函数的第一参数为字体的内部表示名称。需要使用该名称在在RML模版文件的头部进行如下声明：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">document</span> <span class="attr">filename</span>=<span class="string">&quot;demo.pdf&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">docinit</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">registerCidFont</span> <span class="attr">faceName</span>=<span class="string">&quot;SourceHanSerifSC&quot;</span> /&gt;</span></span><br><span class="line">      	<span class="tag">&lt;<span class="name">registerCidFont</span> <span class="attr">faceName</span>=<span class="string">&quot;SourceHanSerifSCBold&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">docinit</span>&gt;</span></span><br><span class="line">  	...</span><br><span class="line"><span class="tag">&lt;/<span class="name">document</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="本文小结"><a href="#本文小结" class="headerlink" title="本文小结"></a>本文小结</h3><p>这些背景知识是自己在完成任务的一开始具有的疑问，进而中查阅资料再收集整理成文的，这利于自己，也方便你我。如果你有问题或者不同的见解，欢迎关注我的微信公众号，然后留言讨论。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/ReportLab/" class="tag">#ReportLab</a><a href="/tags/字体/" class="tag">#字体</a><a href="/tags/语言/" class="tag">#语言</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/machining-06-rarz-conversion.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">机械加工 之表面粗糙度Ra与Rz转换</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/reportlab-02-rml-specification-file-dtd.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">ReportLab 模版RML文件的规范文件DTD</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

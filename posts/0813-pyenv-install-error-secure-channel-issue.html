@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Python 杂记之 解决Win 7中安装与配置pyenv-win时因secure channel错误所引起的问题 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Python 杂记之 解决Win 7中安装与配置pyenv-win时因secure channel错误所引起的问题 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/0813-pyenv-install-error-secure-channel-issue.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2021-06-19T06:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Python-相关-8-Python-杂记/">Python 相关 - 8. Python 杂记</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>June</span>
+            <span>19,</span>
+            <span>2021</span>
+        </div>
+        
+
+        <h1 class="title">Python 杂记之 解决Win 7中安装与配置pyenv-win时因secure channel错误所引起的问题</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：如何解决pyenv的Windows版本pyenv-win在Windows 7中安装配置pyenv-win时，遇到的:: [ERROR] :: An error occurred in the support of the secure channel，为什么会存在secure protocol 安全协议的问题？如何在Window 7系统中开启TLS 1.0和 TSL 2.0两个协议，什么是SChannel ？如何设置pyenv版本列表中的system选项？mlink命令中的/f与/d的区别是什么？</p>
+<p>Abstract: How to solve the problem of pyenv-win when installing and configuring pyenv-win in Windows 7:: [ERROR] :: An error occurred in the support of the secure channel, why there is a secure protocol problem? ? How to enable TLS 1.0 and TSL 2.0 in Window 7 system, what is SChannel? How to set the system option in the pyenv version list? What is the difference between /f and /d in the mlink command?</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h2 id="所遇问题"><a href="#所遇问题" class="headerlink" title="所遇问题"></a>所遇问题</h2><p>在Windows 系统中在尝试安装配置pyenv-win时，在使用<code>pyenv install</code>命令安装其他Python版本的时候，有可能碰见如下问题。或者只有我不幸遇见了这个问题，这篇文章可以帮助你解决这个问题。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\nobody&gt;pyenv install 3.9.4</span><br><span class="line">:: [Info] ::  Mirror: https://www.python.org/ftp/python</span><br><span class="line">:: [Downloading] ::  3.9.4 ...</span><br><span class="line">:: [Downloading] ::  From https://www.python.org/ftp/python/3.9.4/python-3.9.4-amd64-webinstall.exe</span><br><span class="line">:: [Downloading] ::  To   C:\Users\nobody\.pyenv\pyenv-win\install_cache\python-3.9.4-amd64-webinstall.exe</span><br><span class="line">:: [ERROR] :: Im Support des sicheren Channels ist ein Fehler aufgetreten</span><br></pre></td></tr></table></figure>
+
+<p>由于当前系统为德语版，错误提示信息为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:: [ERROR] :: Im Support des sicheren Channels ist ein Fehler aufgetreten</span><br></pre></td></tr></table></figure>
+
+<p>该错误问题的英文翻译为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:: [ERROR] :: An error occurred <span class="keyword">in</span> the support of the secure channel</span><br></pre></td></tr></table></figure>
+
+<h2 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h2><p>该问题出现原因的关键字为，secure protocol 即安全协议，具体为当前系统为对传输层（Transport Layer Security ）TLS 1.0 和TLS 2.0 这两个协议提供支持。一些应用和服务在开发是，被设计成，为了实现安全套接字连接，会选择使用WinHTTP，使用WinHTTP时，会选择使用WINHTTP_OPTION_SECURE_PROTOCOLS这个标识符，可改标识符的定义不包含对TLS 1.0 和TLS 2.0 协议的使用。Windows 7 允许通过设置一个名为<code>DefaultSecureProtocol</code> 的注册表键的值，来控制WINHTTP_OPTION_SECURE_PROTOCOLS这个标识符的定义，即定义当程序WINHTTP_OPTION_SECURE_PROTOCOLS时，Windows系统应该为其开启那些协议（或Windows 系统应视为该标识符支持的协议应为什么），具体参见<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/topic/update-to-enable-tls-1-1-and-tls-1-2-as-default-secure-protocols-in-winhttp-in-windows-c4bd73d2-31d7-761e-0178-11268bb10392">Update to enable TLS 1.1 and TLS 1.2 as default secure protocols in WinHTTP in Windows</a>这篇官方文章。</p>
+<p>在Windows系统中，<code>DefaultSecureProtocol</code> 合法值和其对应含义如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th align="left">合法值</th>
+<th align="left">值的含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0x00000008</td>
+<td align="left">默认开启SSL 2.0</td>
+</tr>
+<tr>
+<td align="left">0x00000020</td>
+<td align="left">默认开启SSL 3.0</td>
+</tr>
+<tr>
+<td align="left">0x00000080</td>
+<td align="left">默认开启 TLS 1.0</td>
+</tr>
+<tr>
+<td align="left">0x00000200</td>
+<td align="left">默认开启 TLS 1.1</td>
+</tr>
+<tr>
+<td align="left">0x00000800</td>
+<td align="left">默认开启 TLS 1.2</td>
+</tr>
+</tbody></table>
+<p>举例来说，如果我们想为WINHTTP_OPTION_SECURE_PROTOCOLS这个标识同时开启TLS 1.1 和 TLS1.2的支持，那么我们需要将0x00000200 与0x00000800相加，其结果应为0x00000a00。我们将<code>DefaultSecureProtocol</code> 的值设置为0x00000a00，就可以同时开始TLS 1.1 和 TLS1.2这两个协议。</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><h3 id="第一步，检查注册表，如有必要添加DefaultSecureProtocol键并设置响应的值。"><a href="#第一步，检查注册表，如有必要添加DefaultSecureProtocol键并设置响应的值。" class="headerlink" title="第一步，检查注册表，如有必要添加DefaultSecureProtocol键并设置响应的值。"></a>第一步，检查注册表，如有必要添加DefaultSecureProtocol键并设置响应的值。</h3><p><code>DefaultSecureProtocol</code> 这个注册表的键，在32位的Windows系统位于，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\WinHttp</span><br></pre></td></tr></table></figure>
+
+<p>如下图所示。</p>
+<p><img src="/posts/0813-pyenv-install-error-secure-channel-issue/image-20210619142132677.png" alt="image-20210619142132677"></p>
+<p>在64位的Windows系统位于，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Internet Settings\WinHttp</span><br></pre></td></tr></table></figure>
+
+<p>64位系统</p>
+<p><img src="/posts/0813-pyenv-install-error-secure-channel-issue/image-20210619142014086.png" alt="image-20210619142014086"></p>
+<p>需要注意的是，如果注册表默认没有<code>DefaultSecureProtocol</code> 这个键，在64位Window系统中，要在以上两处添加这个键，并设置相应的合法值，值的类型为DWORD。</p>
+<p>也可以使用Windows官方提供的快速工具Easy Fix 来实现上述键值的自动添加。下载链接：<a target="_blank" rel="noopener" href="https://download.microsoft.com/download/0/6/5/0658B1A7-6D2E-474F-BC2C-D69E5B9E9A68/MicrosoftEasyFix51044.msi%E3%80%82">https://download.microsoft.com/download/0/6/5/0658B1A7-6D2E-474F-BC2C-D69E5B9E9A68/MicrosoftEasyFix51044.msi。</a></p>
+<p>该工具除了在WinHttp这个键下（在64位系统中，注册表的上述两处位置），添加<code>DefaultSecureProtocol</code> 这个键和默认值0x00000a00。还会将在下列两处位置添加一个名为<code>SecureProtocol</code>的新键和默认值0x00000a00，以开启IE浏览器对TLS 1.1 和 TLS 1.2两个协议的支持。两处位置如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings</span><br></pre></td></tr></table></figure>
+
+<p>添加后的结果如下图所示：</p>
+<p><img src="/posts/0813-pyenv-install-error-secure-channel-issue/image-20210619150914631.png" alt="image-20210619150914631"></p>
+<h3 id="第二步，在Windows-7上开启SChannel组件级别的TLS-1-0和TLS-1-2两个协议的支持"><a href="#第二步，在Windows-7上开启SChannel组件级别的TLS-1-0和TLS-1-2两个协议的支持" class="headerlink" title="第二步，在Windows 7上开启SChannel组件级别的TLS 1.0和TLS 1.2两个协议的支持"></a>第二步，在Windows 7上开启SChannel组件级别的TLS 1.0和TLS 1.2两个协议的支持</h3><p><strong>SChannel</strong>也被称为Secure Channel 23，是一个windows子系统，当windows应用程序想要做任何与TLS相关的事情时，比如与远程服务器建立一个加密会话，或接受来自客户端的TLS连接，就会使用Schannel，从体系来看，SChannel实现了Security Support Provider Interface (SSPI)接口，是微软提供的SSP包之一。SSP包还包括CredSSP、Negotiate、NTLM、Kerberos和Digest24等等。</p>
+<p>SChannel使用示例：</p>
+<p><strong>HTTPS连接</strong></p>
+<blockquote>
+<p>由IE，Edge，powershell的<code>InvokeWebRequest</code>发起的 由IIS web server收到的</p>
+</blockquote>
+<p><strong>RDP连接</strong></p>
+<blockquote>
+<p>客户端的mstsc.exe 服务器上的终端服务（svchost.exe中的termsrv.dll）</p>
+</blockquote>
+<p>微软官方文档TLS-SSL设置一文提到，若要在Windows 7系统上协商和启用TLS 1.0和TLS 2.0的版本就需要在相应的子项中创建<code>DisabledByDefault</code>的子健，并将该键的值设置为设置0。</p>
+<p>对于TLS 1.0，注册表位置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.1\Client</span><br></pre></td></tr></table></figure>
+
+<p>对于TLS 1.2，注册表位置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\TLS 1.2\Client</span><br></pre></td></tr></table></figure>
+
+<p>添加之后结果应如下图所示。</p>
+<p><img src="/posts/0813-pyenv-install-error-secure-channel-issue/image-20210619141719216.png" alt="image-20210619141719216"></p>
+<h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>当完成上述注册表的添加与修改后就可以尝试重新打开cmd，并使用命令<code>pyenv install xxx</code> 安装新的版本，我测试的结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\nobody&gt;pyenv install 3.7.9</span><br><span class="line">:: [Info] ::  Mirror: https://www.python.org/ftp/python</span><br><span class="line">:: [Downloading] ::  3.7.9 ...</span><br><span class="line">:: [Downloading] ::  From https://www.python.org/ftp/python/3.7.9/python-3.7.9-amd64-webinstall.exe</span><br><span class="line">:: [Downloading] ::  To   C:\Users\nobody\.pyenv\pyenv-win\install_cache\python-3.7.9-amd64-webinstall.exe</span><br><span class="line">:: [Installing] ::  3.7.9 ...</span><br><span class="line">:: [Info] :: completed! 3.7.9</span><br></pre></td></tr></table></figure>
+
+<p>检查安装结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\nobody&gt;pyenv versions</span><br><span class="line">  3.7.9</span><br></pre></td></tr></table></figure>
+
+<p>相比pyenv在其他系统如Linux 和Mac OS中，<code>pyenv versions</code>的结果少了一个<strong>system</strong>, 即表示系统预装，或者系统级别的Python版本，可以将系统安装的Python通过<code>mklink /J</code>或者<code>mklink /D</code> 命令创建一个快捷方式，即link，将系统安装的Python映射到pyevn的相关子目录，如下图，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\nobody&gt;mklink /J <span class="string">&quot;C:\Users\nobody\.pyenv\pyenv-win\versions\system&quot;</span> <span class="string">&quot;C:\Python27&quot;</span></span><br><span class="line">Connection created <span class="keyword">for</span> C:\Users\nobody\.pyenv\pyenv-win\versions\system &lt;&lt;===&gt;&gt; C:\Python27</span><br></pre></td></tr></table></figure>
+
+<p>然后在使用<code>pyenv versions</code>检查已安装的版本，会得到如下结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\nobody&gt;pyenv versions</span><br><span class="line">  3.7.9</span><br><span class="line">  system</span><br></pre></td></tr></table></figure>
+
+<p>在使用<code>pyenv global system</code>·将系统安装的python版本设置为全局默认版本，再次使用<code>pyenv versions</code>检查已安装的版本，会得到如下结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\nobody&gt;pyenv versions</span><br><span class="line">  3.7.9</span><br><span class="line">* system (set by C:\Users\nobody\.pyenv\pyenv-win\version)</span><br></pre></td></tr></table></figure>
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>以上即为本人在Windows 7系统中安装和配置pyenv时所遇问题和找到的解决方案。上述接近问题的办法并非自己原创，部分内容来自官方文档，自己总结了一下，假如了一些扩展性的知识，文章是想作为自己学习的日志，方便自己日后回顾。上述内容仅为一家之言，并非最优，若读者有别的思路也欢迎关注我的个人微信公众号，一起讨论学习。</p>
+<h2 id="补充内容"><a href="#补充内容" class="headerlink" title="补充内容"></a>补充内容</h2><h3 id="mklink命令-d和-j参数的区别总结如下："><a href="#mklink命令-d和-j参数的区别总结如下：" class="headerlink" title="mklink命令/d和/j参数的区别总结如下："></a>mklink命令/d和/j参数的区别总结如下：</h3><h4 id="差异1，当创建时"><a href="#差异1，当创建时" class="headerlink" title="差异1，当创建时"></a>差异1，当创建时</h4><ul>
+<li>/d 可以使用相对路径方式创建</li>
+<li>/j  必须绝对路径方式创建</li>
+</ul>
+<p>此区别意义不大，建议所有的mklink目录均用绝对路径创建</p>
+<h4 id="差异2，当复制和剪切时"><a href="#差异2，当复制和剪切时" class="headerlink" title="差异2，当复制和剪切时"></a>差异2，当复制和剪切时</h4><ul>
+<li>复制：/d /j 均生成源目录的内容副本，变为一般文件夹</li>
+<li>剪切/移动：<ul>
+<li>/d 生成的目录，移动到其他地方，仍旧保持链接。对源目录无影响，/d生成的目录消失</li>
+<li>/j   生成的目录，移动到其他地方，会产生一个新的副本文件夹，源文件夹内容全部移至新普通文件夹内，源文件夹清空，源文件夹仍旧存在，/j生成的目录也依旧存在</li>
+</ul>
+</li>
+</ul>
+<h4 id="差异3，当使用软件打开时"><a href="#差异3，当使用软件打开时" class="headerlink" title="差异3，当使用软件打开时"></a>差异3，当使用软件打开时</h4><ul>
+<li>/d生成的目录，地址栏会跳到源目录位置。</li>
+<li>/J生成的目录，地址栏不会跳到源目录位置。</li>
+</ul>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/杂记/" class="tag">#杂记</a><a href="/tags/pyenv/" class="tag">#pyenv</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/installshield-QA-howto-use-iscmdbld-build-project.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Install Shield 如何使用ISCmdBld构建安装包</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/hexo-04-use-mermaid-and-matjax-with-hexo-tranquilpeak-theme.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Hexo 如何在tranquilpeak主题中使用mermaid语句与Latex语句</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

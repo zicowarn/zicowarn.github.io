@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Inno Setup 如何以管理员的身份运行 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Inno Setup 如何以管理员的身份运行 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/inno-01-run-as-admin.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2019-06-25T00:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Inno-Setup-相关-实战经验/">Inno Setup 相关 - 实战经验</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>June</span>
+            <span>25,</span>
+            <span>2019</span>
+        </div>
+        
+
+        <h1 class="title">Inno Setup 如何以管理员的身份运行</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h2 id="Inno-Setup-如何以管理员的身份相关"><a href="#Inno-Setup-如何以管理员的身份相关" class="headerlink" title="Inno Setup 如何以管理员的身份相关"></a>Inno Setup 如何以管理员的身份相关</h2><h3 id="1-如何以管理员身份运行一个Batch脚本文件"><a href="#1-如何以管理员身份运行一个Batch脚本文件" class="headerlink" title="1. 如何以管理员身份运行一个Batch脚本文件"></a>1. 如何以管理员身份运行一个Batch脚本文件</h3><p>If you are using <code>[Run]</code> section then make sure you use <code>runascurrentuser</code> flag (If this flag is specified, the spawned process will inherit Setup/Uninstall’s user credentials (typically, full administrative privileges))</p>
+<span id="more"></span>
+
+<p>Else there are three ways how to run applications programatically (recommended way):</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function Exec(const Filename, Params, WorkingDir: String; const ShowCmd: Integer; const Wait: TExecWait; var ResultCode: Integer): Boolean;</span><br><span class="line"></span><br><span class="line">function ShellExec(const Verb, Filename, Params, WorkingDir: String; const ShowCmd: Integer; const Wait: TExecWait; var ErrorCode: Integer): Boolean;</span><br><span class="line"></span><br><span class="line">function ShellExecAsOriginalUser(const Verb, Filename, Params, WorkingDir: String; const ShowCmd: Integer; const Wait: TExecWait; var ErrorCode: Integer): Boolean;</span><br></pre></td></tr></table></figure>
+
+<p>You should use <code>Exec()</code> or <code>ShellExec()</code> because they open the specified file or performs another action specified by Verb, using the same credentials as Setup/Uninstall.</p>
+<p>But none of mentioned ways will work if your installer is not running in elevated mode. So make sure the UAC window will appear before installer starts:</p>
+<p>In section <code>[Setup]</code> use directive <code>PrivilegesRequired</code></p>
+<p>Valid values:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">none`, `poweruser`, `admin`, or `lowest</span><br></pre></td></tr></table></figure>
+
+<p>Use admin to ensure appropriate credentials.</p>
+<h3 id="2-各个合法值在不同版本中的表现"><a href="#2-各个合法值在不同版本中的表现" class="headerlink" title="2. 各个合法值在不同版本中的表现"></a>2. 各个合法值在不同版本中的表现</h3><h4 id="合法值为："><a href="#合法值为：" class="headerlink" title="合法值为："></a>合法值为：</h4><ul>
+<li>none, poweruser, admin, or lowest</li>
+</ul>
+<h4 id="默认值为：Default-value"><a href="#默认值为：Default-value" class="headerlink" title="默认值为：Default value:"></a>默认值为：Default value:</h4><ul>
+<li>admin</li>
+</ul>
+<h4 id="描述Description"><a href="#描述Description" class="headerlink" title="描述Description:"></a>描述Description:</h4><p>The effect of this directive depends on which version of Windows the user is running:</p>
+<p>此参数的效果取决于用户运行的Windows版本：</p>
+<p><strong>On Windows Vista and later:</strong></p>
+<p>This directive affects whether elevated rights are requested (via a User Account Control dialog) when the installation is started.</p>
+<p>该指令影响安装开始时是否要求提升权限（通过“用户帐户控制”对话框）。</p>
+<p>When set to admin (the default) or poweruser, Setup will always run with administrative privileges. If Setup was started by an unprivileged user, Windows will ask for the password to an account that has administrative privileges, and Setup will then run under that account.</p>
+<p>当设置为admin（默认）或超级用户时，安装程序将始终以管理特权运行。 如果安装程序是由非特权用户启动的，则Windows将要求输入具有管理特权的帐户的密码，然后安装程序将在该帐户下运行。</p>
+<p>When set to none, Setup will only run with administrative privileges if it was started by a member of the Administrators group. Do not use this setting unless you are sure your installation will run successfully on unprivileged accounts.</p>
+<p>如果设置为none，则安装程序仅由Administrators组的成员启动时才具有管理特权。 除非您确定安装将在非特权帐户上成功运行，否则不要使用此设置。</p>
+<p>When set to lowest, Setup will not request to be run administrative privileges even if it was started by a member of the Administrators group. Additionally, the uninstall info root key will always be HKEY_CURRENT_USER, and the “common” forms of the Shell Folder constants are mapped to the “user” forms, even if administrative privileges are available. Do not use this setting unless you are sure your installation will run successfully on unprivileged accounts.</p>
+<p>设置为最低时，即使安装程序是由Administrators组的成员启动的，它也不会请求运行管理权限。 此外，卸载信息的根密钥将始终为HKEY_CURRENT_USER，并且即使具有管理特权，Shell文件夹常量的“公共”形式也将映射到“用户”形式。 除非您确定安装将在非特权帐户上成功运行，否则不要使用此设置。</p>
+<p><strong>On Windows NT/2000/XP/2003</strong></p>
+<p>This directive specifies the minimum user privileges required to run the installation.</p>
+<p>该指令指定运行安装所需的最低用户特权。</p>
+<p>When set to admin (the default), Setup will only run if the user is a member of the Administrators group. Otherwise, it will display the following message and exit: “You must be logged in as an administrator when installing this program.”</p>
+<p>当设置为admin（默认值）时，仅当用户是Administrators组的成员时，安装程序才会运行。 否则，它将显示以下消息并退出：“安装此程序时，您必须以管理员身份登录。”</p>
+<p>When set to poweruser, Setup will only run if the user is a member of the Administrators or Power Users groups. Otherwise, it will display the following message and exit: “You must be logged in as an administrator or as a member of the Power Users group when installing this program.”</p>
+<p>设置为poweruser时，仅当用户是Administrators或Power Users组的成员时，安装程序才会运行。 否则，它将显示以下消息并退出：“安装此程序时，您必须以管理员或Power Users组成员的身份登录。”</p>
+<p>When set to none Setup will not check the user’s group membership. Do not use this setting unless you are sure your installation will run successfully on unprivileged accounts.</p>
+<p>设置为none时，安装程序将不检查用户的组成员身份。 除非您确定安装将在非特权帐户上成功运行，否则不要使用此设置。</p>
+<p>When set to lowest Setup will not check the user’s group membership. Additionally, the uninstall info root key will always be HKEY_CURRENT_USER, and the “common” forms of the Shell Folder constants are mapped to the “user” forms, even if administrative privileges are available. Do not use this setting unless you are sure your installation will run successfully on unprivileged accounts.</p>
+<p>设置为最低时，安装程序将不检查用户的组成员身份。 此外，卸载信息的根密钥将始终为HKEY_CURRENT_USER，并且即使具有管理特权，Shell文件夹常量的“公共”形式也将映射到“用户”形式。 除非您确定安装将在非特权帐户上成功运行，否则不要使用此设置。</p>
+<p><strong>On Windows 95/98/Me</strong></p>
+<p>This directive has no effect on these versions of Windows.</p>
+<p>该指令对这些版本的Windows无效。</p>
+<h3 id="以管理员身份安装和非管理员身份安装的区别"><a href="#以管理员身份安装和非管理员身份安装的区别" class="headerlink" title="以管理员身份安装和非管理员身份安装的区别"></a>以管理员身份安装和非管理员身份安装的区别</h3><p>An installation can run in one of two modes: administrative or non administrative. Which mode is selected is specified by the <a target="_blank" rel="noopener" href="http://www.jrsoftware.org/ishelp/topic_setup_privilegesrequired.htm">PrivilegesRequired</a> and <a target="_blank" rel="noopener" href="http://www.jrsoftware.org/ishelp/topic_setup_privilegesrequiredoverridesallowed.htm">PrivilegesRequiredOverridesAllowed</a> [Setup] section directives.</p>
+<p>In administrative install mode:</p>
+<ul>
+<li>The <code>&#123;group&#125;</code> folder is created in the <em>All Users</em> profile.</li>
+<li>The “auto” form of the directory and Shell Folder constants is mapped to the “common” form.</li>
+<li>The <a target="_blank" rel="noopener" href="http://www.jrsoftware.org/ishelp/topic_registrysection.htm">HKA</a> and uninstall info root keys will be HKEY_LOCAL_MACHINE.</li>
+</ul>
+<p>In non administrative install mode:</p>
+<ul>
+<li>The <code>&#123;group&#125;</code> folder is created in the current user’s profile.</li>
+<li>The “auto” form of the directory and Shell Folder constants is mapped to the “user” form.</li>
+<li>The <a target="_blank" rel="noopener" href="http://www.jrsoftware.org/ishelp/topic_registrysection.htm">HKA</a> and uninstall info root keys will be HKEY_CURRENT_USER.</li>
+</ul>
+<p><strong>Notes:</strong></p>
+<p>Regardless of the version of Windows, if the installation is running in administrative install mode then you should be careful about making any per-user area changes: such changes may not achieve what you are intending. The compiler will warn you about this, which can be disabled using <a target="_blank" rel="noopener" href="http://www.jrsoftware.org/ishelp/topic_setup_useduserareaswarning.htm">UsedUserAreasWarning</a>.</p>
+<p>无论Windows的版本如何，如果安装均以管理安装模式运行，则应谨慎进行每个用户区域的更改：此类更改可能无法实现您的预期。 编译器将对此警告，可以使用<a target="_blank" rel="noopener" href="http://www.jrsoftware.org/ishelp/topic_setup_useduserareaswarning.htm">UsedUserAreasWarning</a>禁用。</p>
+<p>If the installation is running in non administrative install mode, but administrative privileges are available anyway then Setup or the [Code] section might still make use of these privileges. For this reason the uninstaller will always be marked as requiring administrative privileges in this case, just as if the installation was running in administrative install mode.</p>
+<p>如果安装程序在非管理安装模式下运行，但是仍然具有管理特权，则安装程序或[Code]部分可能仍会使用这些特权。 因此，在这种情况下，卸载程序将始终被标记为需要管理特权，就像安装在管理安装模式下运行一样。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/inno-02-installdotnet.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Inno Setup 在x86和x64环境下安装-NET安装包</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/0807-ma-auto-generic-function.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Python 杂记之 根据版本号自动调用泛函数</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

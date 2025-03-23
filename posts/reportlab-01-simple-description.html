@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>ReportLab 项目基本内容简介 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="ReportLab 项目基本内容简介 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/reportlab-01-simple-description.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2022-12-04T10:51:48.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/ReportLab-相关-开发记录/">ReportLab 相关 - 开发记录</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>December</span>
+            <span>4,</span>
+            <span>2022</span>
+        </div>
+        
+
+        <h1 class="title">ReportLab 项目基本内容简介</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：本文主要介绍了项目中如何使用ReportLab的Python模块实现纯Python环境下生成PDF报告文件。本文也包括项目依赖和组件介绍。</p>
+<p>Abstract: This article describes how the project uses ReportLab’s Python module to generate PDF report files in a pure Python environment. This article also includes an introduction to project dependencies and components.</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h2 id="ReportLab-项目内容基本简介"><a href="#ReportLab-项目内容基本简介" class="headerlink" title="ReportLab 项目内容基本简介"></a>ReportLab 项目内容基本简介</h2><p>新项目，使用Python编程语言，借助Reportlab开发模块。实现纯Python环境下PDF报告文件生产。</p>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>这是一个软件库，可以让你使用Python编程语言直接创建Adobe的便携式文档格式（PDF）的文件。它还可以创建各种位图和矢量格式的图表和数据图形，以及PDF。</p>
+<p>PDF是电子文档的全球标准。它支持高质量的打印，但由于免费提供的Acrobat Reader，它完全可以跨平台携带。任何以前生成硬拷贝报告或驱动打印机的应用程序都可以从制作PDF文件中受益；这些文件可以存档、通过电子邮件发送、放在网络上或以老式的方式打印出来。然而，PDF文件格式是一种复杂的索引二进制格式，不可能直接输入。PDF格式规范有600多页，而且PDF文件必须提供精确的字节偏移量–在一个有效的PDF文件中的任何地方多放一个字符都会使其无效。这使得它比HTML更难生成。</p>
+<p>ReportLab库直接根据你的图形命令创建PDF。没有任何中间的步骤。你的应用程序可以极快地生成报告–有时比传统的报告编写工具快几个数量级。这种方法被其他几个库所共享–C语言的PDFlib，Java语言的iText，.NET语言的iTextSharp等。然而，ReportLab库的不同之处在于，它可以在更高的层次上工作，有一个功能齐全的引擎来布置文档，并配有表格和图表。</p>
+<p>此外，由于你是在用一种强大的通用语言编写程序，所以对于你从哪里获得数据，如何转换数据，以及你可以创建什么样的输出都没有任何限制。而且，你可以在整个报告系列中重复使用代码。</p>
+<p>预计ReportLab库至少在以下情况下是有用的。</p>
+<ul>
+<li>在网络上生成动态PDF</li>
+<li>大批量的企业报告和数据库发布</li>
+<li>为其他应用程序提供可嵌入的打印引擎，包括一种 “报告语言”，以便用户可以定制自己的报告。这与跨平台的应用特别相关，因为这些应用不能依赖每个操作系统上一致的打印或预览API。</li>
+<li>一个’构建系统’，用于带有图表、表格和文本的复杂文件，如管理账目、统计报告和科学论文。</li>
+<li>一步到位地从XML到PDF项目依赖</li>
+</ul>
+<p>项目应用Python编程语言，借助Reportlab开发模块。实现纯Python环境下PDF报告文件生产。</p>
+<h3 id="ReportLab的商业软件"><a href="#ReportLab的商业软件" class="headerlink" title="ReportLab的商业软件"></a>ReportLab的商业软件</h3><p>ReportLab 库构成了我们生成 PDF 的商业解决方案的基础，即报告标记语言（RML）。这在我们的网站上有完整的文档可供评估。我们相信，RML是开发丰富的PDF工作流程的最快和最简单的方法。你在一个与HTML类似的标记语言中工作，使用你最喜欢的模板系统来填充一个RML文档；然后调用我们的rml2pdf API函数来生成一个PDF。这就是ReportLab的员工用来建立你在reportlab.com上可以看到的所有解决方案。关键区别。</p>
+<ul>
+<li>有两本手册、一个正式的规范（DTD）和广泛的自我文档化测试的完全文档化。(相比之下，我们试图确保开放源码的文档不会出错，但我们并不总是能跟上代码的步伐)</li>
+<li>在高级别的标记中工作，而不是构造Python对象的图形</li>
+<li>不需要Python专业知识–你的同事可能会在你离开后感谢你！’</li>
+<li>支持矢量图和包含其他的PDF文件</li>
+<li>用一个标签表达许多更有用的功能，这需要在开源包中进行大量的编码</li>
+<li>包括商业支持</li>
+</ul>
+<p>我们要求开源开发者考虑在合适的地方尝试使用RML。你可以在我们的网站上注册，并在购买前试用一份副本。费用是合理的，并与项目的数量挂钩，收入有助于我们花更多的时间开发这个软件。</p>
+<p>以上内容来自<a target="_blank" rel="noopener" href="https://docs.reportlab.com/reportlab/userguide/ch1_intro/">ReportLab</a>官网，由DeepL完成主要翻译，自己手动修改部分内容，记录下来，方便自己日后查看。</p>
+<h3 id="项目依赖"><a href="#项目依赖" class="headerlink" title="项目依赖"></a>项目依赖</h3><ul>
+<li>python 版本3.8.5</li>
+<li>reportlab 版本3.6.12</li>
+<li>reportlab-preppy 版本4.1.0</li>
+<li>reportlab-pyrxp 版本 3.0.1</li>
+<li>trml2pdf 版本 0.6</li>
+</ul>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>官方文档中得知：reportlab依赖于“preppy”、“pyrxp”、“rml2pdf”，而在新版本中reportlab已经将“preppy”、“pyrxp”、“rml2pdf”分拆出来，所以Demo中原来封装在“rlextra”中的包已经被分拆了。相关功能由rml2pdf 完成，因为“relextra”是ReportLab Plus商业发行版的组件。使用下面的链接进行下载：</p>
+<ol>
+<li>reportlab-preppy : <strong>BSD开源协议</strong></li>
+</ol>
+<p>preppy - a Preprocessor for Python。 用于处理rml文件。即替换rml中的值。</p>
+<p>资源地址：<a target="_blank" rel="noopener" href="https://pypi.org/project/preppy/">https://pypi.org/project/preppy/</a></p>
+<p>文档地址：<a target="_blank" rel="noopener" href="https://docs.reportlab.com/preppy/">https://docs.reportlab.com/preppy/</a></p>
+<p>安装命令：pip install preppy</p>
+<ol start="2">
+<li>reportlab-pyrxp: <strong>BSD开源协议</strong> </li>
+</ol>
+<p>Python RXP interface - fast validating XML parser。用于处理rml文件。</p>
+<p>资源地址：<a target="_blank" rel="noopener" href="https://pypi.org/project/pyRXP/">https://pypi.org/project/pyRXP/</a></p>
+<p>文档地址：<a target="_blank" rel="noopener" href="https://pyrxp.readthedocs.io/en/latest/usage.html">https://pyrxp.readthedocs.io/en/latest/usage.html</a></p>
+<p>安装命令：pip install pyRXP</p>
+<ol start="3">
+<li>trml2pdf: <strong>GNU /LGPL 协议</strong></li>
+</ol>
+<p>Tiny RML2PDF is open source implementation of RML (Report Markup Language) from ReportLab。用于将rml文件转换成pdf文件。</p>
+<p>资源地址：<a target="_blank" rel="noopener" href="https://github.com/romanlv/trml2pdf">https://github.com/romanlv/trml2pdf</a></p>
+<p>文档地址：<a target="_blank" rel="noopener" href="http://www.reportlab.com/docs/rml-for-idiots.pdf">http://www.reportlab.com/docs/rml-for-idiots.pdf</a></p>
+<p>安装命令：pip install trml2pdf</p>
+<ol start="4">
+<li>reportlab: <strong>商用与开源</strong></li>
+</ol>
+<p>基本开发框架</p>
+<p>文档地址：<a target="_blank" rel="noopener" href="http://download.csdn.net/detail/yima1006/6433077">http://download.csdn.net/detail/yima1006/6433077</a></p>
+<p>在线Demo：<a target="_blank" rel="noopener" href="http://www.reportlab.com/static/cms/files/RLtutorial.zip">http://www.reportlab.com/static/cms/files/RLtutorial.zip</a> </p>
+<h3 id="本文小结"><a href="#本文小结" class="headerlink" title="本文小结"></a>本文小结</h3><p>这些背景知识是自己在完成任务的一开始具有的疑问，进而中查阅资料再收集整理成文的，这利于自己，也方便你我。如果你有问题或者不同的见解，欢迎关注我的微信公众号，然后留言讨论。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/ReportLab/" class="tag">#ReportLab</a><a href="/tags/基本内容/" class="tag">#基本内容</a><a href="/tags/简介/" class="tag">#简介</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/reportlab-02-rml-specification-file-dtd.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">ReportLab 模版RML文件的规范文件DTD</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/inno-08-use-DLLS-user32dll.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Inno Setup 如何将使用DLL库 user32.dll中相关函数</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

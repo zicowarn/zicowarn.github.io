@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Python 杂记之 如何使用pyenv管理python版本管理与如何使用virtualenv创建python虚拟运行环境 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Python 杂记之 如何使用pyenv管理python版本管理与如何使用virtualenv创建python虚拟运行环境 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/0809-python-hwoto-install-pyevn-virtualenv.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2020-09-22T15:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Python-相关-8-Python-杂记/">Python 相关 - 8. Python 杂记</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>September</span>
+            <span>22,</span>
+            <span>2020</span>
+        </div>
+        
+
+        <h1 class="title">Python 杂记之 如何使用pyenv管理python版本管理与如何使用virtualenv创建python虚拟运行环境</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：为何需要使用pyenv来管理python的版本？为何需要使用virtualenv来创建python虚拟运行环境？pyenv与pipenv和virtualenv的关系是什么样的？在自己使用pyenv的时候遇见过什么样的问题，又是如何解决所遇问题的。如果遇见诸如“BUILD FAILED”的安装错误，出现该错误的原因可能是什么？</p>
+<p>Abstract: Why do we need to manage the use pyenv python version？Why do I need to use virtualenv to create a python virtual runtime environment? What is the relationship with pyenv, pipenv, and virtualenv ?What kind of problems have been encountered when using pyenv and how have they been solved？ If you encounter an installation error such as “BUILD FAILED”, what could be the cause of the error?</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>Python的版本管理非常有必要，这种想法在第一次接触到python3的时候就开始有的想法。但是工作中所遇项目主要是在windows系统下，开发环境并不复杂，又使用Eclipse的项目设定结合windows的环境变量。所以也一直没有去尝试着安装配置pyevn，但是自己工作之余学些aws lambda函数时，就遇到了需要隔离python版本与创建虚拟运行环境的使用场景，最终还是逃不过这部分内容，因此也就有了这篇网文。</p>
+<h3 id="什么是pyenv和为什么要版本隔离"><a href="#什么是pyenv和为什么要版本隔离" class="headerlink" title="什么是pyenv和为什么要版本隔离"></a>什么是pyenv和为什么要版本隔离</h3><p>Pyenv主要是用于Python版本隔离，所谓版本隔离，就是同时安装与使用不同版本的Python在一个主机里，且彼此之间没有交叉也不相互影响。在没有Pyenv之前，在windows系统下也可以实现多python版本共存，可以使用环境变量进行隔离。在Linux系统下则可以使用update-alternatives这一系统命令链接符工具来进行版本管理。</p>
+<p>那为什么需要版本管理。假设你有两个Python项目，一个是Python2.x另一个是Python3.x，这是你就可以考虑版本隔离了，或者需要同时测试，管理很多不同版本的Python项目，也可以考虑版本隔离。</p>
+<h3 id="什么是virtualenv和为什么需要虚拟环境"><a href="#什么是virtualenv和为什么需要虚拟环境" class="headerlink" title="什么是virtualenv和为什么需要虚拟环境"></a>什么是virtualenv和为什么需要虚拟环境</h3><p>virtualenv主要是为了创建Python运行的虚拟环境。所谓虚拟环境，就是Python运行时，库依赖性的隔离。比如项目一需要A依赖包，项目二需要B依赖包。传统习惯是，将A包与B包都使用pip install命令进行安装，就可以同时完成项目一与项目二的开发工作，但是这在开发时是没问题的，但在部署时就不一定了，如果部署环境与开发环境不一致，就可能需要花时间去从新安装依赖包，如果部署平台与开发平台也不一致，或者部署环境中的存储限制就需要在开发的时候创建一个虚拟环境，创建一个最小依赖的开发环境。</p>
+<p>常见的一些定义virtualenv和pyvenv（同venv）都是用于创建虚拟运行环境，实现库依赖性的隔离。区别是前者支持Python不同版本，可以为不同python创建虚拟环境，而后者仅支持python3.x，venv仅支持python3.6以后不的版本。另一点区别是，virtualenv是PyPI软件包，pyvenv（同venv）是标准库。</p>
+<h3 id="什么是pipenv和什么是依赖管理"><a href="#什么是pipenv和什么是依赖管理" class="headerlink" title="什么是pipenv和什么是依赖管理"></a>什么是pipenv和什么是依赖管理</h3><p>另一些常见的定义还有pipevn，pipenv可以视为pip命令和virtualenv命令的组合命令。virtualenv创建的虚拟环境仅仅实现了Python库的依赖性隔离。但是一个虚拟环境下随着项目功能的增加，依赖包的变化，一段时间之后这个虚拟环境下第三方库的依赖具体什么样，就很难弄明白了。pipenv就是为了解决这一问题而存在的。这点很像nodejs的依赖包管理工具npm（或cnpm）。使用Pipenv时，Pipenv会自动管理python库依赖。Pipenv会在创建虚拟环境时自动创建Pipfile和Pipfile.lock文件，之后在安装和卸载第三方依赖包的时候，这两个文件都会得到更新被维护。Pipfile记录项目依赖包列表，Pipfile.lock记录固定版本的详细依赖包列表。</p>
+<h3 id="其他相关定义"><a href="#其他相关定义" class="headerlink" title="其他相关定义"></a>其他相关定义</h3><p>virtualenvwrapper是对virtualenv命令的扩展。pyenv-virtualenv是pyenv的插件，主要用于确保pyenv和virtualenv能够同时使用。如果使用的是python3.3以上的版本，则默认python自带venv，pyenv-virtualenv插件就是可选内容。pyenv-virtualenvwrapper也是pyenv的插件，主要是为了是pyenv中能集成virtualenvwrapper。</p>
+<h3 id="安装pvenv"><a href="#安装pvenv" class="headerlink" title="安装pvenv"></a>安装pvenv</h3><p>本文的安装环境为mac os Catalina 版本为10.5.5。在终端输入一下命令, pyenv目前不支持windows （windows可以使用pyenv-win来代替），只支持mac和linux。官方提供了一个安装脚本，安装起来非常简单，它会自动安装<code>pyenv</code>和<code>pyenv-virtualenv</code>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash</span><br></pre></td></tr></table></figure>
+
+<p>也可使用git命令克隆pyenv源代码至本地，命令如下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/pyenv/pyenv.git ~/.pyenv</span><br></pre></td></tr></table></figure>
+
+<p>完成上述步骤就需要修改环境变量了，打开bash配置文件.bash_profile或者.bashrc，在文档末尾添加如下内容，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=<span class="string">&quot;<span class="variable">$HOME</span>/.pyenv/bin:<span class="variable">$PATH</span>&quot;</span></span><br><span class="line"><span class="built_in">eval</span> <span class="string">&quot;<span class="subst">$(pyenv init -)</span>&quot;</span></span><br><span class="line"><span class="built_in">eval</span> <span class="string">&quot;<span class="subst">$(pyenv virtualenv-init -)</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>Mac环境下可以尝试直接使用下列命令来进行安装，需要注意的是，使用brew 安装 pyenv 是不需要进行环境配置的，brew 在安装 pyenv 时已经自动设定了相关内容。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install pyenv</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置pyenv"><a href="#配置pyenv" class="headerlink" title="配置pyenv"></a>配置pyenv</h3><p>完成安装知乎，配置部分的内容其实很简单，仅需要在bash配置文件中添加如下内容，完成pyenv的初始化即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">eval</span> <span class="string">&quot;<span class="subst">$(pyenv init -)</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="使用pyenv"><a href="#使用pyenv" class="headerlink" title="使用pyenv"></a>使用pyenv</h3><p>pyenv提供了11个可用命令，可以参考<a target="_blank" rel="noopener" href="https://github.com/pyenv/pyenv/blob/master/COMMANDS.md">文档</a>来查看具体内容，在这里简单介绍几个常用命令。</p>
+<h5 id="pyenv-versions"><a href="#pyenv-versions" class="headerlink" title="pyenv versions"></a>pyenv versions</h5><p>用于检查当前系统中已经安装的python版本，命令输出如下内容，带星号为当前系统默认使用的python版本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">username@mac~ % pyenv versions         </span><br><span class="line">* system (<span class="built_in">set</span> by /Users/username/.pyenv/version)</span><br><span class="line">  2.7.10</span><br><span class="line">  2.7.15</span><br></pre></td></tr></table></figure>
+
+<h5 id="pyenv-version"><a href="#pyenv-version" class="headerlink" title="pyenv version"></a>pyenv version</h5><p>用于查看当前系统默认使用的python版本，命令输出如下内容，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">username@mac ~ % pyenv version </span><br><span class="line">system (<span class="built_in">set</span> by /Users/username/.pyenv/version)</span><br></pre></td></tr></table></figure>
+
+<h5 id="pyevn-install-–list"><a href="#pyevn-install-–list" class="headerlink" title="pyevn install –list"></a>pyevn install –list</h5><p>用于检查，所有可安装的python版本，输出内容如下，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">username@mac ~ % pyenv install --list</span><br><span class="line">Available versions:</span><br><span class="line">  2.1.3</span><br><span class="line">  2.2.3</span><br><span class="line">  2.3.7</span><br><span class="line">  2.4.0</span><br><span class="line">  2.4.1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>输出列表里纯数字的表示官方版本，其他的版本注释如下：</p>
+<ul>
+<li>activepython (ActiveState公司) 主要面向企业用户与数据科学家，可以节省大量精力在Python的组装与管理方面</li>
+<li>anaconda (Anaconda公司)主要用例包括数学、统计学、工程、数据分析、机器学习以及其他相关应用</li>
+<li>ironPython 属于一套立足.Net运行时——或者CLR（公共语言运行时）——的Python实现方</li>
+<li>jython 能够将Python 2.x编译为JVM字节码，并在JVM上运行生成的程序，其仅支持Python 2.x</li>
+<li>pypy 属于CPython解释器的替代品，其利用即时（JIT）编译以加速Python程序的执行</li>
+<li>micropython 是Python 3的一个完整软件实现，用C语言编写，被优化于运行在微控制器之上， 如Arduino等</li>
+<li>miniconda 只包含最基本的内容：python与conda，以及相关的必须依赖项，是conda的最小依赖开发环境</li>
+<li>stackless 是python的一个增强版本，是python协程的一个实现。 使用它可以避免创建线程所引起的不必要的开销， 同时也可以实现无锁编程。</li>
+</ul>
+<h5 id="python-install-3-7-0"><a href="#python-install-3-7-0" class="headerlink" title="python install 3.7.0"></a>python install 3.7.0</h5><p>该命令意指安装Python 3.7.0的官方版本版本，该命令输出如下内容，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">username@mac ~ % pyenv install 3.7.0  </span><br><span class="line">...</span><br><span class="line">python-build: use openssl@1.1 from homebrew</span><br><span class="line">python-build: use readline from homebrew</span><br><span class="line">Installing Python-3.7.0...</span><br><span class="line">python-build: use readline from homebrew</span><br><span class="line">python-build: use zlib from xcode sdk</span><br><span class="line">Installed Python-3.7.0 to /Users/username/.pyenv/versions/3.7.0</span><br></pre></td></tr></table></figure>
+
+<h5 id="python-uninstall"><a href="#python-uninstall" class="headerlink" title="python uninstall"></a>python uninstall</h5><p>该命令用于卸载特定版本的python</p>
+<h5 id="python-rehash"><a href="#python-rehash" class="headerlink" title="python rehash"></a>python rehash</h5><p>在安装新一个版本的python后可以执行此命令，使其pyenv更新自己要管理的所有python版本的相关信息。</p>
+<h3 id="卸载pyenv"><a href="#卸载pyenv" class="headerlink" title="卸载pyenv"></a>卸载pyenv</h3><p>pyenv的卸载非常简单，删除.pyenv目录与bash配置文件的相关内容即可。</p>
+<h3 id="更新pyenv"><a href="#更新pyenv" class="headerlink" title="更新pyenv"></a>更新pyenv</h3><p>在mac中，可以使用brew upgrade pyenv来完成pyenv的更新，也可以通过从github中克隆新版本的源码到本地安装目录完成相应更新工作。</p>
+<h3 id="安装pyenv-virtualenv"><a href="#安装pyenv-virtualenv" class="headerlink" title="安装pyenv-virtualenv"></a>安装pyenv-virtualenv</h3><p>在完成python版本的隔离之后，就可以尝试实现项目依赖的隔离，这就需要借助pyenv-virtualenv来完成，安装pyenv-virtualenv也有两种方法，在mac中使用brew 安装或者，从github中克隆源码到本地。</p>
+<p>mac中使用brew install pyenv-virtualenv命令则可以完成安装，该命令的输出内容如下，按照输出内容的提示，我们需要在完成安装之后对其进行配置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">username@mac ~ % brew install pyenv-virtualenv</span><br><span class="line">==&gt; Downloading https://github.com/pyenv/pyenv-virtualenv/archive/v1.1.5.tar.gz</span><br><span class="line">==&gt; Downloading from https://codeload.github.com/pyenv/pyenv-virtualenv/tar.gz/v</span><br><span class="line"><span class="comment">######################################################################## 100.0%</span></span><br><span class="line">==&gt; ./install.sh</span><br><span class="line">==&gt; Caveats</span><br><span class="line">To <span class="built_in">enable</span> auto-activation add to your profile:</span><br><span class="line">  <span class="keyword">if</span> <span class="built_in">which</span> pyenv-virtualenv-init &gt; /dev/null; <span class="keyword">then</span> <span class="built_in">eval</span> <span class="string">&quot;<span class="subst">$(pyenv virtualenv-init -)</span>&quot;</span>; <span class="keyword">fi</span></span><br><span class="line">==&gt; Summary</span><br><span class="line"> /usr/local/Cellar/pyenv-virtualenv/1.1.5: 22 files, 65.7KB, built <span class="keyword">in</span> 2 seconds</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>从github中克隆源码到本地的命令如下，这里需要注意的是，需要在当前用户的home目录运行该命令，因为源码的本地目录为pyenv的子目录，如有必要也需要手动创建子目录plugins。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/pyenv/pyenv-virtualenv.git .pyenv/plugins/pyenv-virtualenv</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置pyenv-virtualenv"><a href="#配置pyenv-virtualenv" class="headerlink" title="配置pyenv-virtualenv"></a>配置pyenv-virtualenv</h3><p>根据brew install pyenv-virtualenv，完成配置仅需在bash配置文件中加入如下内容即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="built_in">which</span> pyenv-virtualenv &gt;/dev/null; <span class="keyword">then</span> <span class="built_in">eval</span> <span class="string">&quot;<span class="subst">$(pyenv virtualenv-init -)</span>&quot;</span>;<span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<p>然后可以使用如下命令，更新bash配置的修改，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> .bash_profile</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用pyenv-virtualenv"><a href="#使用pyenv-virtualenv" class="headerlink" title="使用pyenv-virtualenv"></a>使用pyenv-virtualenv</h3><p>pyenv-virtualenv的具体使用方法，可以参考<a target="_blank" rel="noopener" href="https://github.com/pyenv/pyenv-virtualenv/blob/master/README.md">文档</a>本文简单介绍一下部分命令。</p>
+<h5 id="pyenv-virtualenv-版本号-虚拟环境名"><a href="#pyenv-virtualenv-版本号-虚拟环境名" class="headerlink" title="pyenv virtualenv 版本号 虚拟环境名"></a>pyenv virtualenv 版本号 虚拟环境名</h5><p>比如，由于项目中aws 的lambda函数中使用python 3.6.0 的是最终是需要完成一个python 3.6.0的虚拟运行环境，那么就可以使用如下命令，这里版本号为3.6.0， 虚拟环境名为env360。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">username@mac ~ % pyenv virtualenv 3.6.0 env360</span><br><span class="line">Requirement already satisfied: setuptools <span class="keyword">in</span> /Users/username/.pyenv/versions/3.6.0/envs/env360/lib/python3.6/site-packages</span><br><span class="line">Requirement already satisfied: pip <span class="keyword">in</span> /Users/username/.pyenv/versions/3.6.0/envs/env360/lib/python3.6/site-packages</span><br></pre></td></tr></table></figure>
+
+<h5 id="pyenv-virtualenvs"><a href="#pyenv-virtualenvs" class="headerlink" title="pyenv virtualenvs"></a>pyenv virtualenvs</h5><p>用于查看当前所有存在的环境名，命令输出内容如下，每个虚拟环境会出现两次，分别为虚拟环境目录的真实目录和目录链接。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">username@mac ~ % pyenv virtualenvs            </span><br><span class="line">  3.6.0/envs/env360 (created from /Users/username/.pyenv/versions/3.6.0)</span><br><span class="line">  3.8.5/envs/env385 (created from /Users/username/.pyenv/versions/3.8.5)</span><br><span class="line">  env360 (created from /Users/username/.pyenv/versions/3.6.0)</span><br><span class="line">  env385 (created from /Users/username/.pyenv/versions/3.8.5)</span><br></pre></td></tr></table></figure>
+
+<h5 id="pyenv-activate-虚拟环境名"><a href="#pyenv-activate-虚拟环境名" class="headerlink" title="pyenv activate 虚拟环境名"></a>pyenv activate 虚拟环境名</h5><p>用于激活特定名称的虚拟运行环境，命令输出如下内容。激活后有如下提示信息。如提示信息所述，在非虚拟环境下运行export PYENV_VIRTUALENV_DISABLE_PROMPT=1，则可以在以后激活虚拟环境时，关闭该提示信息。虚拟环境激活之后，命令行提示符部分会有(env360)类似字样，说明当前在env360的虚拟运行环境下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">username@mac ~ % pyenv activate env360</span><br><span class="line">pyenv-virtualenv: prompt changing will be removed from future release. configure `<span class="built_in">export</span> PYENV_VIRTUALENV_DISABLE_PROMPT=1<span class="string">&#x27; to simulate the behavior.</span></span><br><span class="line"><span class="string">(env360) username@mac ~ % </span></span><br></pre></td></tr></table></figure>
+
+<h5 id="pyenv-virtualenv-delete-虚拟环境名-或-pyenv-uninstall-虚拟环境名"><a href="#pyenv-virtualenv-delete-虚拟环境名-或-pyenv-uninstall-虚拟环境名" class="headerlink" title="pyenv virtualenv-delete 虚拟环境名 或 pyenv uninstall 虚拟环境名"></a>pyenv virtualenv-delete 虚拟环境名 或 pyenv uninstall 虚拟环境名</h5><p>这两个命令都是用于删除特定名称的虚拟运行环境，以命令<code>pyenv virtualenv-delete</code>为例，输出入如下内容。命令运行后会有提示信息用于确认操作，输入yes即可确认操作，完成虚拟运行环境的删除工作。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">username@mac ~ % pyenv virtualenv-delete env385          </span><br><span class="line">pyenv-virtualenv: remove /Users/username/.pyenv/versions/3.8.5/envs/env385? <span class="built_in">yes</span></span><br><span class="line">username@mac ~ %</span><br></pre></td></tr></table></figure>
+
+<h3 id="卸载-pyenv-virtualenv"><a href="#卸载-pyenv-virtualenv" class="headerlink" title="卸载 pyenv-virtualenv"></a>卸载 pyenv-virtualenv</h3><p>pyenv-virtualenv的卸载和pyenv的卸载过程类似，删除bash配置文件的相关内容，在pyenv目录中的删除相对应的pyenv-virtualenv子目录即可。</p>
+<h3 id="更新-pyenv-virtualenv"><a href="#更新-pyenv-virtualenv" class="headerlink" title="更新 pyenv-virtualenv"></a>更新 pyenv-virtualenv</h3><p>如图pyenv一样，在mac中，可以使用brew upgrade pyenv-virtualenv来完成pyenv-virtualenv的更新，也可以通过从github中克隆新版本的源码到本地安装目录完成相应更新工作。</p>
+<h3 id="所遇问题与解决方案"><a href="#所遇问题与解决方案" class="headerlink" title="所遇问题与解决方案"></a>所遇问题与解决方案</h3><h4 id="问题：Ubuntu-下使用pyenv安装3-7-0版本时，遇到的安装错误"><a href="#问题：Ubuntu-下使用pyenv安装3-7-0版本时，遇到的安装错误" class="headerlink" title="问题：Ubuntu 下使用pyenv安装3.7.0版本时，遇到的安装错误"></a>问题：Ubuntu 下使用pyenv安装3.7.0版本时，遇到的安装错误</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">root@R021:~<span class="comment"># pyenv install -v 3.6.12</span></span><br><span class="line">Downloading Python-3.6.12.tar.xz...</span><br><span class="line">-&gt; https://www.python.org/ftp/python/3.6.12/Python-3.6.12.tar.xz</span><br><span class="line">/tmp/python-build.20200916030737.1554 ~</span><br><span class="line">Installing Python-3.6.12...</span><br><span class="line">/tmp/python-build.20200916030737.1554/Python-3.6.12 /tmp/python-build.20200916030737.1554 ~</span><br><span class="line">checking build system <span class="built_in">type</span>... x86_64-pc-linux-gnu</span><br><span class="line">checking host system <span class="built_in">type</span>... x86_64-pc-linux-gnu</span><br><span class="line">checking <span class="keyword">for</span> python3.6... no</span><br><span class="line">checking <span class="keyword">for</span> python3... python3</span><br><span class="line">checking <span class="keyword">for</span> --enable-universalsdk... no</span><br><span class="line">checking <span class="keyword">for</span> --with-universal-archs... no</span><br><span class="line">checking MACHDEP... linux</span><br><span class="line">checking <span class="keyword">for</span> --without-gcc... no</span><br><span class="line">checking <span class="keyword">for</span> --with-icc... no</span><br><span class="line">checking <span class="keyword">for</span> gcc... no</span><br><span class="line">checking <span class="keyword">for</span> cc... no</span><br><span class="line">checking <span class="keyword">for</span> cl.exe... cl.exe</span><br><span class="line"></span><br><span class="line">BUILD FAILED (Ubuntu 16.04 using python-build 1.2.20-6-gd1ae4a1)</span><br><span class="line"></span><br><span class="line">Inspect or clean up the working tree at /tmp/python-build.20200916030737.1554</span><br><span class="line">Results logged to /tmp/python-build.20200916030737.1554.<span class="built_in">log</span></span><br></pre></td></tr></table></figure>
+
+<p>出现上述问题的原因为，部分pyenv所需的内容没有安装，可以尝试使用如下命令来检查和安装pyenv的所需组建，然后再使用pyenv安装所需python版本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev</span><br></pre></td></tr></table></figure>
+
+<h4 id="问题：Mac-下使用pyenv安装3-7-0版本时，遇到的安装错误"><a href="#问题：Mac-下使用pyenv安装3-7-0版本时，遇到的安装错误" class="headerlink" title="问题：Mac 下使用pyenv安装3.7.0版本时，遇到的安装错误"></a>问题：Mac 下使用pyenv安装3.7.0版本时，遇到的安装错误</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">username@mac ~ % pyenv install 3.7.0 </span><br><span class="line">Downloading openssl-1.0.2k.tar.gz...</span><br><span class="line">-&gt; https://www.openssl.org/source/openssl-1.0.2k.tar.gz</span><br><span class="line">Installing openssl-1.0.2k...</span><br><span class="line"></span><br><span class="line">BUILD FAILED (OS X 10.15.5 using python-build 20180424)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">configure: error: C compiler cannot create executables</span><br><span class="line">See `config.log<span class="string">&#x27; for more details.</span></span><br></pre></td></tr></table></figure>
+
+<p>上述错误中的关键内容为C 编译器错误，解决方法。这时候就要检查xcode comand line组件是否安装，使用如下命令检测xcode command line是否安装，如果有输出内容，则说明已经安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">username@mac ~ % xcode-select -p</span><br><span class="line">/Library/Developer/CommandLineTools</span><br></pre></td></tr></table></figure>
+
+<p>如果想检查xcode command line的版本，则可以使用如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">username@mac ~ % pkgutil --pkg-info=com.apple.pkg.CLTools_Executables</span><br><span class="line">package-id: com.apple.pkg.CLTools_Executables</span><br><span class="line">version: 12.0.0.0.1.1599194153</span><br><span class="line">volume: /</span><br><span class="line">location: /</span><br><span class="line">install-time: 1600823154</span><br><span class="line"><span class="built_in">groups</span>: com.apple.FindSystemFiles.pkg-group </span><br></pre></td></tr></table></figure>
+
+<p>如果没有安装，则需要安装Xcode command line， 然后重新使用pyenv安装所需版本的python。</p>
+<h4 id="问题：Mac-终端启动虚拟环境时，遇到错误"><a href="#问题：Mac-终端启动虚拟环境时，遇到错误" class="headerlink" title="问题：Mac 终端启动虚拟环境时，遇到错误"></a>问题：Mac 终端启动虚拟环境时，遇到错误</h4><p>在Mac上安装完pyenv和pyenv-virtualenv后，当重新启动终端后，运行pyenv activate xxx启动虚拟环境时会遇到如下提示，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Failed to deactivate virtualenv.</span><br><span class="line"></span><br><span class="line">Perhaps pyenv-virtualenv has not been loaded into your shell properly.</span><br><span class="line">Please restart current shell and try again.</span><br></pre></td></tr></table></figure>
+
+<p>检查bash的配置<code>.bash_profile</code>中内容也没有发现问题，这时候就要查看Mac中启动的终端时bash还是zsh。bash与zsh都是mac终端自带的shell命令解释器，早期Mac OS系统默认使用bash解释器，在10.15之后的系统中官方推荐使用zsh解释器。如果当前终端启动的是zsh，就需要创建zsh的配置文件<code>.zshrc</code>文件，并在该文件中添加如下相关配置即可，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">eval</span> <span class="string">&quot;<span class="subst">$(pyenv init -)</span>&quot;</span></span><br><span class="line"><span class="built_in">eval</span> <span class="string">&quot;<span class="subst">$(pyenv virtualenv-init -)</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>当然在Mac中bash和zsh是可以自由切换的，切换方式如下：</p>
+<ul>
+<li>切换bash：<code>chsh -s /bin/bash</code></li>
+<li>切换zsh：<code>chsh -s /bin/zsh</code></li>
+<li><strong>终端</strong>的系统偏好设置里手动设置。</li>
+</ul>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>以上即为本人在安装和配置pyenv和pyenv-virtualenv整个过程，也包括自己在不同系统下安装这两个组建所遇问题和找到的解决方案。Python版本隔离与Python开发运行环境隔离，两者哪一个更有必要了解安装？哪种方案最优？个人觉得没必要过多纠结，适合自己需求的就是最合适的。上述方案也仅为一家之言，并非最优，若读者有别的思路也欢迎关注我的个人微信公众号，一起讨论学习。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/杂记/" class="tag">#杂记</a><a href="/tags/Pyenv/" class="tag">#Pyenv</a><a href="/tags/版本管理/" class="tag">#版本管理</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/aws-common-02-awscli-configuration.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">AWS 如何使用IAM创建一个最小访问权限的用户并使用aws-cli来部署lambda函数程序包</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/aws-lambda-02-use-pythonpackage-pymssql.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">AWS 如何在lambda函数中使用Python依赖库pymssql</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

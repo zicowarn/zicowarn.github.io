@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>AWS 如何在lambda函数中使用Python依赖库pymssql - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="AWS 如何在lambda函数中使用Python依赖库pymssql - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/aws-lambda-02-use-pythonpackage-pymssql.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2020-09-20T01:39:50.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/AWS-相关-实战经验/">AWS 相关 - 实战经验</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>September</span>
+            <span>20,</span>
+            <span>2020</span>
+        </div>
+        
+
+        <h1 class="title">AWS 如何在lambda函数中使用Python依赖库pymssql</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a> </p>
+<p>摘要：使用Python实现aws lambda函数时，如何解决代码依赖问题？如何在aws lambda中配置并安装Python的依赖包Packages？以pymssql依赖包为例，如何在aws lambda的Python代码中import该依赖？</p>
+<p>Abstract: How to solve the problem of code dependency when using Python to implement aws lambda function? How to configure and install Python’s dependency package Packages in aws lambda? This article takes the pymssql dependency package as an example. How to import the dependency in the Python code of aws lambda?</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a> </p>
+<h3 id="任务背景"><a href="#任务背景" class="headerlink" title="任务背景"></a>任务背景</h3><p>任务为使用aws的lambda函数从一个MS SQL数据库中读取部分的数据，然后对数据处理后，转存至aws的DyanmoDB上，因为需要从MS SQL数据库中读取信息，代码就需要相关依赖，Python对MS SQL的依赖库为<a target="_blank" rel="noopener" href="https://pypi.org/project/pymssql/"><strong>pymssql</strong></a>，初步计划lambda 的函数使用Python来完成，版本为Python 3.6。本文主要介绍，如何在aws lambda函数中使用python依赖库<strong>pymssql</strong>。</p>
+<h3 id="所遇问题"><a href="#所遇问题" class="headerlink" title="所遇问题"></a>所遇问题</h3><p>aws lambda 的 Python 3.6 的运行环境，是不具有pymssql这个依赖包的，该依赖包并非标准库，又<strong>PyPI</strong>(<em>Python Package Index</em>)是python<strong>官方的第三方库的仓库</strong>管理维护，可以通过pip命令获取和安装。aws lambda 函数Python Runtime 运行时与操作系统如下，总的来说lambda函数是运行在Amazon Linux的操作系统上的，Amazon Linux和Amazon Linux2的区别就是内核版本有区别。</p>
+<table>
+<thead>
+<tr>
+<th align="left">Python 运行时</th>
+<th align="left"></th>
+<th align="left"></th>
+<th align="left"></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">名称</td>
+<td align="left">标识符</td>
+<td align="left">适用于 Python 的 AWS 开发工具包</td>
+<td align="left">操作系统</td>
+</tr>
+<tr>
+<td align="left">Python 3.8</td>
+<td align="left"><code>python3.8</code></td>
+<td align="left">boto3-1.14.17 botocore-1.17.17</td>
+<td align="left">Amazon Linux 2</td>
+</tr>
+<tr>
+<td align="left">Python 3.7</td>
+<td align="left"><code>python3.7</code></td>
+<td align="left">boto3-1.14.17 botocore-1.17.17</td>
+<td align="left">Amazon Linux</td>
+</tr>
+<tr>
+<td align="left">Python 3.6</td>
+<td align="left"><code>python3.6</code></td>
+<td align="left">boto3-1.14.17 botocore-1.17.17</td>
+<td align="left">Amazon Linux</td>
+</tr>
+<tr>
+<td align="left">Python 2.7</td>
+<td align="left"><code>python2.7</code></td>
+<td align="left">boto3-1.14.17 botocore-1.17.17</td>
+<td align="left">Amazon Linux</td>
+</tr>
+</tbody></table>
+<p>在测试中，我们使用的lambda函数名为<strong>test</strong>，Python文件名为lambda_function.py，该文件内容为，lambda函数的范例代码，内容如下。其中第二行为修改内容，主要为了引入pymssql模块。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> pymssql</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">lambda_handler</span>(<span class="params">event, context</span>):</span><br><span class="line">    <span class="comment"># TODO implement</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&#x27;statusCode&#x27;</span>: <span class="number">200</span>,</span><br><span class="line">        <span class="string">&#x27;body&#x27;</span>: json.dumps(<span class="string">&#x27;Hello from Lambda!&#x27;</span>)</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于pymssql不是标准库，所以如果直接在lambda函数中引用该包，则lambda的执行结果为：<strong>失败</strong>，错误信息为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;errorMessage&quot;</span>: <span class="string">&quot;Unable to import module &#x27;lambda_function&#x27;&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>日志输出为，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">START RequestId: d77542a0-d9c0-426a-a050-04948dc8464a Version: <span class="variable">$LATEST</span></span><br><span class="line">Unable to import module <span class="string">&#x27;lambda_function&#x27;</span>: No module named <span class="string">&#x27;pymssql&#x27;</span></span><br><span class="line"></span><br><span class="line">END RequestId: d77542a0-d9c0-426a-a050-04948dc8464a</span><br><span class="line">REPORT RequestId: d77542a0-d9c0-426a-a050-04948dc8464a	Duration: 0.32 ms	Billed Duration: 100 ms	Memory Size: 128 MB	Max Memory Used: 43 MB	Init Duration: 1.32 ms	</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，程序错误的原因为无法引入pymssql这个模块，是一个依赖问题。基本的共识为：不同版本的Python的相同第三方依赖包的内容是不同的，同样的不同操作系统的相同第三方依赖包的内容也是不同的。所以在调试代码也好，解决依赖也好，就需要创建一个Python版本隔离并且依赖隔离的环境，这部分内容，在python相关的文章里都有介绍，若有需要可以查看相关文章。</p>
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>解决问题的思路有两种：第一种，使用lambda 层（Layer）的方式解决依赖问题，另一种为将依赖内容与lambda函数的py文件整合在一起解决依赖问题。lambda函数代码更新可以通过，网页端，上传zip程序包或Amazone S3中引用，三种方式完成，本文主要讨论的以zip压缩文件作为程序包来更新lambda的相关代码部分。</p>
+<h4 id="创建-lambda-程序的依赖项程序包"><a href="#创建-lambda-程序的依赖项程序包" class="headerlink" title="创建 lambda 程序的依赖项程序包"></a>创建 lambda 程序的依赖项程序包</h4><p>要创建一个运行在linux系统下，Python 3.6运行时的lambda函数相关依赖项的程序包，就要创建并启动一个Python的隔离运行环境。关于如何创建这样一个隔离环境，也请参考python相关文章。</p>
+<h5 id="启动虚拟环境"><a href="#启动虚拟环境" class="headerlink" title="启动虚拟环境"></a>启动虚拟环境</h5><p>比如，在Linux系统下，我们有如下的一个名为env3612的python虚拟环境，则可以在终端里输入pyenv activate env3612命令来启动这个虚拟环境，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">username@mac:~<span class="comment"># pyenv virtualenvs</span></span><br><span class="line">  3.6.12/envs/env3612 (created from /root/.pyenv/versions/3.6.12)</span><br><span class="line">  env3612 (created from /root/.pyenv/versions/3.6.12)</span><br><span class="line"></span><br><span class="line">username@mac:~<span class="comment"># pyenv activate env3612</span></span><br><span class="line">(env3612) username@mac:~<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="创建工作文件夹"><a href="#创建工作文件夹" class="headerlink" title="创建工作文件夹"></a>创建工作文件夹</h5><p>在相关虚拟运行环境启动后，就可以创建一个工作目录，下面代码中第一层目录的文件夹pymssql-dependencies这个名字可以自定义，其不对后续操作产生影响，第二层目录的文件夹python，该文件夹名非常重要，请保持一致。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">username@mac:~<span class="comment"># mkdir pymssql-dependencies</span></span><br><span class="line">username@mac:~<span class="comment"># cd pymssql-dependencies/</span></span><br><span class="line">username@mac:~/pymssql-dependencies<span class="comment"># mkdir python</span></span><br><span class="line">username@mac:~/pymssql-dependencies<span class="comment"># cd python/</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="安装单一Python库"><a href="#安装单一Python库" class="headerlink" title="安装单一Python库"></a>安装单一Python库</h5><p>进入最终工作目录python之后，即可使用pip命令<code>pip install pymssql -t ./ </code>，就可以单独安装pymssql这个依赖库安装到这个python文件夹内，安装之后，文件夹内仅有pymssql相关内容。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(env3612) username@mac:~/pymssql-dependencies/python<span class="comment"># pip install pymssql -t ./</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="压缩程序包"><a href="#压缩程序包" class="headerlink" title="压缩程序包"></a>压缩程序包</h5><p>完成pymssql之后，需要从python这个文件夹返回至上一级目录，再使用<code>zip -r ~/tmp/pymssql-dependencies.zip . </code>将python目录内的所有内容压缩成zip文件。该文件可以理解为lambda函数的程序包。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(env3612) username@mac:~/pymssql-dependencies/python<span class="comment"># cd ..</span></span><br><span class="line">(env3612) username@mac:~/pymssql-dependencies<span class="comment"># mkdir ~/tmp</span></span><br><span class="line">(env3612) username@mac:~/pymssql-dependencies<span class="comment"># zip -r ~/tmp/pymssql-dependencies.zip .</span></span><br><span class="line">  adding: python/ (stored 0%)</span><br><span class="line">  adding: python/_mssql.cpython-36m-x86_64-linux-gnu.so (deflated 73%)</span><br><span class="line">	...</span><br><span class="line">  adding: python/pymssql.libs/libsybdb-98ddd287.so.5.1.0 (deflated 64%)</span><br></pre></td></tr></table></figure>
+
+<h4 id="一、通过-lambda-层解决依赖问题"><a href="#一、通过-lambda-层解决依赖问题" class="headerlink" title="一、通过 lambda 层解决依赖问题"></a>一、通过 lambda 层解决依赖问题</h4><p>该方法解决问题是，首先要创建一个lambda 函数的层，配置信息请参考下方图片。在这里层的名称可以自定义，因为其只做为索引，在lambda函数引入层时，被用于索引。与之后要上传至层的zip文件名，和zip文件内的文件都无关系。</p>
+<h5 id="创建lambda层"><a href="#创建lambda层" class="headerlink" title="创建lambda层"></a>创建lambda层</h5><p><img src="/posts/aws-lambda-02-use-pythonpackage-pymssql/aws-lambda-02-creatlayer.png" alt="Lambda Create Layer"></p>
+<p>然后选择之前创建的zip文件，上传后点击<code>创建</code>，就可以完成相关lambda层的创建。再在lambda函数的配置页面点击<code>Layers</code>，然后选择<code>添加层</code>，为test这个lambda函数的指定一个layer。</p>
+<p><img src="/posts/aws-lambda-02-use-pythonpackage-pymssql/aws-lambda-0203.png" alt="aws-lambda-0203"></p>
+<p>然后在如下页面选择<code>自定义层</code>，选择层的名称，点击<code>添加</code>即可完成配置。</p>
+<p><img src="/posts/aws-lambda-02-use-pythonpackage-pymssql/aws-lambda-0204.png" alt="aws-lambda-0204"></p>
+<p>然后就可以再次测试该lambda函数。这时候lambda的执行结果为：<strong>成功</strong>，详细信息为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;statusCode&quot;: 200,</span><br><span class="line">  &quot;body&quot;: &quot;\&quot;Hello from Lambda!\&quot;&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>日志输出为，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">START RequestId: ee1f059b-8288-4463-8501-8f36df9a6d67 Version: <span class="variable">$LATEST</span></span><br><span class="line">END RequestId: ee1f059b-8288-4463-8501-8f36df9a6d67</span><br><span class="line">REPORT RequestId: ee1f059b-8288-4463-8501-8f36df9a6d67	Duration: 0.33 ms	Billed Duration: 100 ms	Memory Size: 128 MB	Max Memory Used: 48 MB	Init Duration: 29.24 ms	</span><br></pre></td></tr></table></figure>
+
+<p>如上的信息表明，上述方法已经通过lambda函数的层的方式解决了依赖问题，通过该方法也可以解决其他相关依赖的相似问题。</p>
+<h4 id="二、通过-lambda-代码解决依赖问题"><a href="#二、通过-lambda-代码解决依赖问题" class="headerlink" title="二、通过 lambda 代码解决依赖问题"></a>二、通过 lambda 代码解决依赖问题</h4><p>该方法前期准备工作与方法一相同，都需要创建Python的隔离运行环境，并安装pymssql至python文件夹内，在安装以后，python文件夹的具体情况如下，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(env3612) username@mac:~/pymssql-dependencies/python<span class="comment"># ls -al</span></span><br><span class="line">total 7392</span><br><span class="line">drwxr-xr-x@   7 username  staff      224  9 27 16:23 .</span><br><span class="line">drwx------+ 145 username  staff     4640  9 27 16:24 ..</span><br><span class="line">-rwxr-xr-x@   1 username  staff  2287480  9 27 11:07 _mssql.cpython-36m-x86_64-linux-gnu.so</span><br><span class="line">drwxr-xr-x@   9 username  staff      288  9 27 11:07 pymssql-2.1.5.dist-info</span><br><span class="line">-rwxr-xr-x@   1 username  staff  1490808  9 27 11:07 pymssql.cpython-36m-x86_64-linux-gnu.so</span><br><span class="line">drwxr-xr-x@   4 username  staff      128  9 27 16:20 pymssql.libs</span><br></pre></td></tr></table></figure>
+
+<p>这时候需要将lambda函数的py文件，即lambda_function.py拷贝至该目录，然后在python目录下，运行<code>zip -r ~/Downloads/test.zip .</code>命令，将python文件内的所有文件压缩成为一个名为test.zip的压缩文档，如下，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(env3612) username@mac:~/pymssql-dependencies/python<span class="comment">#  zip -r ~/Downloads/test.zip . </span></span><br><span class="line">updating: _mssql.cpython-36m-x86_64-linux-gnu.so (deflated 73%)</span><br><span class="line">updating: pymssql.cpython-36m-x86_64-linux-gnu.so (deflated 72%)</span><br><span class="line">updating: lambda_function.py (deflated 24%)</span><br><span class="line">  adding: pymssql-2.1.5.dist-info/ (stored 0%)</span><br><span class="line">  adding: pymssql-2.1.5.dist-info/RECORD (deflated 39%)</span><br><span class="line">...</span><br><span class="line">  adding: pymssql.libs/lambda_function.py (deflated 24%)</span><br></pre></td></tr></table></figure>
+
+<p>在这里，zip的文件名最好与lambda函数保持一致，文件名称字母大小写不敏感。然后点击lambda函数中<code>函数代码</code>部分的<code>操作</code>按钮，然后选择<code>上传.zip文件</code>项，接着选择test.zip压缩文件，点击<code>保存</code>即可。</p>
+<p><img src="/posts/aws-lambda-02-use-pythonpackage-pymssql/aws-lambda-0204-1195705.png" alt="aws-lambda-0204"></p>
+<p>完成上述内容，然后点击测试，就可以得到与方法一一样的成功执行结果。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>上述两个方法中，程序包的部署，可以通过网页端完成，也可以通过aws-cli来实现。zip的文件包也可以先上传至Amazone S3存储内，然后在页面端选择使用。在尝试两个方法的时候，要注意打包zip程序包时，命令行的当前目录，方法一需要在python上一级目录。方法二需要确保在python目录内。上述两个方案仅为一家之言，并非最优，若读者有别的思路也欢迎关注我的个人微信公众号，一起讨论学习。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/AWS/" class="tag">#AWS</a><a href="/tags/lambda/" class="tag">#lambda</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/0809-python-hwoto-install-pyevn-virtualenv.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Python 杂记之 如何使用pyenv管理python版本管理与如何使用virtualenv创建python虚拟运行环境</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/hexo-03-howto-debug-hexo-in-vscode.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Hexo 如何在VS Code中调试Hexo的相关代码</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

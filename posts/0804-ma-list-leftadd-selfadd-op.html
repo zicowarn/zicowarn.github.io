@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Python 杂记之 实现列表的自加和左移等操作 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Python 杂记之 实现列表的自加和左移等操作 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/0804-ma-list-leftadd-selfadd-op.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2018-12-15T00:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Python-相关-8-Python-杂记/">Python 相关 - 8. Python 杂记</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>December</span>
+            <span>15,</span>
+            <span>2018</span>
+        </div>
+        
+
+        <h1 class="title">Python 杂记之 实现列表的自加和左移等操作</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h2 id="列表与操作方法"><a href="#列表与操作方法" class="headerlink" title="列表与操作方法"></a>列表与操作方法</h2><p>列表<strong>list</strong>是Python语言中的标准数据类型，进一步讲list是一种可变的序列类型，不可变的有tuple和range（注：Python 3.x中xrange已经不存在了）。<strong>可变序列类型</strong>，<strong>可变</strong>就是长度可以改变，所含元素数值可以改变，元素数据类型可以改变；<strong>序列</strong>意指成员有序排列，可以通过索引访问元素。既然是序列类型，就一定可以迭代（for 循环），所以列表是<strong>可迭代</strong>的对象，请注意<strong>可迭代</strong>和<strong>迭代器</strong>的差异。</p>
+<span id="more"></span>
+
+<p>列表的常用操作包括，索引，切片，改变与排序。而这几种操作要属<strong>改变</strong>最多样。改变包括，一、<strong>长度改变</strong>，成员的<strong>添加</strong>（常用方法append，insert和extend）与<strong>删除</strong>（常用方法pop与remove）。二、<strong>数值改变</strong>，通过索引访问与重新赋值来实现。</p>
+<h2 id="列表操作的延伸思考"><a href="#列表操作的延伸思考" class="headerlink" title="列表操作的延伸思考"></a>列表操作的延伸思考</h2><p>由于上一篇文章是与运算符相关，所以在准备文字的时候就思索，作为标准数据类型的列表，能和它组合使用的运算符都有什么呢？今天我就和大家一起总结，共同学习一下。</p>
+<p>一般情况下，Python中列表只能与➕操作符组合使用，前提是➕号左右都是序列类型。可能别的教程里面规定➕左右都应该是一样的列表类型。我们今天扩展一下，定义：➕号左右都是序列类型。</p>
+<ul>
+<li>当加号➕右侧为列表，或者range()时，代码表现符合正常预期，请参看下面例子：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>m2 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m3 = [<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m2 + m3</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m2 + <span class="built_in">range</span>(<span class="number">5</span>, <span class="number">9</span>)</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ss = <span class="built_in">range</span>(<span class="number">5</span>, <span class="number">9</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(ss)</span><br><span class="line">&lt;<span class="built_in">type</span> <span class="string">&#x27;list&#x27;</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m2 + (<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: can only concatenate <span class="built_in">list</span> (<span class="keyword">not</span> <span class="string">&quot;tuple&quot;</span>) to <span class="built_in">list</span></span><br></pre></td></tr></table></figure>
+
+<p>List作为唯一的可变序列类型，而且与加号左侧数据类型一直，它的加法运算正常且容易理解。range， str与tuple是不可变的数据类型，理论上与列表相加时肯定会出错的，但是在Python 2.x 中却没有问题，结果如上。其原因为: Python 2.x 中range返回的是一个列表。而在Python 3.x 中这样写就会引发异常，参考如下代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>m2 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m2 + <span class="built_in">range</span>(<span class="number">5</span>, <span class="number">9</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: can only concatenate <span class="built_in">list</span> (<span class="keyword">not</span> <span class="string">&quot;range&quot;</span>) to <span class="built_in">list</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ss = <span class="built_in">range</span>(<span class="number">5</span>, <span class="number">9</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(ss)</span><br><span class="line">&lt;<span class="keyword">class</span> <span class="string">&#x27;range&#x27;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>因为Python 3.x 中返回的是一个真正的range类实例，是一个不可变的序列类型。</p>
+<ul>
+<li>当加号➕右侧为其它序列类型，即不可变序列类型，如 tuple 或 str 时，请参看下面例子：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>m2 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m2 += <span class="string">&quot;hello&quot;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m2</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="string">&#x27;h&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;l&#x27;</span>, <span class="string">&#x27;l&#x27;</span>, <span class="string">&#x27;o&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m2 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m2 = m2 + <span class="string">&quot;hello&quot;</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: can only concatenate <span class="built_in">list</span> (<span class="keyword">not</span> <span class="string">&quot;str&quot;</span>) to <span class="built_in">list</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m2 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m2 += (<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m2</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>m2 = m2 + (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: can only concatenate <span class="built_in">list</span> (<span class="keyword">not</span> <span class="string">&quot;tuple&quot;</span>) to <span class="built_in">list</span></span><br></pre></td></tr></table></figure>
+
+<p>理论上肯定不行的，毕竟左右两侧的数据类型不同。但是总会有些意外，有些惊喜。虽然在<strong>运算符</strong>的章节中，我们了解到自加操作符与加法和赋值的组合等效，即 a += 1 等效于 a = a + 1。但是参照上方的例子，我们发现应该在解析运行的时候。两种数据操作方式还是有些不一样的，比如在参与的数据有列表是，<strong>自加</strong>时，因为列表（等号左侧）为可变对象，原则上仅需要本地对象（这里指m2）进行修改，不需要产生新的对象。那么在修改的时候解释器会讲右侧的对象尝试数据类型转换，上述的例子中讲字符穿转换为字符列表，将tuple转换为列表，进而对本地m2对象进行修改，所以我们就实现了所有<strong>序列类型</strong>的加法操作，注意非序列的数据类型不行，是不是有点神奇。</p>
+<h2 id="进一步延伸思考"><a href="#进一步延伸思考" class="headerlink" title="进一步延伸思考"></a>进一步延伸思考</h2><p>上一节，我们通过总结可知：1. 列表的加法操作，并不是全效的加法，因为对数据只能对序列操作，那么如果仅需要添加一个成员的时候，加法操作就不再适用。2. 列表没有减法操作。那么有解决方法吗？了解到Python<strong>万物皆对象</strong>（必定不单身）。那么如果继承列表基本类，创建自有字类，通过重写方法就是实现Python的全效加法于减法。有想法之后就实现一下，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyList</span>(<span class="title class_ inherited__">list</span>):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__add__</span>(<span class="params">self, obj</span>):</span><br><span class="line">        <span class="comment">#Function is called by + command</span></span><br><span class="line">        self.addObj(obj)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__sub__</span>(<span class="params">self, obj</span>):</span><br><span class="line">        <span class="comment">#Function is called by - command</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(obj, <span class="built_in">list</span>) <span class="keyword">or</span> <span class="built_in">isinstance</span>(obj, <span class="built_in">tuple</span>):</span><br><span class="line">        <span class="comment">#if isinstance(obj, list) or isinstance(obj, tuple) or isinstance(obj, range): # Python 3.x</span></span><br><span class="line">            <span class="keyword">for</span> o <span class="keyword">in</span> obj: </span><br><span class="line">                <span class="keyword">return</span> self.__class__([item <span class="keyword">for</span> item <span class="keyword">in</span> self <span class="keyword">if</span> item <span class="keyword">not</span> <span class="keyword">in</span> obj])</span><br><span class="line">        <span class="keyword">else</span>: </span><br><span class="line">            <span class="keyword">return</span> self.__class__([item <span class="keyword">for</span> item <span class="keyword">in</span> self <span class="keyword">if</span> item != obj])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__lshift__</span>(<span class="params">self, obj</span>):</span><br><span class="line">        <span class="comment">#Function is called by &lt;&lt; command</span></span><br><span class="line">        self += obj</span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__iadd__</span>(<span class="params">self, obj</span>):</span><br><span class="line">        <span class="comment">#Function is called by += command</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(obj, <span class="built_in">list</span>) <span class="keyword">or</span> <span class="built_in">isinstance</span>(obj, <span class="built_in">tuple</span>):</span><br><span class="line">        <span class="comment">#if isinstance(obj, list) or isinstance(obj, tuple) or isinstance(obj, range): # Python 3.x</span></span><br><span class="line">            <span class="keyword">for</span> o <span class="keyword">in</span> obj: </span><br><span class="line">                self.addObj(o)</span><br><span class="line">        <span class="keyword">else</span>: </span><br><span class="line">            self.addObj(obj)</span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">addObj</span>(<span class="params">self, obj</span>):</span><br><span class="line">        self.append(obj)</span><br></pre></td></tr></table></figure>
+
+<p>在使用需要注意，由于Python默认的列表类为list，传统的列表赋值方式只能产生list的实例对象，那么如果初始化玩MyList类的实例后，再为实例变量使用传统方式赋值时，那么就会产生新的对象，而且新类的<strong>属性</strong>与<strong>方法</strong>将丢失。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> test <span class="keyword">import</span> MyList</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml = MyList([<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(ml)</span><br><span class="line">&lt;<span class="keyword">class</span> <span class="string">&#x27;test.MyList&#x27;</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml = MyList()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(ml)</span><br><span class="line">&lt;<span class="keyword">class</span> <span class="string">&#x27;test.MyList&#x27;</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(ml)</span><br><span class="line">&lt;<span class="built_in">type</span> <span class="string">&#x27;list&#x27;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>实际使用结果如下，因为在加法运算时，我们返回类实例本身，所以列表的值在做加法是会发生变化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml = MyList([<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml + [<span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;f&#x27;</span>, <span class="string">&#x27;g&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, [<span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;f&#x27;</span>, <span class="string">&#x27;g&#x27;</span>]]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml = MyList([<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml + [<span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;f&#x27;</span>, <span class="string">&#x27;g&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, [<span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;f&#x27;</span>, <span class="string">&#x27;g&#x27;</span>]]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml = MyList([<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml += [<span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;f&#x27;</span>, <span class="string">&#x27;g&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;f&#x27;</span>, <span class="string">&#x27;g&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml = MyList([<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml + <span class="string">&quot;e&quot;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;e&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml + <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="number">1</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml - <span class="number">1</span></span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;e&#x27;</span>]  <span class="comment"># 新的列表对象</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="number">1</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml - [<span class="string">&#x27;c&#x27;</span>, <span class="number">1</span>]</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;e&#x27;</span>] <span class="comment"># 新的列表对象</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="number">1</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml &lt;&lt; <span class="string">&quot;e&quot;</span></span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;e&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ml &lt;&lt; [<span class="string">&#x27;d&#x27;</span>, <span class="string">&#x27;f&#x27;</span>]</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;d&#x27;</span>, <span class="string">&#x27;f&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tt = ml - [<span class="string">&#x27;c&#x27;</span>, <span class="number">1</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">type</span>(tt)</span><br><span class="line">&lt;<span class="keyword">class</span> <span class="string">&#x27;test.MyList&#x27;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>而在做减法运算时，我们创建并返回一个新的类实例，所以减数，即原始列表值不发生改变，请参见上述代码中带注释的内容。有心的同学可能也发现了，我们重写__iadd__()， 实现了我们预期的自加，重写__add__()， 实现了我们预期的加法，重写__sub__()， 实现了我们预期的列表减法运算和重写__lshift__()， 实现了我们预期的列表的左移运算，怎么样是不是也有一点成就感。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>在之前的文章中我们介绍了如何动态重写类方法，那么我们的上述的方法能不能也动态地写入基类list中，使其所有实例都有新的方法呢？感兴趣的童鞋可以自己可以试一下。我把结果写出来, 就不再举例分析。<strong>是不行的</strong>，由于基类是由别的语言实现的属于built-in类型，虽然也是动态的类，但是却因为别的语言限制了访问，所以其__iadd__()方法，在实例中是<strong>仅可读的</strong>。所以就没办法实现list基类，这些方法的动态绑定和重写。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/杂记/" class="tag">#杂记</a><a href="/tags/自加/" class="tag">#自加</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/0805-ma-compability-issue.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Python 杂记之 不同版本间剪切板代码兼容性问题</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/0803-ma-dynamic-classmethod-override.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Python 杂记之 如何动态重写类方法</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

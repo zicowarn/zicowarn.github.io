@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Inno Setup 如何将使用DLL库 user32.dll中相关函数 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Inno Setup 如何将使用DLL库 user32.dll中相关函数 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/inno-08-use-DLLS-user32dll.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2022-12-03T11:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Inno-Setup-相关-实战经验/">Inno Setup 相关 - 实战经验</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>December</span>
+            <span>3,</span>
+            <span>2022</span>
+        </div>
+        
+
+        <h1 class="title">Inno Setup 如何将使用DLL库 user32.dll中相关函数</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a> </p>
+<p>摘要：Inno Setup 使用过程中，如何使用user32.dll中的相关函数，例如GetDC，SetTimer和KillTimer等函数的引用使用方法。</p>
+<p>Abstract: How to use the functions in user32.dll, such as GetDC, SetTimer and KillTimer, during Inno Setup.</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a> </p>
+<h2 id="如何将使用DLL库-user32-dll中相关函数"><a href="#如何将使用DLL库-user32-dll中相关函数" class="headerlink" title="如何将使用DLL库 user32.dll中相关函数"></a>如何将使用DLL库 user32.dll中相关函数</h2><h3 id="函数GetDC"><a href="#函数GetDC" class="headerlink" title="函数GetDC"></a>函数GetDC</h3><h4 id="引用方式"><a href="#引用方式" class="headerlink" title="引用方式"></a>引用方式</h4><figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">GetDC</span><span class="params">(hWnd: HWND)</span>:</span> longword; <span class="keyword">external</span> <span class="string">&#x27;GetDC@user32.dll stdcall&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="函数BitBlt"><a href="#函数BitBlt" class="headerlink" title="函数BitBlt"></a>函数BitBlt</h3><h4 id="引用方法"><a href="#引用方法" class="headerlink" title="引用方法"></a>引用方法</h4><figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">BitBlt</span><span class="params">(DestDC: longword; X, Y, Width, Height: integer; SrcDC: longword; XSrc, YSrc: integer; Rop: DWORD)</span>:</span> BOOL; <span class="keyword">external</span> <span class="string">&#x27;BitBlt@gdi32.dll stdcall&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="函数功能"><a href="#函数功能" class="headerlink" title="函数功能"></a>函数功能</h4><p>该函数对指定的源设备环境区域中的像素进行位块（bit_block）转换，以传送到<a target="_blank" rel="noopener" href="http://baike.baidu.com/item/%E7%9B%AE%E6%A0%87/6450">目标</a>设备<a target="_blank" rel="noopener" href="http://baike.baidu.com/item/%E7%8E%AF%E5%A2%83">环境</a>。</p>
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><p>hDestDC：指向目标设备环境的<a target="_blank" rel="noopener" href="http://baike.baidu.com/item/%E5%8F%A5%E6%9F%84">句柄</a>。</p>
+<p>x：指定目标矩形区域左上角的X轴逻辑坐标。</p>
+<p>y：指定目标矩形区域左上角的Y轴逻辑坐标。</p>
+<p>nWidth：指定源在目标矩形区域的逻辑宽度。</p>
+<p>nHeight：指定源在目标矩形区域的逻辑高度。</p>
+<p>hSrcDC：指向源设备环境的句柄。</p>
+<p>xSrc：指定源矩形区域左上角的X轴逻辑坐标。</p>
+<p>ySrc：指定源矩形区域左上角的Y轴逻辑坐标。</p>
+<p>dwRop：指定光栅操作代码。这些代码将定义源矩形区域的颜色数据，如何与目标矩形区域的颜色数据组合以完成最后的颜色。</p>
+<h3 id="函数ReleaseDC"><a href="#函数ReleaseDC" class="headerlink" title="函数ReleaseDC"></a>函数ReleaseDC</h3><h4 id="引用方法-1"><a href="#引用方法-1" class="headerlink" title="引用方法"></a>引用方法</h4><figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ReleaseDC</span><span class="params">(hWnd: HWND; hDC: longword)</span>:</span> integer; <span class="keyword">external</span> <span class="string">&#x27;ReleaseDC@user32.dll stdcall&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="函数SetTimer"><a href="#函数SetTimer" class="headerlink" title="函数SetTimer"></a>函数SetTimer</h3><h4 id="引用方法-2"><a href="#引用方法-2" class="headerlink" title="引用方法"></a>引用方法</h4><figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SetTimer</span><span class="params">(hWnd, nIDEvent, uElapse, lpTimerFunc: longword)</span>:</span> longword; <span class="keyword">external</span> <span class="string">&#x27;SetTimer@user32.dll stdcall&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="函数KillTimer"><a href="#函数KillTimer" class="headerlink" title="函数KillTimer"></a>函数KillTimer</h3><h4 id="引用方法-3"><a href="#引用方法-3" class="headerlink" title="引用方法"></a>引用方法</h4><figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">KillTimer</span><span class="params">(hWnd, nIDEvent: longword)</span>:</span> longword; <span class="keyword">external</span> <span class="string">&#x27;KillTimer@user32.dll stdcall&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="函数GetWindow"><a href="#函数GetWindow" class="headerlink" title="函数GetWindow"></a>函数GetWindow</h3><h4 id="引用方法-4"><a href="#引用方法-4" class="headerlink" title="引用方法"></a>引用方法</h4><figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">GetWindow</span> <span class="params">(HWND: Longint; uCmd: cardinal)</span>:</span> Longint;<span class="keyword">external</span> <span class="string">&#x27;GetWindow@user32.dll stdcall&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="函数功能-1"><a href="#函数功能-1" class="headerlink" title="函数功能"></a>函数功能</h4><p>该函数返回与指定窗口有特定关系（如Z序或所有者）的窗口句柄。</p>
+<h4 id="参数-1"><a href="#参数-1" class="headerlink" title="参数"></a>参数</h4><p>hWnd:窗口句柄。要获得的窗口句柄是依据nCmd参数值相对于这个窗口的句柄。</p>
+<p>nCmd:说明指定窗口与要获得句柄的窗口之间的关系。该参数值可以是下列之一：</p>
+<ul>
+<li>GW_CHILD：如果指定窗口是父窗口，则获得的是在Z序顶端的子窗口的句柄，否则为NULL。函数仅检查指定父窗口的子窗口，不检查继承窗口。</li>
+<li>GW_ENABLEDPOUP：（WindowsNT 5.0）返回的句柄标识了属于指定窗口的处于使能状态弹出式窗口（检索使用第一个由GW_HWNDNEXT 查找到的满足前述条件的窗口）；如果无使能窗口，则获得的句柄与指定窗口相同。</li>
+<li>GW_HWNDFIRST：返回的句柄标识了在Z序最高端的相同类型的窗口。如果指定窗口是最高端窗口，则该句柄标识了在Z序最高端的最高端窗口；如果指定窗口是顶层窗口，则该句柄标识了在z序最高端的顶层窗口：如果指定窗口是子窗口，则句柄标识了在Z序最高端的同属窗口。</li>
+<li>GW_HWNDLAST:返回的句柄标识了在z序最低端的相同类型的窗口。如果指定窗口是最高端窗口，则该柄标识了在z序最低端的最高端窗口：如果指定窗口是顶层窗口，则该句柄标识了在z序最低端的顶层窗口；如果指定窗口是子窗口，则句柄标识了在Z序最低端的同属窗口。</li>
+<li>GW_HWNDNEXT：返回的句柄标识了在Z序中指定窗口下的相同类型的窗口。如果指定窗口是最高端窗口，则该句柄标识了在指定窗口下的最高端窗口：如果指定窗口是顶层窗口，则该句柄标识了在指定窗口下的顶层窗口；如果指定窗口是子窗口，则句柄标识了在指定窗口下的同属窗口。</li>
+<li>GW HWNDPREV：返回的句柄标识了在Z序中指定窗口上的相同类型的窗口。如果指定窗口是最高端窗口，则该句柄标识了在指定窗口上的最高端窗口；如果指定窗口是顶层窗口，则该句柄标识了在指定窗口上的顶层窗口；如果指定窗口是子窗口，则句柄标识了在指定窗口上的同属窗口。</li>
+<li>GW_OWNER：返回的句柄标识了指定窗口的所有者窗口（如果存在）。<br>返回值：如果函数成功，返回值为窗口句柄；如果与指定窗口有特定关系的窗口不存在，则返回值为NULL。<br>若想获得更多错误信息，请调用GetLastError函数。<br>备注：在循环体中调用函数EnumChildWindow比调用GetWindow函数可靠。调用GetWindow函数实现该任务的应用程序可能会陷入死循环或退回一个已被销毁的窗口句柄。<br>速查：Windows NT：3.1以上版本；Windows：95以上版本；Windows CE：1.0以上版本；头文件：winuser.h；库文件：user32.lib。</li>
+</ul>
+<h3 id="本文小结"><a href="#本文小结" class="headerlink" title="本文小结"></a>本文小结</h3><p>这些背景知识是自己在完成该项任务的一开始具有的疑问，进而在茫茫文海中查阅，再收集整理成文的，这利于自己，也方便你我。如果你有问题或者不同的见解，欢迎关注我的微信公众号，然后留言讨论。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Inno-Setup/" class="tag">#Inno Setup</a><a href="/tags/DLL/" class="tag">#DLL</a><a href="/tags/user32-dll/" class="tag">#user32.dll</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/reportlab-01-simple-description.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">ReportLab 项目基本内容简介</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/inno-07-issue-about-set-default-value-createinputdirpage.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Inno Setup 如何创建自定义的路径输入页面</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

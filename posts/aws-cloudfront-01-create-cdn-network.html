@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>AWS 使用CloudFront创建CDN网络 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="AWS 使用CloudFront创建CDN网络 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/aws-cloudfront-01-create-cdn-network.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2020-11-07T01:39:50.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/AWS-相关-实战经验/">AWS 相关 - 实战经验</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>November</span>
+            <span>7,</span>
+            <span>2020</span>
+        </div>
+        
+
+        <h1 class="title">AWS 使用CloudFront创建CDN网络</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a> </p>
+<p>摘要：为了解决部分内容网络分发时高延时的问题，为了提高网页加载速度，提高内容分发速度进而给客户跟好的使用体验，会考虑到CDN网络。如何使用aws CloudFront 与 aws S3 bucket的组合，创建自己的CDN网络，会在本文中介绍相关内容。</p>
+<p>Abstract: In order to solve the problem of high latency in the distribution of some content on the network, in order to increase the loading speed of web pages, increase the speed of content distribution, and provide customers with a better user experience, the CDN network will be considered. How to use the combination of aws CloudFront and aws S3 bucket to create your own CDN network will be introduced in this article.</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a> </p>
+<h3 id="CDN-内容分发网络"><a href="#CDN-内容分发网络" class="headerlink" title="CDN 内容分发网络"></a>CDN 内容分发网络</h3><p>CDN 全程:Content Delivery Network或Content Ddistribute Network，即内容分发网络。基本思想是：尽可能避开互联网上有可能影响数据传输速度和稳定性的瓶颈和环节，使内容传输的更快、更稳定。通过在网络各处放置节点服务器所构成的在现有的互联网基础之上的一层智能虚拟网络，CDN系统能够实时地根据网络流量和各节点的连接、负载状况以及到用户的距离和响应时间等综合信息将用户的请求重新导向离用户最近的服务节点上。</p>
+<p><img src="/posts/aws-cloudfront-01-create-cdn-network/%E5%8E%9F%E7%90%86.gif" alt="cdn原理图-西部数码知识库"></p>
+<p>基本目的为解决因分布、带宽、服务器性能带来的访问延迟问题，适用于站点加速、点播、直播等场景。使用户可就近取得所需内容，解决 Internet网络拥挤的状况，提高用户访问网站的响应速度和成功率。</p>
+<p>控制时延无疑是现代信息科技的重要指标，CDN的意图就是尽可能的减少资源在转发、传输、链路抖动等情况下顺利保障信息的连贯性。</p>
+<h3 id="Amazon-CloudFront-简介"><a href="#Amazon-CloudFront-简介" class="headerlink" title="Amazon CloudFront 简介"></a>Amazon CloudFront 简介</h3><p>Amazon CloudFront 是一种全球内容分发网络服务，可以安全地以低延迟和高传输速度向浏览者分发数据、视频、应用程序和 API。CloudFront 与 AWS  与多种 AWS 产品集成，如用于 DDoS 缓解的 AWS Shield、应用程序防火墙 AWS WAF、 Amazon S3、 Elastic Load Balancing、 Amazon EC2 以及 Amazon Route 53，以及可在 AWS 全球基础设施运行用户代码的 Lambda@Edge。</p>
+<p>截止目前（2020年11月），为了以更低的延迟向最终用户提供内容，Amazon CloudFront 使用了一个包含超过 220 个节点（超过 210 个边缘站点和 12 个区域性边缘缓存）的全球网络，该网络覆盖 44 个国家/地区的 87 个城市。</p>
+<h3 id="Amazon-CloudFront-基本运行机制"><a href="#Amazon-CloudFront-基本运行机制" class="headerlink" title="Amazon CloudFront 基本运行机制"></a>Amazon CloudFront 基本运行机制</h3><p>举例说明，当客户端发起对 <a target="_blank" rel="noopener" href="http://www.customer.com/">www.customer.com</a> 的访问时，首先需要 DNS系统解析出该域名对应的主机 IP，通过本地 ISP DNS 递归查询到 <a target="_blank" rel="noopener" href="http://customer.com/">customer.com</a> 的 DNS 域名服务器并了解到该域名是指向了 <a target="_blank" rel="noopener" href="http://xxx.cloudfront.net/">xxx.cloudfront.net</a>，进一步解析 <a target="_blank" rel="noopener" href="http://xxx.cloudfront.net/">xxx.cloudfront.net</a>，CloudFront 的 DNS 域名服务器会根据请求来源的 IP 等信息，返回适合当前该客户端访问的边缘节点的主机 IP 如1.1.1.1，最终该客户端向1.1.1.1发出请求。如果该边缘节点已经缓存了该客户端请求的内容（图片、视频等静态文件），则直接返回给客户端，如果未缓存，则首先回源取回该内容，并存储在边缘节点，以便下次客户端对该内容请求时可以直接返回该内容。</p>
+<p><img src="/posts/aws-cloudfront-01-create-cdn-network/cloudf(2).png" alt="img"></p>
+<p>更好的 CDN 性能表现带来更多的访问流量，以及更好的用户体验，下面我们将介绍如何配置以及优化建议。</p>
+<h3 id="Amazon-CloudFront-创建CDN网络"><a href="#Amazon-CloudFront-创建CDN网络" class="headerlink" title="Amazon CloudFront 创建CDN网络"></a>Amazon CloudFront 创建CDN网络</h3><h4 id="1-创建分配"><a href="#1-创建分配" class="headerlink" title="1. 创建分配"></a>1. 创建分配</h4><p>登陆aws，选择CloudFront服务，即可打开**[Amazon CloudFront – 入门]<strong>, 然后点击<code>创建分配</code>按钮。目前CloudFront支持的内容分发方式为Web和RTMP，但根据最新的公告信息（2020年10月），</strong>CloudFront 在 2020 年 12 月 31 日停止支持 RTMP 分配。**本文示例中，选用Web分发方式。</p>
+<h4 id="2-创建分配-源设置"><a href="#2-创建分配-源设置" class="headerlink" title="2. 创建分配-源设置"></a>2. 创建分配-源设置</h4><p>配置页面中，需要配置的第一部分内容为源设置。所需设置内容如下，需要注意的是，根据分发源的类型不同，该部分的所需设置项也不同，本文中选用的Amazon S3作为分发源，所需配置内容为下图左半部分。</p>
+<ul>
+<li>源域名 （Origin Domain Name），仅支持域名方式。下拉列表中可以看到帐号里已经创建过的 ELB，S3，Elemental Media Service。如果是自定义站点，需先给该站点配置域名，不能填写 IP。</li>
+<li>源路径（Origin Path），为可选项，如果源站内容有多层目录且希望回源的时候路径上不体现这些目录，可以在此设置要隐藏的目录层级。如果您希望 CloudFront 从 Amazon S3 存储桶或自定义源的目录中请求内容，请在此处输入目录路径名称(以 / 开头)。在将请求转发到源时，CloudFront 会将目录名追加到“源域名”的值，例如 myawsbucket/production。请勿在目录名称末尾包含 /。</li>
+<li>启用源护盾（Origin Protocol Policy），  即CloudFront 回源协议，可以是 HTTP 或 HTTPS，或者与client 发出请求时一样的协议。需要注意在这儿设置的是 CloudFront 回源站时用的协议，而不是 client 到达 CloudFront PoP 点的协议。如果选用了 HTTPS，一定要注意源站配置对应回源域名（Origin Domain Name）的 SSL 证书。</li>
+<li>源ID（Origin ID），为源的描述标识。此值允许您区分同一分配中的多个源。每个源的描述在分配中必须是唯一的。</li>
+<li>限制存储桶访问（Restrict Bucket Access），如果希望要求用户始终使用 CloudFront URL 而非 Amazon S3 URL 访问您的 Amazon S3 内容，请单击“是”。当您使用签名的 URL 或签名的 Cookies 来限制对您的内容的访问时，这会很有用。请参阅“帮助”中的“通过 CloudFront 提供私有内容”。</li>
+<li>源连接尝试次数（Origin Connection Attempts），顾名思义，即CloudFront 尝试连接到源的次数。有效值为 1 到 3。默认值为 3 次尝试。这在分发源为非aws存储产品时较为重要。</li>
+<li>源连接超时（Origin Connection Timeout），尝试建立与源的连接时，CloudFront 等待的时间(单位为秒)。有效值为 1 到 10 秒。默认值为 10 秒。</li>
+<li>源协议策略（Origin Protocol Policy），  CloudFront 至源的访问协议，可以是 HTTP 或 HTTPS，或者与client 发出请求时一样的协议。注意这儿是 CloudFront 回源站时用的协议，而不是 client 到达 CloudFront PoP 点的协议。如果选用了 HTTPS，一定要注意源站配置对应回源域名（Origin Domain Name）的 SSL 证书。</li>
+<li>最低源SSL协议（Minimum Origin SSL Protocol），选择适用于 CloudFront 的最低 SSL 协议，以在建立到源的 HTTPS 连接时使用。我们建议您选择服务器支持的最新协议。</li>
+<li>源自定义标头（Origin Custom Headers）， 可选项。自定义回源 Header，即回源的时候添加的 Header，可以是一些自定义的 Header，通常用于由源站对该 Header 进行检测，如果有该 Header 则提供服务，没有则返回错误码，可用于内容访问的安全加强。</li>
+</ul>
+<p><img src="/posts/aws-cloudfront-01-create-cdn-network/image-20201107182108663.png" alt="image-20201107182108663"></p>
+<h4 id="2-创建分配-默认缓存行为设置"><a href="#2-创建分配-默认缓存行为设置" class="headerlink" title="2. 创建分配-默认缓存行为设置"></a>2. 创建分配-默认缓存行为设置</h4><p>缓存行为让您为您网站上文件的特定 URL 路径模式配置各种 CloudFront 功能。例如，一个缓存行为可能适用于用作 CloudFront 源服务器的 Web 服务器上的 <code>images</code> 目录中的所有 <code>.jpg</code> 文件。您可为每个缓存行为配置的功能包括：</p>
+<ul>
+<li><p>路径模式（Path Pattern），默认缓存行为仅允许 * 的路径模式(将所有请求转发到“源”指定的源)。要更改其他请求的行为或路由(例如 *.jpg)，请在创建分配后添加更多缓存行为。也就是说如果要细化配置，需要在创建完成之后才能过进行。</p>
+</li>
+<li><p>查看器协议策略（Viewer Protocol Policy），即选择您希望查看器，即客户端用来访问 CloudFront 边缘站点中的内容时采用协议策略。</p>
+</li>
+<li><p>允许的HTTP方法（Allowed HTTP Methods），指定您希望 CloudFront 处理并转发从客户端到源的 HTTP 方法。需要注意的是，如果将 Amazon S3 存储桶用作分配的源并使用 CloudFront 源访问身份，则在某些 Amazon S3 区域中不支持 <code>POST</code> 请求，并且这些区域中的 <code>PUT</code> 请求需要使用额外的标头。当GET，HEAD或POST且content-type的值仅限于下列三者之一</p>
+<ul>
+<li><code>text/plain</code></li>
+<li><code>multipart/form-data</code></li>
+<li><code>application/x-www-form-urlencoded</code></li>
+</ul>
+<p>除了上面三种情况外都会触发预检，所以发送一个content-type为application/json的post请求会触发CORS预检，而text/plain不会触发。所以可以通过修改content-type的值为text/plain规避CORS的问题。所以在上述三种情况之外，就需要允许OPTION方法了。</p>
+</li>
+<li><p>字段级加密配置（Field-level Encryption Config），如果您要对特定数据字段强制实施字段级加密，则在下拉列表中选择一个字段级加密配置。在使用POST方法时，会被用到。CloudFront 字段级加密使用非对称加密，也称为公有密钥加密。您需要向 CloudFront 提供一个公有密钥，之后系统会自动加密您指定的所有敏感数据。不能使用您向 CloudFront 提供的密钥解密经过加密的值；只有您的私有密钥才能执行解密。</p>
+</li>
+<li><p>缓存的HTTP方法（Cached HTTP Methods），指定您是否希望 CloudFront 在查看器提交 <code>OPTIONS</code> 请求时缓存来自源的响应。CloudFront 始终缓存 <code>GET</code> 和 <code>HEAD</code> 请求的响应。当开始CORS时，个人建议不应该缓存OPTIONS方法。因为如果缓存该方法，如果原访问限制规则发生变化时，检查器不会在第一时间发现该变化。</p>
+</li>
+<li><p>缓存和源请求设置（Cache and origin request settings），指定您是否要 CloudFront 基于指定标头的值缓存对象：</p>
+<ul>
+<li><strong>无（改进缓存）</strong> – CloudFront 不根据标头值缓存您的对象。</li>
+<li><strong>白名单</strong> – CloudFront 仅根据指定标头的值缓存您的对象。使用<strong>白名单标头</strong>选择您希望 CloudFront 进行缓存所基于的标头。</li>
+<li><strong>所有</strong> – CloudFront 不缓存与该缓存行为关联的对象。相反，CloudFront 将每个请求发送到源。(不建议对 Amazon S3 源使用。)</li>
+</ul>
+<p>无论您选择哪个选项，CloudFront 都会将特定标头转发到源并根据您转发的标头执行特定操作。</p>
+</li>
+<li><p>缓存策略（Cache Policy），CloudFront 提供了一组托管缓存策略，您可以将这些策略附加到分配的任意缓存行为。有了托管缓存策略，您无需编写或维护自己的缓存策略。托管策略使用已针对特定使用案例优化的设置。要使用托管缓存策略，请将它附加到分配中的缓存行为。此过程与创建缓存策略时的过程相同，只不过您只需附加一个托管缓存策略，而不是创建新的缓存策略。您可以按名称（使用控制台）或 ID（使用 AWS CLI 或开发工具包）附加策略。以下部分列出了名称和 ID。以下列表描述了托管缓存策略，详情<a target="_blank" rel="noopener" href="https://docs.aws.amazon.com/zh_cn/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html">参看</a>。</p>
+<ul>
+<li><strong>Managed-CachingOptimized</strong>，此策略旨在通过最大程度地减少 CloudFront 在缓存键中包含的值来优化缓存效率。CloudFront 不在缓存键中包含任何查询字符串或 Cookie，并且仅包含标准化的 <code>Accept-Encoding</code> 标头。这使 CloudFront 能够在源返回对象或在启用 CloudFront 边缘压缩时以 Gzip 和 Brotli 压缩格式分别缓存对象。</li>
+<li><strong>Managed-CachingOptimizedForUncompressedObjects</strong>，此策略旨在通过最大程度地减少缓存键中包含的值来提高缓存效率。不包括查询字符串、标头或 Cookie。此策略与前一个策略相同，但它禁用了缓存压缩对象设置。</li>
+<li><strong>Managed-CachingDisabled</strong>，此策略禁用缓存。此策略对于动态内容和不可缓存的请求很有用。</li>
+<li><strong>Managed-Elemental-MediaPackage</strong>，此策略旨在用于作为 AWS Elemental MediaPackage 终端节点的源。</li>
+</ul>
+</li>
+<li><p>源请求策略（Origin Request Policy），CloudFront 提供了一组托管源请求策略，您可以将这些策略附加到分配的任意缓存行为。有了托管源请求策略，您无需编写或维护自己的源请求策略。托管策略使用已针对特定使用案例优化的设置。要使用托管源请求策略，请将它附加到分配中的缓存行为。此过程与创建源请求策略时的过程相同，只不过您只需附加一个托管源请求策略，而不是创建新的源请求策略。您可以按名称（使用控制台）或 ID（使用 AWS CLI 或开发工具包）附加策略。以下部分列出了名称和 ID。详情<a target="_blank" rel="noopener" href="https://docs.aws.amazon.com/zh_cn/AmazonCloudFront/latest/DeveloperGuide/using-managed-origin-request-policies.html">参考</a></p>
+<ul>
+<li><strong>Managed-UserAgentRefererHeaders</strong>，此策略仅包含 <code>User-Agent</code> 和 <code>Referer</code> 标头。它不包含任何查询字符串或 Cookie。</li>
+<li><strong>Managed-CORS-CustomOrigin</strong>，此策略包含在源为自定义源时启用跨源资源共享 (CORS) 请求的标头。</li>
+<li><strong>Managed-CORS-S3Origin</strong>，此策略包含在源为 Amazon S3 存储桶时启用跨源资源共享 (CORS) 请求的标头。选择该策略即会在原请求Origin Request Content中的白名单中添加如下参数。白名单中的这些项目很多教程中都是需要依次手动添加的，aws设置此策略简便了用户操作。<ul>
+<li>origin</li>
+<li>access-control-request-headers</li>
+<li>access-control-request-method</li>
+</ul>
+</li>
+<li><strong>Managed-AllViewer</strong>，此策略包含查看器请求中的所有值（查询字符串、标头和 Cookie）。</li>
+<li><strong>Managed-Elemental-MediaTailor-PersonalizedManifests</strong>，此策略旨在用于作为 AWS Elemental MediaTailor 终端节点的源。</li>
+</ul>
+</li>
+<li><p>平滑流（Smooth Streamig），该配置项仅当源服务器使用 Microsoft IIS时会有作用。启用此选项可使用 Smooth Streaming 来流式处理实时事件。如果您在此处启用 Smooth Streaming，则 CloudFront 无法将 Microsoft IIS 服务器作为源。</p>
+</li>
+<li><p>限制查看器访问（使用签名 URL 或签名 Cookie），如果您希望与该缓存行为的 <code>PathPattern</code> 匹配的对象请求使用公共 URL，请选择 <strong>No</strong>。如果您希望与该缓存行为的 <code>PathPattern</code> 匹配的对象请求使用签名 URL，请选择 <strong>Yes</strong>。然后指定您希望用于创建签名 URL 的 AWS 账户；这些账户被称为可信签署人。</p>
+</li>
+<li><p>自动压缩对象，如果您希望 CloudFront 在查看器支持压缩内容时自动压缩某些类型的文件，请选择<strong>是</strong>。当 CloudFront 压缩内容时，由于文件更小，因此下载速度更快，并会更快地为用户呈现网页。</p>
+</li>
+</ul>
+<p><img src="/posts/aws-cloudfront-01-create-cdn-network/image-20201107184032233.png" alt="image-20201107184032233"></p>
+<h4 id="3-创建分配-分配设置"><a href="#3-创建分配-分配设置" class="headerlink" title="3. 创建分配-分配设置"></a>3. 创建分配-分配设置</h4><p>该部分主要为了设置分配的价格级别和CloudFront使用备用域名时所需要完成的配置选项。本文简单介绍部分配置。有关备用域名时相关设置会在另一篇文章中介绍。</p>
+<ul>
+<li>AWS WAF Web ACL， 如果要使用 AWS WAF 根据您指定的条件来允许或阻止请求，请选择要与该分配关联的 Web ACL。AWS WAF 是一种 Web 应用程序防火墙，可让您监视转发到 CloudFront 的 HTTP 和 HTTPS 请求，并控制对您的内容的访问。根据指定的条件 (如请求源自的 IP 地址或查询字符串的值)，CloudFront 会使用所请求的内容或使用 HTTP 状态代码 403 (Forbidden) 来响应请求。还可以将 CloudFront 配置为在请求被阻止时返回自定义错误页面。</li>
+<li>备用域名 (CNAME)，可选。指定要用于对象 URL 的一个或多个域名，而不是您在创建分配时 CloudFront 所指定的域名。您必须拥有该域名，或有权使用它，您可以通过添加 SSL/TLS 证书来验证这一点。</li>
+<li>支持的 HTTP 版本，选择您希望分配在查看器与 CloudFront 通信时支持的 HTTP 版本。要使查看器和 CloudFront 使用 HTTP/2，查看器必须支持 TLS 1.2 或更高版本，并且必须支持服务器名称标识 (SNI)。一般情况下，将 CloudFront 配置为使用 HTTP/2 与查看器进行通信可降低延迟。您可以针对 HTTP/2 进行优化以提高性能。有关更多信息，请在 Internet 上搜索“http/2 optimization”。</li>
+<li>默认根对象，可选。当浏览者请求分配的根 URL (<code>http://www.example.com/</code>) 而不是分配中的对象 (<code>http://www.example.com/product-description.html</code>) 时，您希望 CloudFront 从源（例如，<code>index.html</code>）中请求的对象。指定一个默认根对象，以避免公开分配的内容。</li>
+</ul>
+<p><img src="/posts/aws-cloudfront-01-create-cdn-network/image-20201109015314326.png" alt="image-20201109015314326"></p>
+<p>选用默认配置项即可完成CloudFront的基本配置，有关，如何使用备用域名和开启CORS的内容会在其他文章中介绍。文章部分选项在自己的项目中有用到，会被详细介绍。还有部分选项没有使用到，就使用官方文档中的描述。总的来说使用aws的CloudFront完成CDN网络的搭建比自己单独建设相关网络要简便的多。由于目前还在免费使用周期，也就没有费用上的对比。aws 相关服务也是刚刚开始接触，文中定有不足之处，也希望经验丰富的朋友多多指教，感兴趣的朋友可以关注我的个人公众号一起来讨论学习。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/AWS/" class="tag">#AWS</a><a href="/tags/CloudFront/" class="tag">#CloudFront</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/machining-01-surface-roughness-knowledge.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">机械加工 之表面粗糙度的定义与总结</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/angular-01-use-ngfor-a-json-object.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Angular 如何使用结构型指令*ngFor历遍json对象</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

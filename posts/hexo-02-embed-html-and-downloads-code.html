@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Hexo 解决嵌入的html被渲染的问题和code_dir的配置项的用法 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Hexo 解决嵌入的html被渲染的问题和code_dir的配置项的用法 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/hexo-02-embed-html-and-downloads-code.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2020-09-02T00:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Hexo-相关-实战经验/">Hexo 相关 - 实战经验</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>September</span>
+            <span>2,</span>
+            <span>2020</span>
+        </div>
+        
+
+        <h1 class="title">Hexo 解决嵌入的html被渲染的问题和code_dir的配置项的用法</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：使用Hexo时，如何解决嵌入的html也被hexo的主题代码渲染的问题？hexo中的code_dir的文件夹的作用是？</p>
+<p>Abstract: How to solve the problem that embedded html is also rendered by hexo theme code. What does the code_dir folder in hexo for? </p>
+<span id="more"></span>
+
+<h3 id="嵌入式html渲染异常"><a href="#嵌入式html渲染异常" class="headerlink" title="嵌入式html渲染异常"></a>嵌入式html渲染异常</h3><p>在使用Hexo管理自己的技术博客文章时，有时候需要在文中嵌入html代码。例如使用iframe嵌入html网页，这时候常常会遇见渲染异常，即嵌入的html也被hexo的主题代码渲染了。解决这部分异常的方法很简单。假设文章中嵌入的html代码如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">width</span>=<span class="string">&quot;200&quot;</span> <span class="attr">height</span>=<span class="string">&quot;300&quot;</span> <span class="attr">src</span>=<span class="string">&quot;demo/demo-1.html&quot;</span> <span class="attr">frameborder</span>=<span class="string">&quot;40&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>解决该问题的方法很简单，仅需在Hexo的配置文件_config.yml中找到<code>skip_render</code>这一配置项，按照如下修改配置文件即可：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Directory</span></span><br><span class="line"><span class="string">...</span></span><br><span class="line"><span class="attr">skip_render:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">demo/*.html</span></span><br></pre></td></tr></table></figure>
+
+<p>出现问题的原因是：在渲染markdown文章的时候，内部的html也一并被渲染了，修改这一项则可以在渲染的时候过滤指定文件。该配置支持通配模式。相同方法，嵌入文章的CSS和Javascript文件也可以在渲染时被忽略。</p>
+<h3 id="code-dir配置项的用法"><a href="#code-dir配置项的用法" class="headerlink" title="code_dir配置项的用法"></a>code_dir配置项的用法</h3><p>在hexo的配置文件_config.yml中有<code>code_dir</code>这一配置项，这个配置项也是在修改<code>skip_render</code>的时候发现的，就好奇它的作用，弄清楚之后记录下来，以便以后回顾学习。了解发现这个配置的用处很大。之前写文章时，为了解决文章配图的问题，当时学会了<code>post_asset_folder</code>配置项，为此也安装了<strong>hexo-asset-image</strong>包。所以一开始在使用iframe尝试在文章中嵌入html页面时，就把相应的html文件，css文件，js文件全部放在了与post同名的文件夹中，但是学会<code>code_dir</code>这一配置项后，就可以更优雅地处理这些文件了。</p>
+<p><code>code_dir</code>的默认值为路径<strong>downloads/code</strong>。问题是该文件夹应该位于何处，才能在确保使用hexo server和hexo deploy两个命令时，文章被正确处理。经过尝试之后得知，文件夹downloads/code应位于<strong>source</strong>文件夹内，如下图。这样的话可以确保，无论文章是在编辑、预览或发布时，文章中的相关内容都有效。</p>
+<p><img src="/posts/hexo-02-embed-html-and-downloads-code/hexo-02-01.png" alt="截屏2020-09-02 下午4.52.28"></p>
+<p>这个文件夹，不仅可以用于本文提到嵌入式的html，css和js文件的保存目录，也可以作为示例代码的保存路径以供读者下载尝试。即在markdown文章内使用下列代码：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">donwload file</span>](<span class="link">/downloads/code/demo.html</span>)</span><br></pre></td></tr></table></figure>
+
+<p>文章发布时，读者就可以使用右键菜单“储存为…”下载所需文件。</p>
+<p>这里没有专家，记录这些主要是为了自己以后回顾学习之方便，文章有不足之处也实属正常。见解不同，诚切赐教，关注微信公众号，一起讨论学习。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Hexo/" class="tag">#Hexo</a><a href="/tags/使用技巧/" class="tag">#使用技巧</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/hexo-03-howto-debug-hexo-in-vscode.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Hexo 如何在VS Code中调试Hexo的相关代码</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/css-01-use-css-hide-content.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">CSS 如何运用CSS来隐藏页面文本</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

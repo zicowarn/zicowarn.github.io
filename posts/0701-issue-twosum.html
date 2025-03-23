@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Python 应用之 Two sum - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Python 应用之 Two sum - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/0701-issue-twosum.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2018-11-23T00:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Python-相关-7-Python-应用/">Python 相关 - 7. Python 应用</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>November</span>
+            <span>23,</span>
+            <span>2018</span>
+        </div>
+        
+
+        <h1 class="title">Python 应用之 Two sum</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>最近一直考虑着下一篇关于Python的文章应该是什么样的内容，对比一些专业大咖的文章，目前应该写一个完整的且无错的程序，然后和大家一起一行行地分析代码相互学习，可是我实在不想如此亦步亦趋。在学习编程方面，我是一个实用主义者，认为“学以致用”才是学习的最终目的， 最近发现了一些有趣的东西，让我很感兴趣，也能检验我自己所学的东西。</p>
+<span id="more"></span>
+
+<p>本着“学以致用”为先，从今天开始我们通过研究算法的方式，进而明白自己之前学的内容如何更好地使用。之所以打算写这样方面的内容，也是因为最近的一次和猎头通话时，被问到类似的问题，可是自己竟然不会，丢脸啊。所以就下定决心研究算法，在此把自己所学所想跟大家分享。</p>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a><strong>问题描述</strong></h2><p>* 英文原文：</p>
+<blockquote>
+<p>Given an array of integers, return indices of the two numbers such that they add up to a specific target. You may assume that each input would have exactly one solution, and you may not use the same element twice.</p>
+</blockquote>
+<p>* 我的理解：</p>
+<blockquote>
+<p>给定一个整数数组和一个目标值，求数组内两个元素和为目标值的指针。 需要保证每次输入都能得到正确的解，并且任何一个元素<strong>不能</strong>使用两次。</p>
+</blockquote>
+<p>* 例：</p>
+<blockquote>
+<p>如有列表 [2, 7, 11, 15] 若目标值 9， 因为 2 + 7 = 9， 所以得[0, 1]; 若目标值 18， 因为 7 + 11 = 18， 所以得[1, 2]。</p>
+</blockquote>
+<h2 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a><strong>解决思路</strong></h2><ul>
+<li><strong>第一步推导</strong></li>
+</ul>
+<p>使用最简单的思路暴力解决。 历遍列表中的每一个元素，然后检查是否相邻的两个元素的和是否和所求一致，如果相同则返回这两个元素的索引。代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">Approach1</span>(<span class="params">listInput, iTarget</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Brute Force</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        :type listInput: List[int]</span></span><br><span class="line"><span class="string">        :type iTarget: int</span></span><br><span class="line"><span class="string">        :rtype: List[int]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(listInput) &lt;= <span class="number">1</span>:            </span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">for</span> iDx <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(listInput)):            </span><br><span class="line">            <span class="keyword">for</span> jDx <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="built_in">len</span>(listInput)):                </span><br><span class="line">                <span class="keyword">if</span> listInput[jDx] == (iTarget - listInput[iDx]):</span><br><span class="line">                    <span class="keyword">return</span> [iDx, jDx]</span><br></pre></td></tr></table></figure>
+
+<p>这样的方法虽然不能符合题目要求，因为列表中的每一个元素都被使用了两次。但是可以以此为基础，进一步探索找到解决问题的最优解。</p>
+<ul>
+<li><p><strong>第二步推导</strong></p>
+<p>因为第一步推导中方法的时间复杂度为O(n^2)。 为了优化时间复杂度，就要尝试找到一个更加高性能的方法来检查一个元素与目标值的差是否存在于列表中。 而且当其差值存在，我们还要得到该元素的索引。 那么最好的保存两者映射的途径是什么？ 当然是一个哈希表，在Python中为字典。</p>
+</li>
+</ul>
+<p>为了提高效率就要减少查找时间，准确地说把两者映射的查找次数从N降低到1。 而哈希表就是为此而生的。 理论上使用哈希表可以实现在恒定时间内完成查找。但是现实中可能会出现哈希函数不完善造成的冲突可能会导致查找次数重新从1退到n。 所以选择合适的哈希函数也是很重要的。 以此为思路优化第一步的推导，就得到下面的代码。 Python作为高级编程的语言，虽然解释器封装了哈希函数，也会存在碰撞冲突的风险，但一般很少出现。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">Approach2</span>(<span class="params">listInput, iTarget</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Two-pass Hash Table</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        :type listInput: List[int]</span></span><br><span class="line"><span class="string">        :type iTarget: int</span></span><br><span class="line"><span class="string">        :rtype: List[int]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(listInput) &lt;= <span class="number">1</span>:            </span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="comment"># dictBuffer = &#123;&#125;</span></span><br><span class="line">        <span class="comment"># for iDx in range(len(listInput)):</span></span><br><span class="line">        <span class="comment">#    dictBuffer[listInput[iDx]] = iDx</span></span><br><span class="line">        dictBuffer = <span class="built_in">dict</span>(<span class="built_in">zip</span>(listInput, <span class="built_in">range</span>(<span class="built_in">len</span>(listInput))))        </span><br><span class="line">        <span class="keyword">for</span> iDx <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(listInput)):</span><br><span class="line">            iComplement = iTarget - listInput[iDx]            </span><br><span class="line">            <span class="keyword">if</span> dictBuffer.has_key(iComplement) <span class="keyword">and</span> dictBuffer.get(iComplement) != iDx:</span><br><span class="line">                <span class="keyword">return</span> [iDx, dictBuffer.get(iComplement)]</span><br></pre></td></tr></table></figure>
+
+<p>上述的推导里面，使用了两个迭代，第一次迭代中（被注释的内容），循环将每个元素和其索引添加到字典内。然后在第二个迭代中，我们检查字典中是否存在其中一个元素差值为键的映射，如果存在就返回该元素以及差值对于的索引。 需要检验该差值不能为元素本身。</p>
+<ul>
+<li><strong>第三步推导</strong></li>
+</ul>
+<p>通过正确理解第二步推导，其实可以发现。 相同的目的也可以通过一次迭代完成。 在迭代的过程中，我们先判断当前元素是否存在于映射字典中，该映射字典保存了列表中一个元素与目标值的差以及该元素的索引。如果存在就立即返回。 若不存在，则将该元素与目标值的差作为键，其索引作为值，保存在这个映射字典中。代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">Approach3</span>(<span class="params">listInput, iTarget</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        One-pass Hash Table</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        :type listInput: List[int]</span></span><br><span class="line"><span class="string">        :type iTarget: int</span></span><br><span class="line"><span class="string">        :rtype: List[int]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(listInput) &lt;= <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        dictBuffer = &#123;&#125;</span><br><span class="line">        <span class="keyword">for</span> iDx <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(listInput)):</span><br><span class="line">            <span class="keyword">if</span> listInput[iDx] <span class="keyword">in</span> dictBuffer:</span><br><span class="line">                <span class="keyword">return</span> [dictBuffer[listInput[iDx]], iDx]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                dictBuffer[iTarget - listInput[iDx]] = iDx</span><br></pre></td></tr></table></figure>
+
+<p>可以看出第三步的推导能够满足题目的要求，即每个元素只能使用一次，而且解决方案的时间复杂度(O(n))和空间复杂度(O(n))都为最优。 关于算法的复杂度，即时间复杂度和空间复杂度的内容，我找机会总结后分享给大家。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h2><p>第三步推导完成之后，真的是醍醐灌顶。通过这三步推导，从最早的暴力解决，一步步地靠近正确的答案，发现这里面没有新的编程技术，也没有自创的数据类型。全都是之前文章介绍过的基本知识，可是通过改变这些基本内容的使用方法和方式，就能得到不一样的效果。也意识到，我们都有解决问题的能力和想到解决方案的智慧，只是很多时候面对问题时，都是以简单和快速为先，并没有考虑使用的方法是否最优。很多时候只要具有就是看下去的毅力和试下去的恒心，我们都能找到解决问题的最优解。</p>
+<p>研究这个算法的过程，也认识到自己离软件大拿和行业翘楚还很远。也明白自己看待问题的眼光，解决问题的思路包括编程的思维都是有局限。这篇文章也作为我自己对待编程的新起点，希望与君相互讨论帮助，共同进步学习。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/实战经验/" class="tag">#实战经验</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/0801-ma-zeropointone.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Python 杂记之 Python不认识0.1</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/030302-for.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Python 循环语句for</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

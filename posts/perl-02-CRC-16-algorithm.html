@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Perl 实现CRC-16算法和应用 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Perl 实现CRC-16算法和应用 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/perl-02-CRC-16-algorithm.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2015-02-15T13:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Perl-相关-实战经验/">Perl 相关 - 实战经验</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>February</span>
+            <span>15,</span>
+            <span>2015</span>
+        </div>
+        
+
+        <h1 class="title">Perl 实现CRC-16算法和应用</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：本文讨论如何使用Perl语言实现CRC-16算法和应用</p>
+<p>Abstract: This article discusses how to use Perl language to implement CRC-16 algorithm and application</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/eperl -w</span></span><br><span class="line"><span class="comment">#   Filename: crc-16.pl </span></span><br><span class="line"><span class="keyword">my</span> @table;</span><br><span class="line"><span class="function"><span class="keyword">sub</span> <span class="title">generateCRC16</span>()</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment"># globle @table;</span></span><br><span class="line">    <span class="comment"># if (len(@table) == 256) &amp; ($table[1] == 49354))</span></span><br><span class="line">    <span class="comment"># &#123;</span></span><br><span class="line">    <span class="comment">#     return;</span></span><br><span class="line">    <span class="comment"># &#125;</span></span><br><span class="line">    <span class="keyword">my</span> $i = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">my</span> @lst;</span><br><span class="line">    <span class="keyword">my</span> $data;</span><br><span class="line">    <span class="keyword">my</span> $crc;</span><br><span class="line">    <span class="keyword">while</span> ($i &lt; <span class="number">256</span>) &#123;</span><br><span class="line">         <span class="comment"># body...</span></span><br><span class="line">         $data = ($i&lt;&lt;<span class="number">1</span>);</span><br><span class="line">         $crc = <span class="number">0</span>;</span><br><span class="line">         <span class="keyword">my</span> $j = <span class="number">8</span>;</span><br><span class="line">         <span class="keyword">while</span>($j &gt; <span class="number">0</span>)</span><br><span class="line">         &#123;</span><br><span class="line">            $data &gt;&gt;=<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (($data ^ $crc) &amp; <span class="number">0x0001</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                $crc = ($crc &gt;&gt; <span class="number">1</span>) ^ <span class="number">0xA001</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">            &#123;</span><br><span class="line">                 $crc &gt;&gt;= <span class="number">1</span>;   </span><br><span class="line">            &#125;</span><br><span class="line">            $j -= <span class="number">1</span>;</span><br><span class="line">         &#125;</span><br><span class="line">         $lst[$i] = $crc;</span><br><span class="line">         $i +=<span class="number">1</span>;</span><br><span class="line">     &#125; </span><br><span class="line">    <span class="keyword">return</span> @lst;</span><br><span class="line">&#125;</span><br><span class="line">@table = generateCRC16();</span><br><span class="line"><span class="keyword">print</span> <span class="string">&quot;-----------------------------------------------\n&quot;</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">&quot;The following is the crc-16 table:\n&quot;</span>;</span><br><span class="line"><span class="keyword">my</span> $c = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">for</span> $a (@table)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">printf</span> (<span class="string">&quot;0x%X&quot;</span>,$a);</span><br><span class="line">    <span class="keyword">print</span> <span class="string">&quot;\t&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (($c % <span class="number">8</span> == <span class="number">0</span>) &amp; ($c != <span class="number">0</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">print</span> <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    $c += <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">print</span> <span class="string">&quot;-----------------------------------------------\n&quot;</span>;</span><br><span class="line"><span class="function"><span class="keyword">sub</span> <span class="title">calculaterCRC</span>()</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">my</span> $string = <span class="keyword">shift</span>(@_);</span><br><span class="line">    <span class="keyword">my</span> $crc = <span class="number">0xFFFF</span>;</span><br><span class="line">    <span class="comment">#foreach $chr (unpack(&quot;(a)*&quot;, $string))</span></span><br><span class="line">    <span class="keyword">foreach</span> $chr (<span class="keyword">unpack</span>(<span class="string">&quot;C*&quot;</span>, $string))</span><br><span class="line">    &#123;</span><br><span class="line">        $crc = ($crc &gt;&gt; <span class="number">8</span>) ^ $table[($crc  ^ $chr) &amp; <span class="number">0xFF</span> ];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">my</span> $crcL = <span class="keyword">sprintf</span>(<span class="string">&quot;\\x%X&quot;</span>, &amp;_Lo($crc));</span><br><span class="line">    <span class="keyword">my</span> $crcH = <span class="keyword">sprintf</span>(<span class="string">&quot;\\x%X&quot;</span>, &amp;_Hi($crc));</span><br><span class="line">    <span class="keyword">return</span> $crcH.$crcL;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#printf (&quot;%X\n&quot;,&amp;calculaterCRC(&quot;Hallo World&quot;));</span></span><br><span class="line"><span class="function"><span class="keyword">sub</span> <span class="title">convertchrtoacsii</span>()</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">my</span> $string = <span class="keyword">shift</span>(@_);</span><br><span class="line">    <span class="keyword">foreach</span> $chr (<span class="keyword">unpack</span>(<span class="string">&quot;C0U4&quot;</span>, $string))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">print</span> $chr.<span class="string">&quot; the acsii code is: &quot;</span>.ord($chr).<span class="string">&quot;  in hex format: &quot;</span>;</span><br><span class="line">        <span class="keyword">printf</span> <span class="string">&quot;%X\n&quot;</span>, (<span class="keyword">ord</span>($chr));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">sub</span> _<span class="title">Lo</span>()</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">my</span> $myhex = <span class="keyword">shift</span>(@_);</span><br><span class="line">    <span class="keyword">return</span> ($myhex &amp; <span class="number">0x00FF</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">sub</span> _<span class="title">Hi</span>()</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">my</span> $myhex = <span class="keyword">shift</span>(@_);</span><br><span class="line">    <span class="keyword">return</span> (($myhex &amp; <span class="number">0xFF00</span>) &gt;&gt; <span class="number">8</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">sub</span> <span class="title">checkCrc</span>()　＃用于检查ＣＲＣ码时候匹配</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">my</span> ($payload, $crcsum) = @_;</span><br><span class="line">    <span class="keyword">print</span> $payload.<span class="string">&quot;---\n&quot;</span>;</span><br><span class="line">    <span class="keyword">print</span> $crcsum.<span class="string">&quot;+++\n&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> ($crcsum eq &amp;calculaterCRC($payload))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">print</span> <span class="string">&quot;check CRC summe&gt;&gt;: not match!!\n&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">print</span> <span class="string">&quot;check CRC summe&gt;&gt;: match!!\n&quot;</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">sub</span> <span class="title">embedPayload</span>　＃　此方法主要实现将字符串中的字符转换为十六进制，并加入：作为分隔符</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">my</span> $string = <span class="keyword">shift</span>(@_);</span><br><span class="line">    <span class="keyword">my</span> @chrs = (<span class="keyword">unpack</span>(<span class="string">&quot;(a)*&quot;</span>, $string));</span><br><span class="line">    <span class="keyword">my</span> @newchrs = <span class="keyword">map</span> &#123; <span class="keyword">sprintf</span>(<span class="string">&quot;%X&quot;</span>, (<span class="keyword">ord</span>($_)))&#125; @chrs;</span><br><span class="line">    <span class="keyword">my</span> $iterms =<span class="keyword">join</span> (<span class="string">&quot;:&quot;</span>, @newchrs);</span><br><span class="line">    <span class="keyword">return</span> $iterms;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">sub</span> <span class="title">extraPayload</span>　＃　上述方法的逆操作</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">my</span> $iterms = <span class="keyword">shift</span>(@_);</span><br><span class="line">    <span class="keyword">my</span> @chrs = <span class="keyword">split</span>(<span class="string">&quot;:&quot;</span>,$iterms);</span><br><span class="line">    <span class="keyword">my</span> @newchrs = <span class="keyword">map</span> &#123; <span class="keyword">chr</span>(<span class="keyword">hex</span>($_))&#125; @chrs;</span><br><span class="line">    <span class="keyword">my</span> $string =<span class="keyword">join</span> (<span class="string">&quot;&quot;</span>, @newchrs);</span><br><span class="line">    <span class="keyword">return</span> $string;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">print</span> <span class="string">&quot;-----------------------------------------------\n&quot;</span>;</span><br><span class="line"><span class="keyword">print</span> &amp;embedPayload(<span class="string">&quot;ABCD&quot;</span>).<span class="string">&quot;\n&quot;</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">&quot;---------\n&quot;</span>;</span><br><span class="line"><span class="keyword">print</span> &amp;extraPayload(&amp;embedPayload(<span class="string">&quot;ABCD&quot;</span>));</span><br><span class="line"><span class="comment">#print chr(&quot;\x4F\x4B&quot;);</span></span><br><span class="line"><span class="comment"># usage:</span></span><br><span class="line"><span class="comment"># for example </span></span><br><span class="line"><span class="comment"># payload of message is &quot;Hallo World&quot;</span></span><br><span class="line"><span class="comment"># payload+crc(Hi)+crc(Lo)</span></span><br></pre></td></tr></table></figure>
+
+<p>先上代码，由于整理博客，代码分析以后整理添加。欢迎交流提意见彼此提高。需要声明一下51cto博客作者zuiwuxin就是作者本人，所以不存在版权问题。以后该博客将作为个人文章的主要发布地。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Perl/" class="tag">#Perl</a><a href="/tags/CRC-16/" class="tag">#CRC-16</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/0704-issue-no-module-named-django-conf-urls-defaults.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Python 应用之如何解决加载django模块时的错误:no module named django.conf.urls.defaults</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/perl-03-language-package-UDP-protocol-repackaging.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Perl 如何创建包与UDP协议的再包装</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

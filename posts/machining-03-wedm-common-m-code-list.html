@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>机械加工 线切割数控加工常用M代码一览表 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="机械加工 线切割数控加工常用M代码一览表 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/machining-03-wedm-common-m-code-list.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2022-05-31T09:04:36.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/机械加工-相关-知识总结/">机械加工 相关 - 知识总结</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>May</span>
+            <span>31,</span>
+            <span>2022</span>
+        </div>
+        
+
+        <h1 class="title">机械加工 线切割数控加工常用M代码一览表</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：线切割数控机加工M代码一览表，全部代码语法格式都有详细的解释性描述。部分代码采用图文形式进行详细介绍描述。</p>
+<p>Abstract: List of M codes commonly used in WEDM, all code syntax format with detailed explanatory descriptions. Some codes are described in detail in graphic form.</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h2 id="线切割数控加工常用M代码一览表"><a href="#线切割数控加工常用M代码一览表" class="headerlink" title="线切割数控加工常用M代码一览表"></a>线切割数控加工常用M代码一览表</h2><table>
+<thead>
+<tr>
+<th>M代码</th>
+<th>代码功能(通用)</th>
+<th>AC CUT HMI 2</th>
+<th>Sodick设备</th>
+<th>Seibu设备</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a name="BACK00" href="#M00">M00</a></td>
+<td>程序停止</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK01" href="#M01">M01</a></td>
+<td>可选停止</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK02" href="#M02">M02</a></td>
+<td>程序结束</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK03" href="#M03">M03</a></td>
+<td>AWT 跳过；放电开启（西部）</td>
+<td>x</td>
+<td>*</td>
+<td>*</td>
+</tr>
+<tr>
+<td><a name="BACK04" href="#M04">M04</a></td>
+<td>打开侧门；停留（西部）</td>
+<td>*</td>
+<td>x</td>
+<td>*</td>
+</tr>
+<tr>
+<td><a name="BACK05" href="#M05">M05</a></td>
+<td>关闭侧门；无视接触感知（沙）；放电停止（西）</td>
+<td>*</td>
+<td>*</td>
+<td>*</td>
+</tr>
+<tr>
+<td><a name="BACK06" href="#M06">M06</a></td>
+<td>启用穿丝射流；移动过程不放电</td>
+<td>*</td>
+<td>*</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK07" href="#M07">M07</a></td>
+<td>导电块回退</td>
+<td>-</td>
+<td>x</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK08" href="#M08">M08</a></td>
+<td>打开舱门</td>
+<td>-</td>
+<td>x</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK09" href="#M09">M09</a></td>
+<td>打开侧门</td>
+<td>-</td>
+<td>x</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK12" href="#M12">M12</a></td>
+<td>关闭侧门 + 填充</td>
+<td>-</td>
+<td>x</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK13" href="#M13">M13</a></td>
+<td>等待门关闭 + 填充</td>
+<td>-</td>
+<td>x</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK14" href="#M14">M14</a></td>
+<td>重新穿丝块初始化</td>
+<td>-</td>
+<td>x</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK15" href="#M15">M15</a></td>
+<td>设置锥度切割模式</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK18" href="#M18">M18</a></td>
+<td>打开液槽门</td>
+<td>-</td>
+<td>x</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK19" href="#M19">M19</a></td>
+<td>关闭液槽门</td>
+<td>-</td>
+<td>x</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK20" href="#M20">M20</a></td>
+<td>穿丝</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK21" href="#M21">M21</a></td>
+<td>断丝（AWF，SEQ1）</td>
+<td>x</td>
+<td>x</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK23" href="#M23">M23</a></td>
+<td>取消激活几何策略；断丝（AWF，SEQ2）</td>
+<td>*</td>
+<td>x</td>
+<td>*</td>
+</tr>
+<tr>
+<td><a name="BACK24" href="#M24">M24</a></td>
+<td>激活几何策略；断丝（AWF，SEQ2）</td>
+<td>*</td>
+<td>x</td>
+<td>*</td>
+</tr>
+<tr>
+<td><a name="BACK25" href="#M25">M25</a></td>
+<td>选择定位供电</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK27" href="#M27">M27</a></td>
+<td>取消激活保护策略</td>
+<td>*</td>
+<td>x</td>
+<td>*</td>
+</tr>
+<tr>
+<td><a name="BACK28" href="#M28">M28</a></td>
+<td>激活保护策略，等级1；（西）内部轮廓起始位置距离</td>
+<td>*</td>
+<td>x</td>
+<td>*</td>
+</tr>
+<tr>
+<td><a name="BACK29" href="#M29">M29</a></td>
+<td>激活保护策略，等级2；（西）外部轮廓起始位置距离</td>
+<td>*</td>
+<td>x</td>
+<td>*</td>
+</tr>
+<tr>
+<td><a name="BACK30" href="#M30">M30</a></td>
+<td>程序结束</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK33" href="#M33">M33</a></td>
+<td>电极丝处理臂向前旋转</td>
+<td>x</td>
+<td>-</td>
+<td>x</td>
+</tr>
+<tr>
+<td><a name="BACK34" href="#M34">M34</a></td>
+<td>加注工作水槽</td>
+<td>-</td>
+<td>x</td>
+<td>x</td>
+</tr>
+<tr>
+<td><a name="BACK35" href="#M35">M35</a></td>
+<td>排空工作水槽</td>
+<td>-</td>
+<td>x</td>
+<td>x</td>
+</tr>
+<tr>
+<td><a name="BACK36" href="#M36">M36</a></td>
+<td>半水箱门限制设置</td>
+<td>x</td>
+<td></td>
+<td>x</td>
+</tr>
+<tr>
+<td><a name="BACK37" href="#M37">M37</a></td>
+<td>开启锥度控制（西部）</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK38" href="#M38">M38</a></td>
+<td>加注工作水槽和浸入模式；关闭锥度控制（西部）</td>
+<td>*</td>
+<td>x</td>
+<td>*</td>
+</tr>
+<tr>
+<td><a name="BACK39" href="#M39">M39</a></td>
+<td>加注工作水槽和喷水模式</td>
+<td>-</td>
+<td>x</td>
+<td>x</td>
+</tr>
+<tr>
+<td><a name="BACK40" href="#M40">M40</a></td>
+<td>放电停止，同M05（西）</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK41" href="#M41">M41</a></td>
+<td>关闭供电</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK42" href="#M42">M42</a></td>
+<td>停止给丝</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK43" href="#M43">M43</a></td>
+<td>电极丝处理臂向后旋转；（西）加工液停止</td>
+<td>x</td>
+<td>*</td>
+<td>*</td>
+</tr>
+<tr>
+<td><a name="BACK44" href="#M44">M44</a></td>
+<td>循环泵关闭</td>
+<td>-</td>
+<td>x</td>
+<td>x</td>
+</tr>
+<tr>
+<td><a name="BACK45" href="#M45">M45</a></td>
+<td>加工液开启循环泵打开</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK46" href="#M46">M46</a></td>
+<td>半水箱门限制取消；（西）停止加工液，给丝，切割功率</td>
+<td>*</td>
+<td>-</td>
+<td>*</td>
+</tr>
+<tr>
+<td><a name="BACK50" href="#M50">M50</a></td>
+<td>自动剪丝</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK55" href="#M55">M55</a></td>
+<td>跳点名称</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK60" href="#M60">M60</a></td>
+<td>自动穿丝，同M20</td>
+<td>-</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK62" href="#M62">M62</a></td>
+<td>完成工作水槽排空</td>
+<td>-</td>
+<td>x</td>
+<td>x</td>
+</tr>
+<tr>
+<td><a name="BACK67" href="#M67">M67</a></td>
+<td>排空液槽</td>
+<td>-</td>
+<td>x</td>
+<td>x</td>
+</tr>
+<tr>
+<td><a name="BACK70" href="#M70">M70</a></td>
+<td>回溯</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK74" href="#M74">M74</a></td>
+<td>开启冲洗切割（完全排空）</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK75" href="#M75">M75</a></td>
+<td>开启浸没切割</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK76" href="#M76">M76</a></td>
+<td>开启冲洗切割（部分排空）</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK80" href="#M80">M80</a></td>
+<td>放电开启（不可用）</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK81" href="#M81">M81</a></td>
+<td>供电开启</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK82" href="#M82">M82</a></td>
+<td>给丝开启</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK83" href="#M83">M83</a></td>
+<td>加工液开启</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK89" href="#M89">M89</a></td>
+<td>控制侧面切割</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK90" href="#M90">M90</a></td>
+<td>设置切割开始位置</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK96" href="#M96">M96</a></td>
+<td>反向复制结束（镜像功能）</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK97" href="#M97">M97</a></td>
+<td>反向复制开启（镜像功能）</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK98" href="#M98">M98</a></td>
+<td>从主程序跳转到子程序</td>
+<td>x</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK99" href="#M99">M99</a></td>
+<td>从子程序跳转到主程序</td>
+<td>x</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK101" href="#M101">M101</a></td>
+<td>M代码额外输出指令1</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK102" href="#M102">M102</a></td>
+<td>M代码额外输出指令2</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK103" href="#M103">M103</a></td>
+<td>M代码额外输出指令3</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK114" href="#M114">M114</a></td>
+<td>ACO控制选项</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK115" href="#M115">M115</a></td>
+<td>ACO控制选项</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK116" href="#M116">M116</a></td>
+<td>ACO控制选项</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK117" href="#M117">M117</a></td>
+<td>切割时间记录</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK118" href="#M118">M118</a></td>
+<td>LHA开启</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK121" href="#M121">M121</a></td>
+<td>ELC模式取消（可选）</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK122" href="#M122">M122</a></td>
+<td>ELC模式启用（可选）</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK123" href="#M123">M123</a></td>
+<td>芯线切割，结束位（单次）</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK124" href="#M124">M124</a></td>
+<td>芯线切割，起始位（单次）</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK125" href="#M125">M125</a></td>
+<td>芯线切割关闭（持续）</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK126" href="#M126">M126</a></td>
+<td>芯线切割开启（持续）</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK131" href="#M131">M131</a></td>
+<td>用户数据库自动输入</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK151" href="#M151">M151</a></td>
+<td>进刀路径修正关闭</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK152" href="#M152">M152</a></td>
+<td>进刀路径修正开启</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK161" href="#M161">M161</a></td>
+<td>厚度控制关闭</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK162" href="#M162">M162</a></td>
+<td>厚度控制开启</td>
+<td>x</td>
+<td>x</td>
+<td>-</td>
+</tr>
+<tr>
+<td><a name="BACK199" href="#M199">M199</a></td>
+<td>半水箱门限制取消</td>
+<td>x</td>
+<td>-</td>
+<td>x</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">图例 -，通用功能描述相同</span><br><span class="line">图例 x，设备不支持该命令</span><br><span class="line">图例 *，特殊功能差异描述</span><br></pre></td></tr></table></figure>
+
+<h3 id="M00：程序停止-返回"><a href="#M00：程序停止-返回" class="headerlink" title="M00：程序停止    [返回]"></a><a name="M00">M00：程序停止</a>    <a href="#BACK00">[返回]</a></h3><p>代码格式：M00</p>
+<p>解释：程序停止功能。停止后点击M00会从头开始。M00指令实际上是一个暂停指令。功效是履行此指令后，机床结束一切操作。即进丝等动作结束。但模态信息全数被保存，在按下把持面板上的启动指令后，机床重新启动，持续履行后面的程序。</p>
+<p>用处：M00该指令重要用于工件在加工过程中需停机检查、测量零件、手工换刀或交接班等。</p>
+<h3 id="M01：程序停止-返回"><a href="#M01：程序停止-返回" class="headerlink" title="M01：程序停止    [返回]"></a><a name="M01">M01：程序停止</a>    <a href="#BACK01">[返回]</a></h3><p>代码格式：M01</p>
+<p>解释：可选的停止功能，停止后点击M01就会继续。M01指令的功效与M00类似，不同的是，M01只有在预先按下把持面板上“可选停止开关”按钮的情形下，程序才会结束。倘若未按下“可选停止开关”按钮，程序履行到M01时不会停止，而是持续履行下面的程序。M01结束之后，按启动按钮可以持续履行后面的程序。</p>
+<p>用处：M01该指令重要用于加工工件抽样检查，清理切屑等</p>
+<h3 id="M02：程序结束-返回"><a href="#M02：程序结束-返回" class="headerlink" title="M02：程序结束    [返回]"></a><a name="M02">M02：程序结束</a>    <a href="#BACK02">[返回]</a></h3><p>代码格式：M02</p>
+<p>解释：程序结束</p>
+<p>用处：作为线切割NC代码的最后一行。</p>
+<h3 id="M03：AWT-跳过-返回"><a href="#M03：AWT-跳过-返回" class="headerlink" title="M03：AWT 跳过    [返回]"></a><a name="M03">M03：AWT 跳过</a>    <a href="#BACK03">[返回]</a></h3><p>代码格式：M03</p>
+<p>解释：代码搜索</p>
+<p>用处：AWT为自动穿<strong>丝</strong>装置. 实现自动熔断及自动穿<strong>丝</strong>作业</p>
+<h3 id="M04：打开侧门-返回"><a href="#M04：打开侧门-返回" class="headerlink" title="M04：打开侧门   [返回]"></a><a name="M04">M04：打开侧门</a>   <a href="#BACK04">[返回]</a></h3><p>代码格式：M04</p>
+<p>解释：</p>
+<ul>
+<li>打开侧门</li>
+<li>西部设备停止，格式为M04P_ , 不允许小数点，在 P 指定的时间内停止运行，等效于G04 </li>
+</ul>
+<p>用处：</p>
+<h3 id="M05：无视接触感知-返回"><a href="#M05：无视接触感知-返回" class="headerlink" title="M05：无视接触感知   [返回]"></a><a name="M05">M05：无视接触感知</a>   <a href="#BACK05">[返回]</a></h3><p>代码格式：M05</p>
+<p>解释：无视接触感知；关闭侧门（ AC CUT HMI 2 ）</p>
+<p>用处：用于空跑（Dry Run）。为无视接触感知（No sensor touch）模式下，如果电极丝触碰到其它物体时，电极丝会断开。用于当你想通过现有的切口进行空跑时。所有轴的电机运行，所有限位开关被检查。</p>
+<h3 id="M06：移动过程不放电-返回"><a href="#M06：移动过程不放电-返回" class="headerlink" title="M06：移动过程不放电   [返回]"></a><a name="M06">M06：移动过程不放电</a>   <a href="#BACK06">[返回]</a></h3><p>代码格式：M06</p>
+<p>解释：移动过程不放电</p>
+<p>用处：</p>
+<p>AC CUT HMI 2 设备：启用穿丝射流</p>
+<h3 id="M07：导电块回退-返回"><a href="#M07：导电块回退-返回" class="headerlink" title="M07：导电块回退   [返回]"></a><a name="M07">M07：导电块回退</a>   <a href="#BACK07">[返回]</a></h3><p>代码格式：M07</p>
+<p>解释：启用穿丝射流（AC CUT HMI 2 ）</p>
+<p>用处：</p>
+<h3 id="M08：打开舱门-返回"><a href="#M08：打开舱门-返回" class="headerlink" title="M08：打开舱门   [返回]"></a><a name="M08">M08：打开舱门</a>   <a href="#BACK08">[返回]</a></h3><p>代码格式：M08</p>
+<p>解释：打开舱门</p>
+<p>用处：不常用此M命令</p>
+<h3 id="M09：打开侧门-返回"><a href="#M09：打开侧门-返回" class="headerlink" title="M09：打开侧门   [返回]"></a><a name="M09">M09：打开侧门</a>   <a href="#BACK09">[返回]</a></h3><p>代码格式：M09</p>
+<p>解释：打开侧门</p>
+<p>用处：不常用此M命令</p>
+<h3 id="M12：关闭侧门-填充-返回"><a href="#M12：关闭侧门-填充-返回" class="headerlink" title="M12：关闭侧门 + 填充   [返回]"></a><a name="M12">M12：关闭侧门 + 填充</a>   <a href="#BACK12">[返回]</a></h3><p>代码格式：M12</p>
+<p>解释：关闭侧门 + 填充</p>
+<p>用处：不常用此M命令</p>
+<h3 id="M13：等待门关闭-填充-返回"><a href="#M13：等待门关闭-填充-返回" class="headerlink" title="M13：等待门关闭 + 填充   [返回]"></a><a name="M13">M13：等待门关闭 + 填充</a>   <a href="#BACK13">[返回]</a></h3><p>代码格式：M13</p>
+<p>解释：等待门关闭 + 填充</p>
+<p>用处：不常用此M命令</p>
+<h3 id="M14：重新穿丝块初始化-返回"><a href="#M14：重新穿丝块初始化-返回" class="headerlink" title="M14：重新穿丝块初始化   [返回]"></a><a name="M14">M14：重新穿丝块初始化</a>   <a href="#BACK14">[返回]</a></h3><p>代码格式：M14</p>
+<p>解释：重新穿丝块初始化</p>
+<p>用处：</p>
+<h3 id="M15：设置锥度切割模式-返回"><a href="#M15：设置锥度切割模式-返回" class="headerlink" title="M15：设置锥度切割模式   [返回]"></a><a name="M15">M15：设置锥度切割模式</a>   <a href="#BACK15">[返回]</a></h3><p>代码格式：M16P_</p>
+<p>解释：设置锥度切割模式</p>
+<ul>
+<li>P值为0，垂直切割（正常模式）</li>
+<li>P值为1，锥度切割，通过锥度角指令</li>
+<li>P值为11，锥度切割，上下异形</li>
+</ul>
+<p>用处：</p>
+<h3 id="M25：选择定位供电-返回"><a href="#M25：选择定位供电-返回" class="headerlink" title="M25：选择定位供电   [返回]"></a><a name="M25">M25：选择定位供电</a>   <a href="#BACK25">[返回]</a></h3><p>代码格式：M25P_, 百分比</p>
+<p>解释：可选择定位（侧面、孔中心、间隙中心）供电。</p>
+<p>用处：该选项亦可通过M41，M46，M81和M86指令实现控制。</p>
+<h3 id="M30：程序结束-返回"><a href="#M30：程序结束-返回" class="headerlink" title="M30：程序结束   [返回]"></a><a name="M30">M30：程序结束</a>   <a href="#BACK30">[返回]</a></h3><p>代码格式：M20</p>
+<p>解释：程序结束</p>
+<p>用处：与M02同义，但无法返回程序开始位置</p>
+<h3 id="M55：跳点名称-返回"><a href="#M55：跳点名称-返回" class="headerlink" title="M55：跳点名称   [返回]"></a><a name="M55">M55：跳点名称</a>   <a href="#BACK55">[返回]</a></h3><p>代码格式：M55</p>
+<p>解释：跳点名称，当出现时切割进给块跳到下一个 M20 块。(空跑时） </p>
+<p>用处：</p>
+<h3 id="M70：回溯-返回"><a href="#M70：回溯-返回" class="headerlink" title="M70：回溯   [返回]"></a><a name="M70">M70：回溯</a>   <a href="#BACK70">[返回]</a></h3><p>代码格式：M70</p>
+<p>解释：切割路径会回溯到切割开始位置 </p>
+<p>用处：</p>
+<h3 id="M89：控制侧面切割-返回"><a href="#M89：控制侧面切割-返回" class="headerlink" title="M89：控制侧面切割   [返回]"></a><a name="M89">M89：控制侧面切割</a>   <a href="#BACK89">[返回]</a></h3><p>代码格式：M89P_, </p>
+<p>解释：控制侧面切割</p>
+<p>用处：切割条件受到控制，以防止从工作面切割时断线。仅适用于指定块。可通过 M89P_ 指定切割控制长度。未指定 P 时，将使用外围参数 CD_05 [侧面切割时的控制长度] 的设置值。</p>
+<h3 id="M90：设置切割开始位置-返回"><a href="#M90：设置切割开始位置-返回" class="headerlink" title="M90：设置切割开始位置   [返回]"></a><a name="M90">M90：设置切割开始位置</a>   <a href="#BACK90">[返回]</a></h3><p>代码格式：M90, </p>
+<p>解释：设置切割开始位置</p>
+<p>用处：切割起点用作起点返回功能或回溯功能的参考点。*即使在执行 G92、G93、G54~G59 (G54Pn)、G54P9999、M20 的单命令时，也可以设置切割起点。</p>
+<h3 id="M101：M代码额外输出指令1-返回"><a href="#M101：M代码额外输出指令1-返回" class="headerlink" title="M101：M代码额外输出指令1   [返回]"></a><a name="M101">M101：M代码额外输出指令1</a>   <a href="#BACK101">[返回]</a></h3><p>代码格式：M101, </p>
+<p>解释：M代码额外输出指令1</p>
+<p>用处：与 M102、M103 相同。执行 M101 命令时，继电器触点（输出地址 Y7#4，M102 为 Y7#5，M103 为 Y7#6）将接通，然后通过输入外部 FIN 信号（输入地址 X6#3）完成 M101 命令。</p>
+<h3 id="M114：ACO控制选项-返回"><a href="#M114：ACO控制选项-返回" class="headerlink" title="M114：ACO控制选项   [返回]"></a><a name="M114">M114：ACO控制选项</a>   <a href="#BACK114">[返回]</a></h3><p>代码格式：M114B_ _ W_ _, B为降阶（STEP DOWN） 控制距离；W为升阶（STEP UP） 控制距离。</p>
+<p>解释：ACO控制选项，Auto-Cut-Off控制选项</p>
+<ul>
+<li>M114，单次模式</li>
+<li>M115，持续模式，升阶控制</li>
+<li>M116，持续模式，降阶控制</li>
+</ul>
+<h3 id="M117：切割时间记录-返回"><a href="#M117：切割时间记录-返回" class="headerlink" title="M117：切割时间记录   [返回]"></a><a name="M117">M117：切割时间记录</a>   <a href="#BACK117">[返回]</a></h3><p>代码格式：M117, </p>
+<p>解释：切割时间记录</p>
+<p>用处：切割时间（单位：秒）使用M117Pxxx命令写入宏变量No.xxx。示例：当命令“M117P500;”用于切割开始，命令“M117P501;”用于切割完成时，可以通过从#501中扣除宏变量#500来计算切割时间。</p>
+<h3 id="M118：LHA开启-返回"><a href="#M118：LHA开启-返回" class="headerlink" title="M118：LHA开启   [返回]"></a><a name="M118">M118：LHA开启</a>   <a href="#BACK118">[返回]</a></h3><p>代码格式：M117, </p>
+<p>解释：LHA开启</p>
+<p>用处：当工件和金属丝之间发生短路时，下喷嘴空气会打开。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/数控代码/" class="tag">#数控代码</a><a href="/tags/M代码/" class="tag">#M代码</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/machining-04-wedm-common-t-code-list.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">机械加工 线切割数控加工T代码一览表</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/machining-02-wedm-common-g-code-list.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">机械加工 线切割数控加工常用G代码一览表</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

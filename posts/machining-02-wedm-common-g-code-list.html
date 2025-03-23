@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>机械加工 线切割数控加工常用G代码一览表 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="机械加工 线切割数控加工常用G代码一览表 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/machining-02-wedm-common-g-code-list.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2022-05-30T05:04:36.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/机械加工-相关-知识总结/">机械加工 相关 - 知识总结</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>May</span>
+            <span>30,</span>
+            <span>2022</span>
+        </div>
+        
+
+        <h1 class="title">机械加工 线切割数控加工常用G代码一览表</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：线切割数控机加工常用G代码一览表，全部代码语法格式都有详细的解释性描述。部分代码采用图文形式进行详细介绍描述。</p>
+<p>Abstract: List of G codes commonly used in WEDM, all code syntax format with detailed explanatory descriptions. Some codes are described in detail in graphic form.</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h2 id="线切割数控加工常用G代码一览表"><a href="#线切割数控加工常用G代码一览表" class="headerlink" title="线切割数控加工常用G代码一览表"></a>线切割数控加工常用G代码一览表</h2><table>
+<thead>
+<tr>
+<th>G代码</th>
+<th>代码功能</th>
+<th>备注信息</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a name="BACKAJ" href="#GAJ">GAJ</a></td>
+<td>导丝嘴设置循环（WAL+GDI）</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACKME" href="#GME">GME</a></td>
+<td>带锥度专家的导丝嘴设置循环</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACKOP" href="#GOP">GOP</a></td>
+<td>不放电移动至一点</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK00" href="#G00">G00 </a></td>
+<td>不加工快速移动</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK01" href="#G01">G01</a></td>
+<td>线性插补，直线型切割移动</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK02" href="#G02">G02</a></td>
+<td>圆弧插补，圆弧型切割移动 - 顺时针</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK03" href="#G03">G03</a></td>
+<td>圆弧插补，圆弧形切割移动 - 逆时针</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK104" href="#G04">G04</a></td>
+<td>暂停</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK105" href="#G05">G05</a></td>
+<td>开启X轴镜像（X轴变为红色）</td>
+<td>Sodick 设备，程序结束前M02使用G09关闭镜像</td>
+</tr>
+<tr>
+<td><a name="BACK06" href="#G06">G06</a></td>
+<td>开启Y轴镜像（Y轴变为红色）</td>
+<td>Sodick 设备，程序结束前M02使用G09关闭镜像</td>
+</tr>
+<tr>
+<td><a name="BACK08" href="#G08">G08</a></td>
+<td>开启X与Y轴交换（XY轴变为小写xy）</td>
+<td>Sodick 设备 ，程序结束前M02使用G09关闭交换</td>
+</tr>
+<tr>
+<td><a name="BACK09" href="#G09">G09</a></td>
+<td>取消G05，G06和G08设置</td>
+<td>Sodick 设备，开启镜像与交换，则必须使用该命令。</td>
+</tr>
+<tr>
+<td><a name="BACK10" href="#G10">G10</a></td>
+<td>修改用户参数</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK11" href="#G11">G11</a></td>
+<td>特殊指令或块跳过开启</td>
+<td>AC Millennium中用于定义工艺</td>
+</tr>
+<tr>
+<td><a name="BACK12" href="#G12">G12</a></td>
+<td>块跳过关闭</td>
+<td>Sodick 设备，块跳过</td>
+</tr>
+<tr>
+<td><a name="BACK13" href="#G13">G13</a></td>
+<td>AWT REF=1 使用C888放电的断线恢复</td>
+<td>Sodick 设备AWT</td>
+</tr>
+<tr>
+<td><a name="BACK14" href="#G14">G14</a></td>
+<td>修改加工参数，AWT REF=0</td>
+<td>Sodick 设备AWT</td>
+</tr>
+<tr>
+<td><a name="BACK15" href="#G15">G15</a></td>
+<td>AWT REF=2 不使用C888放电的断线恢复</td>
+<td>Sodick 设备AWT</td>
+</tr>
+<tr>
+<td><a name="BACK20" href="#G20">G20</a></td>
+<td>数值单位设定，英制</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK21" href="#G21">G21</a></td>
+<td>数值单位设定，公制</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK22" href="#G22">G22</a></td>
+<td>柔性限制开启</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK23" href="#G23">G23</a></td>
+<td>柔性限制关闭</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK26" href="#G26">G26</a></td>
+<td>轮廓旋转开启</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK27" href="#G27">G27</a></td>
+<td>轮廓旋转关闭</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK28" href="#G28">G28</a></td>
+<td>返回G29保存位置</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK29" href="#G29">G29</a></td>
+<td>参考点保存（用于自动穿丝）</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK30" href="#G30">G30</a></td>
+<td>返回到最后一个G92位置</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK40" href="#G40">G40</a></td>
+<td>取消电极丝半径补偿</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK41" href="#G41">G41</a></td>
+<td>（向左偏移）电极丝前进方向左侧补偿</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK42" href="#G42">G42</a></td>
+<td>（向右偏移）电极丝前进方向右侧补偿</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK48" href="#G48">G48</a></td>
+<td>拐角倒角功能开启</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK49" href="#G49">G49</a></td>
+<td>拐角倒角功能关闭</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK50" href="#G50">G50</a></td>
+<td>取消锥度</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK51" href="#G51">G51</a></td>
+<td>（左侧锥度）电极丝向前进方向左侧倾斜</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK52" href="#G52">G52</a></td>
+<td>（右侧锥度）电极丝向前进方向右侧倾斜</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK23" href="#G53">G53</a></td>
+<td>在机床坐标系中的快速移动</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK54" href="#G54">G54</a></td>
+<td>工作坐标系0</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK55" href="#G55">G55</a></td>
+<td>在机床坐标系中的加工移动</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK56" href="#G56">G56</a></td>
+<td>工作坐标系2</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK57" href="#G57">G57</a></td>
+<td>工作坐标系3</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK58" href="#G58">G58</a></td>
+<td>半径锥度常数（线与弧线正切）</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK59" href="#G59">G59</a></td>
+<td>圆锥锥度（线与弧线正切）</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK60" href="#G60">G60</a></td>
+<td>恒定拐角半径，独立上下圆角</td>
+<td>AC CUT HMI 2，Seibu西部</td>
+</tr>
+<tr>
+<td><a name="BACK61" href="#G61">G61</a></td>
+<td>最小锥度，锥形倒角</td>
+<td>AC CUT HMI 2，Seibu西部</td>
+</tr>
+<tr>
+<td><a name="BACK62" href="#G62">G62</a></td>
+<td>平均锥度，锥形倒角</td>
+<td>AC CUT HMI 2，Seibu西部</td>
+</tr>
+<tr>
+<td><a name="BACK63" href="#G63">G63</a></td>
+<td>最大锥度，锥形倒角</td>
+<td>AC CUT HMI 2，Seibu西部</td>
+</tr>
+<tr>
+<td><a name="BACK74" href="#G74">G74</a></td>
+<td>定义工件坐标系</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK75" href="#G75">G75</a></td>
+<td>在工件坐标系中定位</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK80" href="#G80">G80</a></td>
+<td>感应器接触</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK81" href="#G81">G81</a></td>
+<td>返回至限制区域</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK82" href="#G82">G82</a></td>
+<td>移动到轴显示的一半</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK83" href="#G83">G83</a></td>
+<td>保持当前位置并保存至H寄存器</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK85" href="#G85">G85</a></td>
+<td>在工件坐标系中加工移动</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK88" href="#G88">G88</a></td>
+<td>角落插值R</td>
+<td>三菱Mitsubishi</td>
+</tr>
+<tr>
+<td><a name="BACK89" href="#G89">G89</a></td>
+<td>交点插值计算</td>
+<td>三菱Mitsubishi</td>
+</tr>
+<tr>
+<td><a name="BACK90" href="#G90">G90</a></td>
+<td>设置绝对模式</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK91" href="#G91">G91</a></td>
+<td>设置增量模式</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK92" href="#G92">G92</a></td>
+<td>定义加工坐标系</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK93" href="#G93">G93</a></td>
+<td>定义局部坐标系</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK95" href="#G95">G95</a></td>
+<td>降低加工频率</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK97" href="#G97">G97</a></td>
+<td>定义全局坐标系</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK104" href="#G104">G104</a></td>
+<td>在所有锐角处驻留（Dwell）</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK105" href="#G105">G105</a></td>
+<td>取消G104设定</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK110" href="#G110">G110</a></td>
+<td>旋转轴模式</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK111" href="#G111">G111</a></td>
+<td>转速</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK125" href="#G125">G125</a></td>
+<td>无接触位置搜索循环</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK126" href="#G126">G126</a></td>
+<td>开启坐标系旋转</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK127" href="#G127">G127</a></td>
+<td>关闭坐标系旋转</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK130" href="#G130">G130</a></td>
+<td>找边循环</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK131" href="#G131">G131</a></td>
+<td>检查干扰因素 = 0</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK132" href="#G132">G132</a></td>
+<td>检查干扰因素 = 2</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK133" href="#G133">G133</a></td>
+<td>两个平行表面内部找中心循环</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK134" href="#G134">G134</a></td>
+<td>找孔循环</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK136" href="#G136">G136</a></td>
+<td>外圆柱找中心循环</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK137" href="#G137">G137</a></td>
+<td>找角循环</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK138" href="#G138">G138</a></td>
+<td>以两孔执行工件找正</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK140" href="#G140">G140</a></td>
+<td>关闭四轴偏置</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK141" href="#G141">G141</a></td>
+<td>四轴左侧偏置</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK142" href="#G142">G142</a></td>
+<td>四轴右侧偏置</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK150" href="#G143">G143</a></td>
+<td>两个平行外表面中找中线面循环</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK145" href="#G145">G145</a></td>
+<td>工件调平测量</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK145" href="#G150">G150</a></td>
+<td>电极丝和导丝嘴赵正电极丝找正</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK152" href="#G152">G152</a></td>
+<td>导丝嘴设置循环（WAL+GDI）</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK153" href="#G153">G153</a></td>
+<td>带锥度专家的导丝嘴设置循环</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK154" href="#G154">G154</a></td>
+<td>工件表面对齐</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK157" href="#G157">G157</a></td>
+<td>测量探针校准</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK174" href="#G174">G174</a></td>
+<td>工件坐标系相对机器坐标系的偏移</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACK192" href="#G192">G192</a></td>
+<td>加工坐标系相对工件坐标系的偏移</td>
+<td>AC CUT HMI 2</td>
+</tr>
+<tr>
+<td><a name="BACKFLAG2D0" href="#FLAG2D0">FLAG2D0</a></td>
+<td>M01 代码关闭</td>
+<td>Sodick 设备</td>
+</tr>
+<tr>
+<td><a name="BACKFLAG2D1" href="#FLAG2D1">FLAG2D1</a></td>
+<td>M01 代码开启</td>
+<td>Sodick 设备</td>
+</tr>
+<tr>
+<td><a name="BACKFLAG3D" href="#FLAG3D">FLAG3D</a></td>
+<td>比例因子输入</td>
+<td>Sodick 设备</td>
+</tr>
+</tbody></table>
+<h3 id="GAJ：导丝嘴设置循环（WAL-GDI）-返回"><a href="#GAJ：导丝嘴设置循环（WAL-GDI）-返回" class="headerlink" title="GAJ：导丝嘴设置循环（WAL+GDI）  [返回]"></a><a name="GAJ">GAJ：导丝嘴设置循环（WAL+GDI）</a>  <a href="#BACKAJ">[返回]</a></h3><p>代码格式：GAJ ZB_ _ _ A_ _ _ WS_ _ _ WB_ _ _</p>
+<p>A 电极丝倾斜度</p>
+<p>WS 电极丝速度</p>
+<p>WB 电极丝张力</p>
+<h3 id="GME：带锥度专家的导丝嘴设置循环-返回"><a href="#GME：带锥度专家的导丝嘴设置循环-返回" class="headerlink" title="GME：带锥度专家的导丝嘴设置循环  [返回]"></a><a name="GME">GME：带锥度专家的导丝嘴设置循环</a>  <a href="#BACKME">[返回]</a></h3><p>代码格式：GME ZB_ _ _  WS_ _ _ WB_ _ _</p>
+<p>WS 电极丝速度</p>
+<p>WB 电极丝张力</p>
+<h3 id="GOH：用于定位上喷嘴的Z轴移动-返回"><a href="#GOH：用于定位上喷嘴的Z轴移动-返回" class="headerlink" title="GOH：用于定位上喷嘴的Z轴移动  [返回]"></a><a name="GOH">GOH：用于定位上喷嘴的Z轴移动</a>  <a href="#BACKOH">[返回]</a></h3><p>代码格式：GOH <WPH>或H_ _ _</WPH></p>
+<p>WPH</p>
+<p>H 高度</p>
+<h3 id="GOP：不放电移动至一点-返回"><a href="#GOP：不放电移动至一点-返回" class="headerlink" title="GOP：不放电移动至一点   [返回]"></a><a name="GOP">GOP：不放电移动至一点</a>   <a href="#BACKOP">[返回]</a></h3><p>代码格式：GOP <n> , N_ _ <em>或E</em> _ _</n></p>
+<p>n  点编号</p>
+<p>N 点名字</p>
+<p>E 位置 [0机械 1电器]</p>
+<h3 id="G00：不加工快速移动-返回"><a href="#G00：不加工快速移动-返回" class="headerlink" title="G00：不加工快速移动   [返回]"></a><a name="G00">G00：不加工快速移动</a>   <a href="#BACK00">[返回]</a></h3><p>代码格式：</p>
+<h3 id="G01：线性插补，直线型切割移动-返回"><a href="#G01：线性插补，直线型切割移动-返回" class="headerlink" title="G01：线性插补，直线型切割移动   [返回]"></a><a name="G01">G01：线性插补，直线型切割移动</a>   <a href="#BACK01">[返回]</a></h3><p>代码格式：G01 X_ _ _ Y_ _ _ U_ _ _ V_ _ _ Z_ _ _ A_ _ _ B_ _ _ E_ _ _</p>
+<p>X 相对或绝对坐标X轴数值</p>
+<p>Y 相对或绝对坐标Y轴数值</p>
+<p>U 四轴线割时上部喷嘴的相对或绝对坐标X轴数值</p>
+<p>V 四轴线割时上部喷嘴的相对或绝对坐标Y轴数值</p>
+<p>Z H/Z 五轴线割时，相对或绝对坐标Z轴数值或高度值Z</p>
+<p>A</p>
+<p>B</p>
+<p>E 位置 [0机械 1电器]</p>
+<h3 id="G02：圆弧插补，圆弧型切割移动-顺时针-返回"><a href="#G02：圆弧插补，圆弧型切割移动-顺时针-返回" class="headerlink" title="G02：圆弧插补，圆弧型切割移动 - 顺时针   [返回]"></a><a name="G02">G02：圆弧插补，圆弧型切割移动 - 顺时针</a>   <a href="#BACK02">[返回]</a></h3><p>代码格式：G02 X_ _ _ Y_ _ _ J+/-x.xx</p>
+<p>X</p>
+<p>Y</p>
+<p>J</p>
+<h3 id="G03：圆弧插补，圆弧型切割移动-逆时针-返回"><a href="#G03：圆弧插补，圆弧型切割移动-逆时针-返回" class="headerlink" title="G03：圆弧插补，圆弧型切割移动 - 逆时针   [返回]"></a><a name="G03">G03：圆弧插补，圆弧型切割移动 - 逆时针</a>   <a href="#BACK03">[返回]</a></h3><p>代码格式：G03 X_ _ _ Y_ _ _ J+/-x.xx</p>
+<p>X</p>
+<p>Y</p>
+<p>J</p>
+<h3 id="G04：暂停-返回"><a href="#G04：暂停-返回" class="headerlink" title="G04：暂停   [返回]"></a><a name="G04">G04：暂停   <a href="#BACK04">[返回]</a></a></h3><p>代码格式：G04 P_ _ _</p>
+<p>P 参数</p>
+<h3 id="G05：开启X轴镜像（X轴变为红色）-返回"><a href="#G05：开启X轴镜像（X轴变为红色）-返回" class="headerlink" title="G05：开启X轴镜像（X轴变为红色）  [返回]"></a><a name="G05">G05：开启X轴镜像（X轴变为红色）</a>  <a href="#BACK05">[返回]</a></h3><p>代码格式：G05</p>
+<p><img src="/posts/machining-02-wedm-common-g-code-list/image-20220528135010308.png" alt="image-20220528135010308"></p>
+<h3 id="G06：开启Y轴镜像（Y轴变为红色）-返回"><a href="#G06：开启Y轴镜像（Y轴变为红色）-返回" class="headerlink" title="G06：开启Y轴镜像（Y轴变为红色）   [返回]"></a><a name="G06">G06：开启Y轴镜像（Y轴变为红色）</a>   <a href="#BACK06">[返回]</a></h3><p>代码格式：G06</p>
+<p><img src="/posts/machining-02-wedm-common-g-code-list/image-20220528135231626.png" alt="image-20220528135231626"></p>
+<h3 id="G08：开启X与Y轴交换（XY轴变为小写xy）-返回"><a href="#G08：开启X与Y轴交换（XY轴变为小写xy）-返回" class="headerlink" title="G08：开启X与Y轴交换（XY轴变为小写xy）   [返回]"></a><a name="G08">G08：开启X与Y轴交换（XY<code>轴变为小写</code>xy）</a>   <a href="#BACK08">[返回]</a></h3><p>代码格式：G08</p>
+<p><img src="/posts/machining-02-wedm-common-g-code-list/image-20220528141049187.png" alt="image-20220528141049187"></p>
+<h3 id="G09：取消G05，G06和G08设置-返回"><a href="#G09：取消G05，G06和G08设置-返回" class="headerlink" title="G09：取消G05，G06和G08设置   [返回]"></a><a name="G09">G09：取消G05，G06和G08设置</a>   <a href="#BACK09">[返回]</a></h3><p>代码格式：G09</p>
+<h3 id="G10：修改用户参数-返回"><a href="#G10：修改用户参数-返回" class="headerlink" title="G10：修改用户参数   [返回]"></a><a name="G10">G10：修改用户参数</a>   <a href="#BACK10">[返回]</a></h3><p>代码格式：G10 P_ _ _ B_ _ _ R_ _ _</p>
+<p>P 限制或激活ID</p>
+<p>B 限制激活或赋值</p>
+<p>R 数值</p>
+<p>Seibu西部设备：</p>
+<ul>
+<li>G10P_ _ _  R_ _ _，偏置设定</li>
+<li>G10P999R_ _ _，设置精加工余量</li>
+<li>G10P_ _ _  B_ _ _，可选块跳过</li>
+</ul>
+<h3 id="G11：特殊指令-返回"><a href="#G11：特殊指令-返回" class="headerlink" title="G11：特殊指令   [返回]"></a><a name="G11">G11：特殊指令</a>   <a href="#BACK11">[返回]</a></h3><p>代码格式：G11 (TEC, n)</p>
+<p>G11 (TEC,TEST); Millenium 工艺文件<br>G11 (WIR,TEST); Millenium 线型文件</p>
+<p>Sodick中，G11用于激活NC代码程序中的斜杠“/”</p>
+<h3 id="G12：块跳过关闭-返回"><a href="#G12：块跳过关闭-返回" class="headerlink" title="G12：块跳过关闭   [返回]"></a><a name="G12">G12：块跳过关闭</a>   <a href="#BACK12">[返回]</a></h3><p>代码格式：G12</p>
+<p>Sodick中，与G11成对出现。</p>
+<h3 id="G13：-AWT-REF-1-使用C888放电的断线恢复-返回"><a href="#G13：-AWT-REF-1-使用C888放电的断线恢复-返回" class="headerlink" title="G13： AWT REF=1 使用C888放电的断线恢复   [返回]"></a><a name="G13">G13： AWT REF=1 使用C888<strong>放电的断线恢复</strong></a>   <a href="#BACK13">[返回]</a></h3><p>代码格式：G13</p>
+<h3 id="G14：修改加工参数，AWT-REF-0-返回"><a href="#G14：修改加工参数，AWT-REF-0-返回" class="headerlink" title="G14：修改加工参数，AWT REF=0   [返回]"></a><a name="G14">G14：修改加工参数，AWT REF=0</a>   <a href="#BACK14">[返回]</a></h3><p>代码格式：G14 I_ _ _ U_ _ _ C_ _ _ P_ _ _ R_ _ _ V_ _ _ L_ _ _ Z_ _ _ B_ _ _ F_ _ _ W_ _ _</p>
+<p>代码格式：G14, Sodick 设备</p>
+<p>Sodick 中，AWT REF=0 关闭断线恢复</p>
+<h3 id="G15：AWT-REF-2-不使用C888放电的断线恢复-返回"><a href="#G15：AWT-REF-2-不使用C888放电的断线恢复-返回" class="headerlink" title="G15：AWT REF=2 不使用C888放电的断线恢复   [返回]"></a><a name="G15">G15：AWT REF=2 不使用C888放电的断线恢复</a>   <a href="#BACK15">[返回]</a></h3><p>代码格式：G15, Sodick 设备</p>
+<h3 id="G20：数值单位设定，英制-返回"><a href="#G20：数值单位设定，英制-返回" class="headerlink" title="G20：数值单位设定，英制   [返回]"></a><a name="G20">G20：数值单位设定，英制</a>   <a href="#BACK20">[返回]</a></h3><p>代码格式：G20</p>
+<h3 id="G21：数值单位设定，公制-返回"><a href="#G21：数值单位设定，公制-返回" class="headerlink" title="G21：数值单位设定，公制   [返回]"></a><a name="G21">G21：数值单位设定，公制</a>   <a href="#BACK21">[返回]</a></h3><p>代码格式：G21</p>
+<h3 id="G22：柔性限制开启-返回"><a href="#G22：柔性限制开启-返回" class="headerlink" title="G22：柔性限制开启   [返回]"></a><a name="G22">G22：柔性限制开启</a>   <a href="#BACK22">[返回]</a></h3><p>代码格式：G22</p>
+<h3 id="G23：柔性限制关闭-返回"><a href="#G23：柔性限制关闭-返回" class="headerlink" title="G23：柔性限制关闭   [返回]"></a><a name="G23">G23：柔性限制关闭</a>   <a href="#BACK23">[返回]</a></h3><p>代码格式：G23</p>
+<h3 id="G26：轮廓旋转开启-返回"><a href="#G26：轮廓旋转开启-返回" class="headerlink" title="G26：轮廓旋转开启   [返回]"></a><a name="G26">G26：轮廓旋转开启</a>   <a href="#BACK26">[返回]</a></h3><p>代码格式：G26 RAxx.xx</p>
+<p>RA 旋转角度，该值会累积且无最大值限制，</p>
+<p>G26 RA60.0</p>
+<p>G90</p>
+<p>G92 X4. Y2.</p>
+<p>…</p>
+<p>G27</p>
+<p>M02</p>
+<p>用于在同一坐标系下围绕G92位置旋转编程的轮廓。程序运行时有效，点击OFF或者遇到M02时，旋转角度自动重置为0。常用于处理齿轮加工编程。</p>
+<h3 id="G27：轮廓旋转关闭-返回"><a href="#G27：轮廓旋转关闭-返回" class="headerlink" title="G27：轮廓旋转关闭   [返回]"></a><a name="G27">G27：轮廓旋转关闭</a>   <a href="#BACK27">[返回]</a></h3><p>代码格式：G27</p>
+<p>与G26成对出现</p>
+<h3 id="G28：返回G29保存位置-返回"><a href="#G28：返回G29保存位置-返回" class="headerlink" title="G28：返回G29保存位置   [返回]"></a><a name="G28">G28：返回G29保存位置</a>   <a href="#BACK28">[返回]</a></h3><p>代码格式：G28</p>
+<h3 id="G29：参考点保存（用于自动穿丝）-返回"><a href="#G29：参考点保存（用于自动穿丝）-返回" class="headerlink" title="G29：参考点保存（用于自动穿丝）   [返回]"></a><a name="G29">G29：参考点保存（用于自动穿丝）</a>   <a href="#BACK29">[返回]</a></h3><p>代码格式：</p>
+<p>G92 X0 Y0<br>G29</p>
+<h3 id="G30：返回到最后一个G92位置-返回"><a href="#G30：返回到最后一个G92位置-返回" class="headerlink" title="G30：返回到最后一个G92位置   [返回]"></a><a name="G30">G30：返回到最后一个G92位置</a>   <a href="#BACK30">[返回]</a></h3><p>代码格式：</p>
+<p>G92 X0 Y0</p>
+<p>….</p>
+<p>G30</p>
+<h3 id="G40：取消电极丝半径补偿-返回"><a href="#G40：取消电极丝半径补偿-返回" class="headerlink" title="G40：取消电极丝半径补偿   [返回]"></a><a name="G40">G40：取消电极丝半径补偿</a>   <a href="#BACK40">[返回]</a></h3><p>代码格式：</p>
+<p>代码格式：</p>
+<p>G92X0Y0</p>
+<p>G41H001</p>
+<p>…</p>
+<p>G40Y0</p>
+<h3 id="G41：电极丝前进方向左侧补偿（向左偏移）-返回"><a href="#G41：电极丝前进方向左侧补偿（向左偏移）-返回" class="headerlink" title="G41：电极丝前进方向左侧补偿（向左偏移）   [返回]"></a><a name="G41">G41：电极丝前进方向左侧补偿（向左偏移）</a>   <a href="#BACK41">[返回]</a></h3><p>代码格式：</p>
+<p>G92X0Y0</p>
+<p>G41H001</p>
+<p>…</p>
+<p>G40Y0</p>
+<p><img src="/posts/machining-02-wedm-common-g-code-list/image-20220528082103526.png" alt="image-20220528082103526"></p>
+<h3 id="G42：电极丝前进方向左侧补偿（向右偏移）-返回"><a href="#G42：电极丝前进方向左侧补偿（向右偏移）-返回" class="headerlink" title="G42：电极丝前进方向左侧补偿（向右偏移）   [返回]"></a><a name="G42">G42：电极丝前进方向左侧补偿（向右偏移）</a>   <a href="#BACK42">[返回]</a></h3><p>代码格式：</p>
+<p>G92X0Y0</p>
+<p>G42H001</p>
+<p>…</p>
+<p>G40Y0</p>
+<p><img src="/posts/machining-02-wedm-common-g-code-list/image-20220528082106302.png" alt="image-20220528082106302"></p>
+<h3 id="G48：拐角倒角功能开启-返回"><a href="#G48：拐角倒角功能开启-返回" class="headerlink" title="G48：拐角倒角功能开启   [返回]"></a><a name="G48">G48：拐角倒角功能开启</a>   <a href="#BACK48">[返回]</a></h3><p>代码格式：G48 R_ _ _ K_ _ _</p>
+<p>R</p>
+<p>K</p>
+<h3 id="G49：拐角倒角功能关闭-返回"><a href="#G49：拐角倒角功能关闭-返回" class="headerlink" title="G49：拐角倒角功能关闭   [返回]"></a><a name="G49">G49：拐角倒角功能关闭</a>   <a href="#BACK49">[返回]</a></h3><p>代码格式：</p>
+<p>G48 R2 K2</p>
+<p>…</p>
+<p>G49</p>
+<h3 id="G50：取消锥度-返回"><a href="#G50：取消锥度-返回" class="headerlink" title="G50：取消锥度   [返回]"></a><a name="G50">G50：取消锥度</a>   <a href="#BACK50">[返回]</a></h3><p>代码格式：</p>
+<p>G52 A0.5</p>
+<p>G01 X.15 Y.25</p>
+<p>…</p>
+<p>G50</p>
+<p>…</p>
+<p>G51 A0.5</p>
+<p>G01 X-.15 Y.25</p>
+<p>…</p>
+<p>G50</p>
+<h3 id="G51：（左侧锥度）电极丝向前进方向左侧倾斜-返回"><a href="#G51：（左侧锥度）电极丝向前进方向左侧倾斜-返回" class="headerlink" title="G51：（左侧锥度）电极丝向前进方向左侧倾斜      [返回]"></a><a name="G51">G51：（左侧锥度）电极丝向前进方向左侧倾斜   </a>   <a href="#BACK51">[返回]</a></h3><p>代码格式：G51 A_ _ _</p>
+<p>A 锥度</p>
+<p><img src="/posts/machining-02-wedm-common-g-code-list/image-20220528133330717.png" alt="image-20220528133330717"></p>
+<h3 id="G52：（右侧锥度）电极丝向前进方向右侧倾斜-返回"><a href="#G52：（右侧锥度）电极丝向前进方向右侧倾斜-返回" class="headerlink" title="G52：（右侧锥度）电极丝向前进方向右侧倾斜   [返回]"></a><a name="G52">G52：（右侧锥度）电极丝向前进方向右侧倾斜</a>   <a href="#BACK52">[返回]</a></h3><p>代码格式：G52 A_ _ _</p>
+<p>A 锥度</p>
+<p><img src="/posts/machining-02-wedm-common-g-code-list/image-20220528133445930.png" alt="image-20220528133445930"></p>
+<h3 id="G53：在机床坐标系中的快速移动-返回"><a href="#G53：在机床坐标系中的快速移动-返回" class="headerlink" title="G53：在机床坐标系中的快速移动   [返回]"></a><a name="G53">G53：在机床坐标系中的快速移动</a>   <a href="#BACK53">[返回]</a></h3><p>代码格式：G53 X_ _ _ Y_ _ _ U_ _ _ V_ _ _ Z_ _ _ A_ _ _ B_ _ _ E_ _ _</p>
+<p>X 相对或绝对坐标X轴数值</p>
+<p>Y 相对或绝对坐标Y轴数值</p>
+<p>U 四轴线割时上部喷嘴的相对或绝对坐标X轴数值</p>
+<p>V 四轴线割时上部喷嘴的相对或绝对坐标Y轴数值</p>
+<p>Z H/Z 五轴线割时，相对或绝对坐标Z轴数值或高度值Z</p>
+<p>A</p>
+<p>B</p>
+<p>E 位置 [0机械 1电器]</p>
+<h3 id="G54：工作坐标系0-返回"><a href="#G54：工作坐标系0-返回" class="headerlink" title="G54：工作坐标系0   [返回]"></a><a name="G54">G54：工作坐标系0</a>   <a href="#BACK54">[返回]</a></h3><p>代码格式：G54</p>
+<p>Sodick设备，工作坐标系0</p>
+<h3 id="G55：在机床坐标系中的加工移动-返回"><a href="#G55：在机床坐标系中的加工移动-返回" class="headerlink" title="G55：在机床坐标系中的加工移动   [返回]"></a><a name="G55">G55：在机床坐标系中的加工移动</a>   <a href="#BACK55">[返回]</a></h3><p>代码格式：G55 X_ _ _ Y_ _ _ U_ _ _ V_ _ _ Z_ _ _ A_ _ _ B_ _ _ </p>
+<p>X 相对或绝对坐标X轴数值</p>
+<p>Y 相对或绝对坐标Y轴数值</p>
+<p>U 四轴线割时上部喷嘴的相对或绝对坐标X轴数值</p>
+<p>V 四轴线割时上部喷嘴的相对或绝对坐标Y轴数值</p>
+<p>Z H/Z 五轴线割时，相对或绝对坐标Z轴数值或高度值Z</p>
+<p>A</p>
+<p>B</p>
+<p>Sodick设备，工作坐标系1</p>
+<h3 id="G56：工作坐标系2-返回"><a href="#G56：工作坐标系2-返回" class="headerlink" title="G56：工作坐标系2   [返回]"></a><a name="G56">G56：工作坐标系2</a>   <a href="#BACK56">[返回]</a></h3><p>代码格式：G56</p>
+<p>Sodick设备，工作坐标系2</p>
+<h3 id="G57：工作坐标系3-返回"><a href="#G57：工作坐标系3-返回" class="headerlink" title="G57：工作坐标系3   [返回]"></a><a name="G57">G57：工作坐标系3</a>   <a href="#BACK57">[返回]</a></h3><p>代码格式：G57</p>
+<p>Sodick设备，工作坐标系3</p>
+<h3 id="G58：半径锥度常数（线与弧线正切）-返回"><a href="#G58：半径锥度常数（线与弧线正切）-返回" class="headerlink" title="G58：半径锥度常数（线与弧线正切）    [返回]"></a><a name="G58">G58：半径锥度常数（线与弧线正切） </a>   <a href="#BACK58">[返回]</a></h3><p>代码格式：G58</p>
+<p>Sodick设备，工作坐标系4</p>
+<h3 id="G59：圆锥锥度（线与弧线正切）-返回"><a href="#G59：圆锥锥度（线与弧线正切）-返回" class="headerlink" title="G59：圆锥锥度（线与弧线正切）   [返回]"></a><a name="G59">G59：圆锥锥度（线与弧线正切）</a>   <a href="#BACK59">[返回]</a></h3><p>代码格式：G59</p>
+<p>Sodick设备，工作坐标系5</p>
+<h3 id="G60：恒定拐角半径-返回"><a href="#G60：恒定拐角半径-返回" class="headerlink" title="G60：恒定拐角半径   [返回]"></a><a name="G60">G60：恒定拐角半径</a>   <a href="#BACK60">[返回]</a></h3><p>代码格式：G60</p>
+<p>Seibu西部设备，G60R_ _ _K_ _ _，独立上角和下角的独立圆角处理</p>
+<h3 id="G61：最小锥度-返回"><a href="#G61：最小锥度-返回" class="headerlink" title="G61：最小锥度   [返回]"></a><a name="G61">G61：最小锥度</a>   <a href="#BACK61">[返回]</a></h3><p>代码格式：G61</p>
+<p>Seibu西部设备，G61R_ _ _，锥形圆角</p>
+<h3 id="G62：平均锥度-返回"><a href="#G62：平均锥度-返回" class="headerlink" title="G62：平均锥度   [返回]"></a><a name="G62">G62：平均锥度</a>   <a href="#BACK62">[返回]</a></h3><p>代码格式：G62</p>
+<p>Seibu西部设备，G62R_ _ _，锥形圆角</p>
+<h3 id="G63：最大锥度-返回"><a href="#G63：最大锥度-返回" class="headerlink" title="G63：最大锥度   [返回]"></a><a name="G63">G63：最大锥度</a>   <a href="#BACK63">[返回]</a></h3><p>代码格式：G63</p>
+<p>Seibu西部设备，G63R_ _ _，锥形圆角</p>
+<h3 id="G74：定义工件坐标系-返回"><a href="#G74：定义工件坐标系-返回" class="headerlink" title="G74：定义工件坐标系   [返回]"></a><a name="G74">G74：定义工件坐标系</a>   <a href="#BACK74">[返回]</a></h3><p>代码格式：G74 X_ _ _ Y_ _ _ J_ _ _ I_ _ _ U_ _ _ V_ _ _ A_ _ _ B_ _ _ Q_ _ _ C_ _ _ E_ _ _</p>
+<p>X 相对或绝对坐标X轴数值</p>
+<p>Y 相对或绝对坐标Y轴数值</p>
+<p>J 基准平面相对于安装平面的高度</p>
+<p>I 第二平面相对于基准平面的高度</p>
+<p>U 四轴线割时上部喷嘴的相对或绝对坐标X轴数值</p>
+<p>V 四轴线割时上部喷嘴的相对或绝对坐标Y轴数值</p>
+<p>A</p>
+<p>B</p>
+<p>Q 绝对旋转</p>
+<p>或</p>
+<p>C 相对旋转</p>
+<p>E 位置 [0机械 1电器]</p>
+<p>Sodick 设备，开启4轴</p>
+<h3 id="G75：在工件坐标系中定位-返回"><a href="#G75：在工件坐标系中定位-返回" class="headerlink" title="G75：在工件坐标系中定位   [返回]"></a><a name="G75">G75：在工件坐标系中定位</a>   <a href="#BACK75">[返回]</a></h3><p>代码格式：G75 X_ _ _ Y_ _ _ Z_ _ _ U_ _ _ V_ _ _ A_ _ _ B_ _ _ E_ _ _</p>
+<p>X 相对或绝对坐标X轴数值</p>
+<p>Y 相对或绝对坐标Y轴数值</p>
+<p>Z 相对或绝对坐标Z轴数值</p>
+<p>U 四轴线割时上部喷嘴的相对或绝对坐标X轴数值</p>
+<p>V 四轴线割时上部喷嘴的相对或绝对坐标Y轴数值</p>
+<p>A</p>
+<p>B</p>
+<p>E 位置 [0机械 1电器]</p>
+<p>Sodick 设备，关闭4轴</p>
+<h3 id="G80：感应器接触-返回"><a href="#G80：感应器接触-返回" class="headerlink" title="G80：感应器接触   [返回]"></a><a name="G80">G80：感应器接触</a>   <a href="#BACK80">[返回]</a></h3><p>代码格式：G80</p>
+<h3 id="G81：返回至限制区域-返回"><a href="#G81：返回至限制区域-返回" class="headerlink" title="G81：返回至限制区域   [返回]"></a><a name="G81">G81：返回至限制区域</a>   <a href="#BACK81">[返回]</a></h3><p>代码格式：G81</p>
+<h3 id="G82：移动到轴显示的一半-返回"><a href="#G82：移动到轴显示的一半-返回" class="headerlink" title="G82：移动到轴显示的一半   [返回]"></a><a name="G82">G82：移动到轴显示的一半</a>   <a href="#BACK82">[返回]</a></h3><p>代码格式：G82</p>
+<h3 id="G83：保持当前位置并保存至H寄存器-返回"><a href="#G83：保持当前位置并保存至H寄存器-返回" class="headerlink" title="G83：保持当前位置并保存至H寄存器   [返回]"></a><a name="G83">G83：保持当前位置并保存至H寄存器</a>   <a href="#BACK83">[返回]</a></h3><p>代码格式：G83</p>
+<h3 id="G85：在工件坐标系中加工移动-返回"><a href="#G85：在工件坐标系中加工移动-返回" class="headerlink" title="G85：在工件坐标系中加工移动   [返回]"></a><a name="G85">G85：在工件坐标系中加工移动</a>   <a href="#BACK85">[返回]</a></h3><p>代码格式：G85 X_ _ _ Y_ _ _ U_ _ _ V_ _ _  Z_ _ _ A_ _ _ B_ _ _</p>
+<p>X 相对或绝对坐标X轴数值</p>
+<p>Y 相对或绝对坐标Y轴数值</p>
+<p>U 四轴线割时上部喷嘴的相对或绝对坐标X轴数值</p>
+<p>V 四轴线割时上部喷嘴的相对或绝对坐标Y轴数值</p>
+<p>Z 相对或绝对坐标Z轴数值</p>
+<p>A</p>
+<p>B</p>
+<h3 id="G88：角落插值R-返回"><a href="#G88：角落插值R-返回" class="headerlink" title="G88：角落插值R   [返回]"></a><a name="G88">G88：角落插值R</a>   <a href="#BACK88">[返回]</a></h3><p>代码格式：G88</p>
+<img src="/posts/machining-02-wedm-common-g-code-list/image-20230904213833948.png" alt="image-20230904213833948" style="zoom:50%;">
+
+<p>G88 通常会在G89后出现，角插值模式是一种模态模式，因此它将保持直到输入新的 G88 或 G89 值。即使在 A = 0 的情况下进行直线切割，也可将 G88 和 G89 应用于线材偏移路径。如果输入 G88，则对所有角进行 R 内插。</p>
+<h3 id="G89：-交点插值计算-返回"><a href="#G89：-交点插值计算-返回" class="headerlink" title="G89： 交点插值计算   [返回]"></a><a name="G89">G89： 交点插值计算</a>   <a href="#BACK89">[返回]</a></h3><p>代码格式：G89</p>
+<img src="/posts/machining-02-wedm-common-g-code-list/image-20230904213853410.png" alt="image-20230904213853410" style="zoom:50%;">
+
+<p>G89 通常会在G88前出现，角插值模式是一种模态模式，因此它将保持直到输入新的 G88 或 G89 值。即使在 A = 0 的情况下进行直线切割，也可将 G88 和 G89 应用于线材偏移路径。输入 G89 时，将对所有角进行交点插值计算。</p>
+<h3 id="G90：设置绝对模式-返回"><a href="#G90：设置绝对模式-返回" class="headerlink" title="G90：设置绝对模式   [返回]"></a><a name="G90">G90：设置绝对模式</a>   <a href="#BACK90">[返回]</a></h3><img src="/posts/machining-02-wedm-common-g-code-list/image-20230809103821290.png" alt="image-20230809103821290" style="zoom:50%;">
+
+<p>代码格式：G90</p>
+<p>G54</p>
+<p>G90</p>
+<h3 id="G91：设置增量模式-返回"><a href="#G91：设置增量模式-返回" class="headerlink" title="G91：设置增量模式   [返回]"></a><a name="G91">G91：设置增量模式</a>   <a href="#BACK91">[返回]</a></h3><img src="/posts/machining-02-wedm-common-g-code-list/image-20230809104054726.png" alt="image-20230809104054726" style="zoom:50%;">
+
+<p>代码格式：G91</p>
+<p>G54</p>
+<p>G91</p>
+<h3 id="G92：定义加工坐标系-返回"><a href="#G92：定义加工坐标系-返回" class="headerlink" title="G92：定义加工坐标系   [返回]"></a><a name="G92">G92：定义加工坐标系</a>   <a href="#BACK92">[返回]</a></h3><p>代码格式：G92</p>
+<p>G90</p>
+<p>G92 X0 Y0</p>
+<p>定义当前加工任务的坐标系</p>
+<h3 id="G93：定义局部坐标系-返回"><a href="#G93：定义局部坐标系-返回" class="headerlink" title="G93：定义局部坐标系   [返回]"></a><a name="G93">G93：定义局部坐标系</a>   <a href="#BACK93">[返回]</a></h3><p>代码格式：G93</p>
+<h3 id="G95：降低加工频率-返回"><a href="#G95：降低加工频率-返回" class="headerlink" title="G95：降低加工频率   [返回]"></a><a name="G95">G95：降低加工频率</a>   <a href="#BACK95">[返回]</a></h3><p>代码格式：G95</p>
+<h3 id="G97：定义全局坐标系-返回"><a href="#G97：定义全局坐标系-返回" class="headerlink" title="G97：定义全局坐标系   [返回]"></a><a name="G97">G97：定义全局坐标系</a>   <a href="#BACK97">[返回]</a></h3><p>代码格式：G97</p>
+<p>定义全部加工任务的坐标系</p>
+<h3 id="G104：在所有锐角处驻留（Dwell）-返回"><a href="#G104：在所有锐角处驻留（Dwell）-返回" class="headerlink" title="G104：在所有锐角处驻留（Dwell）    [返回]"></a><a name="G104">G104：在所有锐角处驻留（Dwell） </a>   <a href="#BACK104">[返回]</a></h3><p>代码格式：G104 X_ _ _</p>
+<p>X_ _ _ 驻留时间，单位秒</p>
+<h3 id="G105：取消G104设定-返回"><a href="#G105：取消G104设定-返回" class="headerlink" title="G105：取消G104设定   [返回]"></a><a name="G105">G105：取消G104设定</a>   <a href="#BACK105">[返回]</a></h3><p>代码格式：G105</p>
+<p>与G104成对出现</p>
+<h3 id="G110：旋转轴模式-返回"><a href="#G110：旋转轴模式-返回" class="headerlink" title="G110：旋转轴模式   [返回]"></a><a name="G110">G110：旋转轴模式</a>   <a href="#BACK110">[返回]</a></h3><p>代码格式：G110</p>
+<h3 id="G111：-转速-返回"><a href="#G111：-转速-返回" class="headerlink" title="G111： 转速   [返回]"></a><a name="G111">G111： 转速</a>   <a href="#BACK111">[返回]</a></h3><p>代码格式：G111 A_ _ _ B_ _ _</p>
+<p>A 轴转速，单位rd/min</p>
+<p>B 轴转速，单位rd/min</p>
+<p>仅当G110开启时有效。</p>
+<h3 id="G125：无接触位置搜索循环-返回"><a href="#G125：无接触位置搜索循环-返回" class="headerlink" title="G125：无接触位置搜索循环   [返回]"></a><a name="G125">G125：无接触位置搜索循环</a>   <a href="#BACK125">[返回]</a></h3><p>代码格式：G145 W_ _ _ D_ _ _ I_ _ _ R_ _ _ S_ _ _ B_ _ _</p>
+<p>W 系统，有效值[1，2，3]</p>
+<p>D 孔径，取值范围（0.0001， -）</p>
+<p>I 距离，最大距离DM（0.0001， -）</p>
+<p>Z 距离，Dz取值范围 （-40， -0.0001）</p>
+<p>R 增加的旋转角度，取值范围R（-360， -）</p>
+<p>S 电极丝速度</p>
+<p>B 电极丝张力</p>
+<h3 id="G126：开启坐标系旋转-返回"><a href="#G126：开启坐标系旋转-返回" class="headerlink" title="G126：开启坐标系旋转   [返回]"></a><a name="G126">G126：开启坐标系旋转</a>   <a href="#BACK126">[返回]</a></h3><p>代码格式：KA20.0 G126</p>
+<p>KA 工件与坐标系X轴的夹角</p>
+<p>KA20.0</p>
+<p>G126</p>
+<p>…</p>
+<p>G127</p>
+<p>M02</p>
+<p>用于旋转当前坐标系。当你想让机器轴线与工件对齐时，在倾斜偏移的遮蔽物上使用。旋转状态保持至G127代码。</p>
+<h3 id="G127：关闭坐标系旋转-返回"><a href="#G127：关闭坐标系旋转-返回" class="headerlink" title="G127：关闭坐标系旋转   [返回]"></a><a name="G127">G127：关闭坐标系旋转</a>   <a href="#BACK127">[返回]</a></h3><p>代码格式： G127</p>
+<p>与G126成对出现。</p>
+<h3 id="G130：找边循环-返回"><a href="#G130：找边循环-返回" class="headerlink" title="G130：找边循环   [返回]"></a><a name="G130">G130：找边循环</a>   <a href="#BACK130">[返回]</a></h3><p>代码格式：G130 W_ _ _ I_ _ _ L_ _ _  R_ _ _ X_ _ _ Y_ _ _ E_ _ _ T_ _ _ S_ _ _ B_ _ _</p>
+<p>AC CUT HMI 设备，找边循环</p>
+<p>W 系统，有效值[1，2，3]</p>
+<p>I 方向，轴（-1=-X，1=X，+1=+X，-2=-Y，2=Y）</p>
+<p>L 距离，回退距离 DR （0， -）</p>
+<p>R 增加的旋转角度，取值范围R（-360， -）</p>
+<p>X 相对或绝对坐标X轴数值</p>
+<p>Y 相对或绝对坐标Y轴数值</p>
+<p>E 位测量模式 [0机械 1电器]</p>
+<p>T 轮廓，有效值[1,2,3,4,5,6]</p>
+<p>S 电极丝速度</p>
+<p>B 电极丝张力</p>
+<h3 id="G131：检查干扰因素-0-返回"><a href="#G131：检查干扰因素-0-返回" class="headerlink" title="G131：检查干扰因素 = 0   [返回]"></a><a name="G131">G131：检查干扰因素 = 0</a>   <a href="#BACK131">[返回]</a></h3><p>代码格式： G131</p>
+<p>AC CUT HMI 设备，找球中心</p>
+<p>代码格式： G131 W_ _ <em>x B</em> _ _ Nn X_ _ _ Y_ _ _</p>
+<p>W 系统，有效值[1，2，3]</p>
+<p>B 基准球半径</p>
+<p>N 测量点数（3，64）</p>
+<p>X 相对或绝对坐标X轴数值</p>
+<p>Y 相对或绝对坐标Y轴数值</p>
+<h3 id="G132：检查干扰因素-2-返回"><a href="#G132：检查干扰因素-2-返回" class="headerlink" title="G132：检查干扰因素 = 2   [返回]"></a><a name="G132">G132：检查干扰因素 = 2</a>   <a href="#BACK132">[返回]</a></h3><p>代码格式： G132</p>
+<p>AC CUT HMI 设备，通过两个测量值根据机床X轴对齐工件循环</p>
+<p>代码格式：G132 W_ _ _ I_ _ _ Z_ _ _ Nn R_ _ _ E_ _ _ T_ _ _ S_ _ _ B_ _ _</p>
+<p>W 系统，有效值[1，2，3]</p>
+<p>I  距离，距离 Dx （-0.001， 0）</p>
+<p>Z 距离，距离 Dz （-40， 0）</p>
+<p>N 测量点数（2，20）</p>
+<p>R 增加的旋转角度，取值范围R（-360， -）</p>
+<p>E 位测量模式 [0机械 1电器]</p>
+<p>T 轮廓，有效值[1,2,3,4,5,6]</p>
+<p>S 电极丝速度</p>
+<p>B 电极丝张力</p>
+<h3 id="G133：两个平行-返回"><a href="#G133：两个平行-返回" class="headerlink" title="G133：两个平行   [返回]"></a><a name="G133">G133：两个平行</a>   <a href="#BACK133">[返回]</a></h3><p>代码格式： G133</p>
+<p>AC CUT HMI 设备，两个平行表面内部找中心循环</p>
+<p>代码格式：G133 W_ _ _ Z_ _ _ R_ _ _  X_ _ _ Y_ _ _ E_ _ _ T_ _ _ S_ _ _ B_ _ _</p>
+<p>W 系统，有效值[1，2，3]</p>
+<p>Z 距离，距离 Dz （-40， 0）</p>
+<p>R 增加的旋转角度，取值范围R（-360， -）</p>
+<p>X 相对或绝对坐标X轴数值</p>
+<p>Y 相对或绝对坐标Y轴数值</p>
+<p>E 位测量模式 [0机械 1电器]</p>
+<p>T 轮廓，有效值[1,2,3,4,5,6]</p>
+<p>S 电极丝速度</p>
+<p>B 电极丝张力</p>
+<h3 id="G134：找孔循环-返回"><a href="#G134：找孔循环-返回" class="headerlink" title="G134：找孔循环   [返回]"></a><a name="G134">G134：找孔循环</a>   <a href="#BACK134">[返回]</a></h3><p>代码格式：G134 W_ _ _ Z_ _ _ Nn C_ _ _ R_ _ _  X_ _ _ Y_ _ _ E_ _ _ T_ _ _ S_ _ _ B_ _ _</p>
+<p>W 系统，有效值[1，2，3]</p>
+<p>Z 距离，距离 Dz （-40， 0）</p>
+<p>N 测量点数（2，20）</p>
+<p>C 角增量 C</p>
+<p>R 增加的旋转角度，取值范围R（-360， -）</p>
+<p>X 相对或绝对坐标X轴数值</p>
+<p>Y 相对或绝对坐标Y轴数值</p>
+<p>E 位测量模式 [0机械 1电器]</p>
+<p>T 轮廓，有效值[1,2,3,4,5,6]</p>
+<p>S 电极丝速度</p>
+<p>B 电极丝张力</p>
+<h3 id="G136：外圆柱找中心循环-返回"><a href="#G136：外圆柱找中心循环-返回" class="headerlink" title="G136：外圆柱找中心循环   [返回]"></a><a name="G136">G136：外圆柱找中心循环</a>   <a href="#BACK136">[返回]</a></h3><p>代码格式：G136 W_ _ _ D_ _ _ Z_ _ _ Nn R_ _ _  C_ _ _ X_ _ _ Y_ _ _ E_ _ _ T_ _ _ S_ _ _ B_ _ _</p>
+<p>AC CUT HMI 设备，安装给定的旋转角度增量分步之行三次</p>
+<p>W 系统，有效值[1，2，3]</p>
+<p>D 间隙距离 DD （0.0001，1 ）</p>
+<p>Z 距离 Dz （-40， 0）</p>
+<p>N 测量点数（3，20）</p>
+<p>R 增加的旋转角度，取值范围R（-360， -）</p>
+<p>C 角增量 C</p>
+<p>X 相对或绝对坐标X轴数值</p>
+<p>Y 相对或绝对坐标Y轴数值</p>
+<p>E 位测量模式 [0机械 1电器]</p>
+<p>T 轮廓，有效值[1,2,3,4,5,6]</p>
+<p>S 电极丝速度</p>
+<p>B 电极丝张力</p>
+<h3 id="G137：找角循环-返回"><a href="#G137：找角循环-返回" class="headerlink" title="G137：找角循环   [返回]"></a><a name="G137">G137：找角循环</a>   <a href="#BACK137">[返回]</a></h3><p>代码格式：G137 W_ _ _ I_ _ _ J_ _ _ Z_ _ _ Nn K_ _ _ R_ _ _ D_ _ _ F_ _ _ X_ _ _ Y_ _ _ E_ _ _ T_ _ _ S_ _ _ B_ _ _</p>
+<p>AC CUT HMI 设备，用于定位电极丝到矩形工件的角部位置</p>
+<p>W 系统，有效值[1，2，3]</p>
+<p>I 距离Dx</p>
+<p>J 距离Dy</p>
+<p>Z 距离，距离 Dz （-40， 0）</p>
+<p>N 测量点数（2，20）</p>
+<p>K 距离增量（0.0001，1 ）</p>
+<p>R 增加的旋转角度，取值范围R（-360， -）</p>
+<p>D 回退距离 DR（0，-）</p>
+<p>F 综合校准 F [0|1]</p>
+<p>X 相对或绝对坐标X轴数值</p>
+<p>Y 相对或绝对坐标Y轴数值</p>
+<p>E 位测量模式 [0机械 1电器]</p>
+<p>T 轮廓，有效值[1,2,3,4,5,6]</p>
+<p>S 电极丝速度</p>
+<p>B 电极丝张力</p>
+<h3 id="G138：以两孔执行工件找正-返回"><a href="#G138：以两孔执行工件找正-返回" class="headerlink" title="G138：以两孔执行工件找正   [返回]"></a><a name="G138">G138：以两孔执行工件找正</a>   <a href="#BACK138">[返回]</a></h3><p>代码格式：G137 W_ _ _ Z_ _ _ Nn C_ _ _ R_ _ _ M_ _ _ H_ _ _ E_ _ _ T_ _ _ S_ _ _ B_ _ _</p>
+<p>AC CUT HMI 设备，用于定位电极丝到矩形工件的角部位置</p>
+<p>W 系统，有效值[1，2，3]</p>
+<p>Z 距离，距离 Dz （-40， 0）</p>
+<p>N 测量点数（2，20）</p>
+<p>C 角增量</p>
+<p>R 增加的旋转角度，取值范围R（-360， -）</p>
+<p>M 名称，最终位置[0|1]</p>
+<p>H 添加Z轴高度（0， -）</p>
+<p>E 位测量模式 [0机械 1电器]</p>
+<p>T 轮廓，有效值[1,2,3,4,5,6]</p>
+<p>S 电极丝速度</p>
+<p>B 电极丝张力</p>
+<h3 id="G140：关闭四轴偏置-返回"><a href="#G140：关闭四轴偏置-返回" class="headerlink" title="G140：关闭四轴偏置   [返回]"></a><a name="G140">G140：关闭四轴偏置</a>   <a href="#BACK140">[返回]</a></h3><p>代码格式： G140</p>
+<h3 id="G141：四轴左侧偏置-返回"><a href="#G141：四轴左侧偏置-返回" class="headerlink" title="G141：四轴左侧偏置   [返回]"></a><a name="G141">G141：四轴左侧偏置</a>   <a href="#BACK141">[返回]</a></h3><p>代码格式： G141</p>
+<h3 id="G142：四轴右侧偏置-返回"><a href="#G142：四轴右侧偏置-返回" class="headerlink" title="G142：四轴右侧偏置   [返回]"></a><a name="G142">G142：四轴右侧偏置</a>   <a href="#BACK142">[返回]</a></h3><p>代码格式： G142</p>
+<p>AC CUT HMI 设备，两个平行外表面找中线面循环</p>
+<p>代码格式：G142 W_ _ _ I_ _ _ Z_ _ _ R_ _ _ X_ _ _ Y_ _ _ E_ _ _ T_ _ _ S_ _ _ B_ _ _</p>
+<p>W 系统，有效值[1，2，3]</p>
+<p>I 距离，Dx取值范围 （0.0001， -）</p>
+<p>Z 距离，Dz取值范围 （-40， -0.0001）</p>
+<p>R 增加的旋转角度，取值范围R（-360， -）</p>
+<p>X 相对或绝对坐标X轴数值</p>
+<p>Y 相对或绝对坐标Y轴数值</p>
+<p>E 位测量模式 [0机械 1电器]</p>
+<p>T 轮廓，有效值[1,2,3,4,5,6]</p>
+<p>S 电极丝速度</p>
+<p>B 电极丝张力</p>
+<h3 id="G143-：两个平行外表面中找中线面循环，避开XY平面中的工件-返回"><a href="#G143-：两个平行外表面中找中线面循环，避开XY平面中的工件-返回" class="headerlink" title="G143 ：两个平行外表面中找中线面循环，避开XY平面中的工件   [返回]"></a><a name="G143">G143 ：两个平行外表面中找中线面循环，避开XY平面中的工件</a>   <a href="#BACK143">[返回]</a></h3><p>代码格式：G143 W_ _ _ I_ _ _ Z_ _ _ R_ _ _ X_ _ _ Y_ _ _ E_ _ _ T_ _ _ S_ _ _ B_ _ _</p>
+<p>W 系统，有效值[1，2，3]</p>
+<p>I 距离，Dx取值范围 （0.0001， -）</p>
+<p>Z 距离，Dz取值范围 （-40， -0.0001）</p>
+<p>R 增加的旋转角度，取值范围R（-360， -）</p>
+<p>X 相对或绝对坐标X轴数值</p>
+<p>Y 相对或绝对坐标Y轴数值</p>
+<p>E 位测量模式 [0机械 1电器]</p>
+<p>T 轮廓，有效值[1,2,3,4,5,6]</p>
+<p>S 电极丝速度</p>
+<p>B 电极丝张力</p>
+<h3 id="G145-：工件调平测量-返回"><a href="#G145-：工件调平测量-返回" class="headerlink" title="G145 ：工件调平测量   [返回]"></a><a name="G145">G145 ：工件调平测量</a>   <a href="#BACK145">[返回]</a></h3><p>代码格式：G143 I_ _ _ J_ _ _ K_ _ _ L_ _ _ X_ _ _ Y_ _ _ Z_ _ _ M_ _ _ N_ _ _ O_ _ _ P_ _ _ R_ _ _ S_ _ _</p>
+<p>I X[D2]</p>
+<p>J Y[D2]</p>
+<p>K X[D3]</p>
+<p>L Y[D3]</p>
+<p>3D 设置时点的设定</p>
+<p>X X[P1]</p>
+<p>Y Y[P1]</p>
+<p>Z Z[P1]</p>
+<p>M X[P2]</p>
+<p>N Y[P2]</p>
+<p>O Z[P2]</p>
+<p>P X[P3]</p>
+<p>R Y[P3]</p>
+<p>S Z[P3]</p>
+<h3 id="G150-：电极丝和导丝嘴找正电极丝找正-返回"><a href="#G150-：电极丝和导丝嘴找正电极丝找正-返回" class="headerlink" title="G150 ：电极丝和导丝嘴找正电极丝找正   [返回]"></a><a name="G150">G150 ：电极丝和导丝嘴找正电极丝找正</a>   <a href="#BACK150">[返回]</a></h3><p>代码格式：G150 Z_ _ _</p>
+<p>Z ZB</p>
+<h3 id="G152-：导丝嘴设置循环（WAL-GDI）-返回"><a href="#G152-：导丝嘴设置循环（WAL-GDI）-返回" class="headerlink" title="G152 ：导丝嘴设置循环（WAL+GDI）   [返回]"></a><a name="G152">G152 ：导丝嘴设置循环（WAL+GDI）</a>   <a href="#BACK152">[返回]</a></h3><p>代码格式：G152 Z_ _ _ A_ _ _ S_ _ _ B_ _ _</p>
+<p>Z ZB</p>
+<p>A 电极丝的倾斜度</p>
+<p>S 电极丝的速度</p>
+<p>B 电极丝的张力</p>
+<h3 id="G153-：带锥度专家的导丝嘴设置循环-返回"><a href="#G153-：带锥度专家的导丝嘴设置循环-返回" class="headerlink" title="G153 ：带锥度专家的导丝嘴设置循环   [返回]"></a><a name="G153">G153 ：带锥度专家的导丝嘴设置循环</a>   <a href="#BACK153">[返回]</a></h3><p>代码格式：G153 Z_ _ _ A_ _ _ S_ _ _ B_ _ _</p>
+<p>Z ZB</p>
+<p>A 电极丝的倾斜度</p>
+<p>S 电极丝的速度</p>
+<p>B 电极丝的张力</p>
+<h3 id="G154-：工件表面对齐-返回"><a href="#G154-：工件表面对齐-返回" class="headerlink" title="G154 ：工件表面对齐   [返回]"></a><a name="G154">G154 ：工件表面对齐</a>   <a href="#BACK154">[返回]</a></h3><p>代码格式：G154 W_ _ _ I_ _ _ L_ _ _ A_ _ _ T_ _ _</p>
+<p>W 系统，有效值[1，2，3]</p>
+<p>I 距离，Dx取值范围 （0.0001， -）</p>
+<p>L 距离，回退距离 DR （0， -）</p>
+<p>A 电极丝的倾斜度</p>
+<p>T 轮廓，有效值[1,2,3,4,5,6]</p>
+<p>Sodick 设备中</p>
+<p>G154 至 G159：工作坐标屏幕 10 至 15</p>
+<p>G254 至 G256：工作坐标屏幕 20 至 25</p>
+<p>G354 至 G359：工作坐标屏幕 30 至 35</p>
+<p>G454 至 G459：工作坐标屏幕 40 至 45</p>
+<p>G554 至 G559：工作坐标屏幕 50 至 55</p>
+<p>G654 至 G659：工作坐标屏幕 60 至 65</p>
+<p>G754 至 G759：工作坐标屏幕 70 至 75</p>
+<p>G854 至 G859：工作坐标屏幕 80 至 85</p>
+<p>G954 至 G959：工作坐标屏幕 90 至 95</p>
+<h3 id="G157-：测量探针校准-返回"><a href="#G157-：测量探针校准-返回" class="headerlink" title="G157 ：测量探针校准    [返回]"></a><a name="G157">G157 ：测量探针校准</a>    <a href="#BACK157">[返回]</a></h3><p>代码格式：G157 D_ _ _ Nn</p>
+<p>D 孔径 （0.0001， -）</p>
+<p>N 测量点数（4，360）</p>
+<h3 id="G174-：-工件坐标系相对机器坐标系的偏移-返回"><a href="#G174-：-工件坐标系相对机器坐标系的偏移-返回" class="headerlink" title="G174 ：  工件坐标系相对机器坐标系的偏移  [返回]"></a><a name="G174">G174 ：  工件坐标系相对机器坐标系的偏移</a>  <a href="#BACK174">[返回]</a></h3><p>代码格式：G174 X_ _ _ Y_ _ _ Z_ _ _ A_ _ _ B_ _ _</p>
+<p>X 相对或绝对坐标X轴数值</p>
+<p>Y 相对或绝对坐标Y轴数值</p>
+<p>Z 相对或绝对坐标Z轴数值或高度值Z</p>
+<p>A</p>
+<p>B</p>
+<h3 id="G192-：-加工坐标系相对工件坐标系的偏移-返回"><a href="#G192-：-加工坐标系相对工件坐标系的偏移-返回" class="headerlink" title="G192 ：  加工坐标系相对工件坐标系的偏移  [返回]"></a><a name="G192">G192 ：  加工坐标系相对工件坐标系的偏移</a>  <a href="#BACK192">[返回]</a></h3><p>代码格式：G174 X_ _ _ Y_ _ _ A_ _ _ B_ _ _</p>
+<p>X 相对或绝对坐标X轴数值</p>
+<p>Y 相对或绝对坐标Y轴数值</p>
+<p>A</p>
+<p>B</p>
+<p>Sodick 设备，将当前值的一半分配给当前工作坐标中的轴显示。</p>
+<h3 id="FLAG2D0-：M01代码关闭-返回"><a href="#FLAG2D0-：M01代码关闭-返回" class="headerlink" title="FLAG2D0 ：M01代码关闭    [返回]"></a><a name="FLAG2D0">FLAG2D0 ：M01代码关闭</a>    <a href="#BACKFLAG2D0">[返回]</a></h3><p>代码格式：FLAG2D0 </p>
+<h3 id="FLAG2D1：M01代码开启-返回"><a href="#FLAG2D1：M01代码开启-返回" class="headerlink" title="FLAG2D1：M01代码开启    [返回]"></a><a name="FLAG2D1">FLAG2D1：M01代码开启</a>    <a href="#BACKFLAG2D1">[返回]</a></h3><p>代码格式：FLAG2D1 </p>
+<h3 id="FLAG3D-：比例因子输入-返回"><a href="#FLAG3D-：比例因子输入-返回" class="headerlink" title="FLAG3D ：比例因子输入    [返回]"></a><a name="FLAG3D">FLAG3D ：比例因子输入</a>    <a href="#BACK157">[返回]</a></h3><p>代码格式：FLAG3D</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/数控代码/" class="tag">#数控代码</a><a href="/tags/G代码/" class="tag">#G代码</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/machining-03-wedm-common-m-code-list.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">机械加工 线切割数控加工常用M代码一览表</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/installshield-QA-howto-use-iscmdbld-build-project.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Install Shield 如何使用ISCmdBld构建安装包</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

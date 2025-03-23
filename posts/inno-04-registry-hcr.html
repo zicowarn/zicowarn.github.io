@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Inno Setup Windows 注册表关键字HKEY\_CLASSES\_ROOT相关内容 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Inno Setup Windows 注册表关键字HKEY\_CLASSES\_ROOT相关内容 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/inno-04-registry-hcr.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2019-07-10T00:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Inno-Setup-相关-实战经验/">Inno Setup 相关 - 实战经验</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>July</span>
+            <span>10,</span>
+            <span>2019</span>
+        </div>
+        
+
+        <h1 class="title">Inno Setup Windows 注册表关键字HKEY\_CLASSES\_ROOT相关内容</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h2 id="Windows-注册表"><a href="#Windows-注册表" class="headerlink" title="Windows 注册表"></a>Windows 注册表</h2><p>HKEY_CLASSES_ROOT在此关键字之下，可以看见有一个CLSID关键字。在CLSID关键字之下列有系统中安装的所有组件的CLSID。注册表CLSID是一个具有如下格式的串：00000010-0000-0010-8000-00AA00D2EA4</p>
+<span id="more"></span>
+
+<p>HKEY_CLASSES_ROOT的开头，列出了将是各种应用程序所注册的文件扩展名。在扩展名之后，可以看到许多其它的名字。此类名字大多数被称作是ProgID，表示是程序员定义的标识符。某些名称表示的不是ProgID而实一些特殊的关键字。</p>
+<p>如：</p>
+<ul>
+<li>CLSID</li>
+<li>AppID，此关键字下的子关键字的作用是将某个APPID（应用程序的ID）映射成某个远程服务器名称。分式COM（DCOM）将用到此关键字。</li>
+<li>组件类别，注册表的这一分支可以将CATID（组件类别ID）映射成某个特定的组件类别。</li>
+<li>Interface，此关键字将用于将IID映射成某个接口相关的信息。这些信息主要用于在跨进程边界使用接口的情况。</li>
+<li>Licenses，保存的是授权使用COM组件的一些认可信息。</li>
+<li>TypeLib，类型库关键字保存的是关于接口成员函数所用的参数的信息。另外还有一些信息。此关键字可以将一个LIBID映射成存储类型库的文件名称。</li>
+</ul>
+<h3 id="ProgID"><a href="#ProgID" class="headerlink" title="ProgID"></a>ProgID</h3><p>所谓ProgID指的是程序员给某个CLSID指定的一个程序员易记的名称。ProgID命名规则为：..，如下图：</p>
+<p>如WPDSp.WPDServiceProvider是版本无关ProgID，根据其值可在CLSID下找到相应键，进而找到相应信息，如组件最新版本信息。</p>
+<p>WPDSp.WPDServiceProvider.1是版本相关ProgID，根据其CLSID值可以找到该版本组件的信息。</p>
+<h3 id="ProgID注册表格式"><a href="#ProgID注册表格式" class="headerlink" title="ProgID注册表格式"></a>ProgID注册表格式</h3><p>ProgID及与版本无关的ProgID被列在组件CLSID下面。</p>
+<p>ProgID的主要作用是获取相应的CLSID。在每一个CLSID项中查找查个ProgID将非常低效的。因此在其下面也将直接列出ProgID。由于ProgID不是针对最终用户而定义的，因此ProgID关键字的缺省值为用户易记的名称。在之下有一个名为CLSID的关键字，其缺省值为组件的CLSID。如下图所示：</p>
+<p>与版本好无关的ProgID也直接被列在HKEY_CLASSES_ROOT下面。它们还有另外一个关键字CurVer，其缺省值为组件当前版本的ProgID，如下图：</p>
+<h3 id="ProgID和CLSID的转换"><a href="#ProgID和CLSID的转换" class="headerlink" title="ProgID和CLSID的转换"></a>ProgID和CLSID的转换</h3><ul>
+<li>CLSIDFromProgID</li>
+<li>ProgIDFromCLSID</li>
+</ul>
+<h3 id="组件的自注册"><a href="#组件的自注册" class="headerlink" title="组件的自注册"></a>组件的自注册</h3><p>为把组件注册到注册表，在DLL中一定要输出如下两个函数：</p>
+<p>STDAPI DllRegisterServer(); //注册</p>
+<p>STDAPI DllUnregisterServer(); //反注册</p>
+<p>我们使用Regsvr32.exe注册某个组件或者反注册某个组件时，其实就是调用这两个函数的过程。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Inno-Setup/" class="tag">#Inno Setup</a><a href="/tags/注册表/" class="tag">#注册表</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/inno-05-beautify-wizard-laben.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Inno Setup 如何更换向导页面标题部分的背景</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/inno-03-check-network-state.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Inno Setup 检查网络连接的Pascal代码</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

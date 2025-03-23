@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Python 杂记之 不同版本间剪切板代码兼容性问题 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Python 杂记之 不同版本间剪切板代码兼容性问题 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/0805-ma-compability-issue.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2018-12-20T00:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Python-相关-8-Python-杂记/">Python 相关 - 8. Python 杂记</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>December</span>
+            <span>20,</span>
+            <span>2018</span>
+        </div>
+        
+
+        <h1 class="title">Python 杂记之 不同版本间剪切板代码兼容性问题</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h2 id="剪切板的基本操作"><a href="#剪切板的基本操作" class="headerlink" title="剪切板的基本操作"></a>剪切板的基本操作</h2><p>在Python的实际应用中有时候会遇到对剪切板进行操作的问题。剪切板的基本操作需求如下：</p>
+<ul>
+<li>获取剪切板中的内容。</li>
+<li>向剪切板中注入内容。</li>
+<li>清除剪切板的内容。</li>
+</ul>
+<span id="more"></span>
+
+<p>使用Python对剪切板进行操作，可以使用tkinter和ctypes这两个标准库。或者使用Qt或者wxpython这些第三方模块（库）来实现。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/LNbO7CDlxmad3eibCibvYHAE43LAlxR0KtSSXwcJAlficsqnvlLNnicHfJPN2C4VYBICeeVI71H81mkWvViaMdQ4KDw/640?wx_fmt=png" alt="img"></p>
+<h2 id="使用ctypes标准库操作剪切板"><a href="#使用ctypes标准库操作剪切板" class="headerlink" title="使用ctypes标准库操作剪切板"></a>使用ctypes标准库操作剪切板</h2><p>使用tkinter标准库或者第三方的Qt或者wxpython，这些实现方式常常是用在在<strong>图形界面化</strong>的项目中的，比如结合按钮事件等。使用ctypes就可以直接在<strong>非图形化界面</strong>项目中实现对剪切板的操作。或者使用pyperclip第三方模块也可实现跨平台的普通项目中对剪切板的操作，基本实现代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</span><br><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"></span><br><span class="line">CF_TEXT = <span class="number">1</span></span><br><span class="line">kernel32 = ctypes.windll.kernel32</span><br><span class="line">user32 = ctypes.windll.user32</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get</span>():</span><br><span class="line">    rts = <span class="string">&quot;&quot;</span></span><br><span class="line">    user32.OpenClipboard(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">if</span> user32.IsClipboardFormatAvailable(CF_TEXT):</span><br><span class="line">        data = user32.GetClipboardData(CF_TEXT)</span><br><span class="line">        data_locked = kernel32.GlobalLock(data)</span><br><span class="line">        text = ctypes.c_char_p(data_locked)</span><br><span class="line">        <span class="built_in">print</span>(text.value)</span><br><span class="line">        rts = text.value</span><br><span class="line">        kernel32.GlobalUnlock(data_locked)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&#x27;no text in clipboard&#x27;</span>)</span><br><span class="line">    user32.CloseClipboard()</span><br><span class="line">    <span class="keyword">return</span> rts</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">set</span>(<span class="params">text</span>):</span><br><span class="line">    GMEM_DDESHARE = <span class="number">0x2000</span></span><br><span class="line">    user32.OpenClipboard(<span class="number">0</span>)</span><br><span class="line">    user32.EmptyClipboard()</span><br><span class="line">    hCd = ctypes.windll.kernel32.GlobalAlloc(GMEM_DDESHARE, <span class="built_in">len</span>(<span class="built_in">bytes</span>(text))+<span class="number">1</span>)</span><br><span class="line">    pchData = ctypes.windll.kernel32.GlobalLock(hCd)</span><br><span class="line">    ctypes.cdll.msvcrt.strcpy(ctypes.c_char_p(pchData), <span class="built_in">bytes</span>(text))</span><br><span class="line">    kernel32.GlobalUnlock(hCd)</span><br><span class="line">    user32.SetClipboardData(CF_TEXT, hCd)</span><br><span class="line">    user32.CloseClipboard()</span><br></pre></td></tr></table></figure>
+
+<p>上述代码中，比较难以理解的应该是GlobalLock和GlobalUnlock，如果有C++的开发背景应该很容易理解这两个函数。简单解释：</p>
+<blockquote>
+<p>GlobalLock()函数 说明：锁定内存中指定的内存块，并返回一个地址值，令其指向内存块的起始处。除非用 GlobalUnlock 函数将内存块解锁，否则地址会一直保持有效。Windows 为每个内存对象都维持着一个锁定计数。对这个函数的每次调用都应有一个对应的 GlobalUnlock 调用 返回值 Long，如成功，返回内存块的地址；如出错，或者这是一个已被丢弃的“可丢弃”内存块，则返回零。通常我们在编程的时候，给应用程序分配的内存都是可以移动的或者是可以丢弃的，这样能使有限的内存资源充分利用，所以，在某一个时候我们分配 的那块内存的地址是不确定的，因为他是可以移动的，所以得先锁定那块内存块，这儿应用程序需要调用API函数GlobalLock函数来锁定句柄。如下：lpMem=GlobalLock(hMem)（数据类型应该是指针类型）; 这样应用程序才能存取这块内存。</p>
+</blockquote>
+<h2 id="剪切板操作的兼容性问题"><a href="#剪切板操作的兼容性问题" class="headerlink" title="剪切板操作的兼容性问题"></a>剪切板操作的兼容性问题</h2><p>上述代码我在公司的项目中也有使用。但是自从公司决定将软件中内嵌的Python2.7升级到Python3.7之后，类似上述的代码就不能在继续运行了。经过调试之后，发现了问题所在，请看下面代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_clipboard_text</span>():</span><br><span class="line">    user32.OpenClipboard(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">if</span> user32.IsClipboardFormatAvailable(CF_TEXT):</span><br><span class="line">        data = user32.GetClipboardData(CF_TEXT)</span><br><span class="line">        data_locked = kernel32.GlobalLock(data)</span><br><span class="line">        text = ctypes.c_char_p(data_locked)</span><br><span class="line">        value = text.value <span class="comment"># 问题所在位置。</span></span><br><span class="line">        kernel32.GlobalUnlock(data_locked)</span><br><span class="line">        <span class="keyword">return</span> value</span><br><span class="line">    user32.CloseClipboard()</span><br></pre></td></tr></table></figure>
+
+<p>在上述代码中，在调试代码时，代码可以运行至带有注释的这一行的前一行。当试图尝试使用便利text时，程序就会出错，从而引发崩溃。可以肯定的是text变量并不为None，在一开始一直以为是锁定内存带来的问题。但是最后发现整个代码都有问题的。</p>
+<p>在不断尝试之后，项目背景是，剪切板的中不会存在特殊字符或者宽字符。本着最少代码修改量就能解决问题的原则，以及“简单胜过复杂”的设计哲学。我们用下列代码解决了这部分代码对Python3的兼容。</p>
+<p><strong>“Simple is better than complicated”</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">kernel32.GlobalLock.argtypes = [ctypes.c_void_p]</span><br><span class="line">kernel32.GlobalLock.restype = ctypes.c_void_p</span><br><span class="line">kernel32.GlobalUnlock.argtypes = [ctypes.c_void_p]</span><br><span class="line">user32.GetClipboardData.restype = ctypes.c_void_p</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_clipboard_text</span>():</span><br><span class="line">    user32.OpenClipboard(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> user32.IsClipboardFormatAvailable(CF_TEXT):</span><br><span class="line">            data = user32.GetClipboardData(CF_TEXT)</span><br><span class="line">            data_locked = kernel32.GlobalLock(data)</span><br><span class="line">            text = ctypes.c_char_p(data_locked)</span><br><span class="line">            value = text.value</span><br><span class="line">            kernel32.GlobalUnlock(data_locked)</span><br><span class="line">            <span class="keyword">return</span> value</span><br><span class="line">    <span class="keyword">finally</span>:</span><br><span class="line">        user32.CloseClipboard()</span><br></pre></td></tr></table></figure>
+
+<p>在使用函数的时候，只要提前申明了函数参数的数据类型，和函数返回值的数据类型。就解决了兼容性问题。虽然解决了问题，但是总觉得有种知其然不知所以然的感觉。为什么Python2中不需要声明，而Python3中却需要。经过不断地查找，找到了下面的解决方案。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line"><span class="keyword">import</span> ctypes.wintypes <span class="keyword">as</span> w</span><br><span class="line"></span><br><span class="line">CF_UNICODETEXT = <span class="number">13</span></span><br><span class="line"></span><br><span class="line">u32 = ctypes.WinDLL(<span class="string">&#x27;user32&#x27;</span>)</span><br><span class="line">k32 = ctypes.WinDLL(<span class="string">&#x27;kernel32&#x27;</span>)</span><br><span class="line"></span><br><span class="line">OpenClipboard = u32.OpenClipboard</span><br><span class="line">OpenClipboard.argtypes = w.HWND,</span><br><span class="line">OpenClipboard.restype = w.BOOL</span><br><span class="line">GetClipboardData = u32.GetClipboardData</span><br><span class="line">GetClipboardData.argtypes = w.UINT,</span><br><span class="line">GetClipboardData.restype = w.HANDLE</span><br><span class="line">GlobalLock = k32.GlobalLock</span><br><span class="line">GlobalLock.argtypes = w.HGLOBAL,</span><br><span class="line">GlobalLock.restype = w.LPVOID</span><br><span class="line">GlobalUnlock = k32.GlobalUnlock</span><br><span class="line">GlobalUnlock.argtypes = w.HGLOBAL,</span><br><span class="line">GlobalUnlock.restype = w.BOOL</span><br><span class="line">CloseClipboard = u32.CloseClipboard</span><br><span class="line">CloseClipboard.argtypes = <span class="literal">None</span></span><br><span class="line">CloseClipboard.restype = w.BOOL</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_clipboard_text</span>():</span><br><span class="line">    text = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> OpenClipboard(<span class="literal">None</span>):</span><br><span class="line">        h_clip_mem = GetClipboardData(CF_UNICODETEXT)</span><br><span class="line">        text = ctypes.wstring_at(GlobalLock(h_clip_mem))</span><br><span class="line">        GlobalUnlock(h_clip_mem)</span><br><span class="line">        CloseClipboard()</span><br><span class="line">    <span class="keyword">return</span> text</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(get_clipboard_text())</span><br></pre></td></tr></table></figure>
+
+<p>乍一看，很复杂，其实其实现过程和第一个解决方案相似，而且上述的代码够同时在Python2.x和Python3.x中完美运行，也同时支持ascii与unicode字符，算是一个完美的解决方案。</p>
+<p>这个解决方案的提供者Mark Tolonen也解释道，由于Python3是64位的，如果我们在Python3.x的环境下使用原来在Python2.x中的代码。默认情况下，我们传递是句柄就是c_int(32bit)的，存储长度不够。超出会存在负值，导致代码不兼容的主要问题就在这儿。</p>
+<p>kernel内核和windows的句柄都是32位的。如果在64位环境中使用这些句柄就会存在负值，为了避免这种情况发生，就应该将这些句柄扩展至64位。而且一些句柄实际上是内存的地址，例如HMODULE和HGLOBAL，以及GlobalLock的返回结果也应该得到扩展。总的来讲，在处理句柄和指针的时候总是声明参数argtypes和返回值restype，就可以避免硬编码实现细节和假设。</p>
+<p>学无止境，总有高手，在这些高手的解释中也学习到了很多，了解一些问题出现的根本原因，和这些高手在面对这些问题时所思考的内容。然后学以致用，来提高自己。</p>
+<p>参考目录：</p>
+<p><strong>Stackflow：</strong><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/46132401/read-text-from-clipboard-in-windows-using-ctypes">https://stackoverflow.com/questions/46132401/read-text-from-clipboard-in-windows-using-ctypes</a></p>
+<p><strong>CSDN：</strong><a target="_blank" rel="noopener" href="https://blog.csdn.net/longxin5/article/details/83394388">https://blog.csdn.net/longxin5/article/details/83394388</a></p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/杂记/" class="tag">#杂记</a><a href="/tags/剪切板/" class="tag">#剪切板</a><a href="/tags/代码兼容/" class="tag">#代码兼容</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/0807-ma-auto-generic-function.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Python 杂记之 根据版本号自动调用泛函数</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/0804-ma-list-leftadd-selfadd-op.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Python 杂记之 实现列表的自加和左移等操作</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

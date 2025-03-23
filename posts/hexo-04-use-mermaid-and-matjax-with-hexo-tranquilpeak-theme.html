@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Hexo 如何在tranquilpeak主题中使用mermaid语句与Latex语句 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Hexo 如何在tranquilpeak主题中使用mermaid语句与Latex语句 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/hexo-04-use-mermaid-and-matjax-with-hexo-tranquilpeak-theme.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2020-12-19T04:17:31.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Hexo-相关-实战经验/">Hexo 相关 - 实战经验</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>December</span>
+            <span>19,</span>
+            <span>2020</span>
+        </div>
+        
+
+        <h1 class="title">Hexo 如何在tranquilpeak主题中使用mermaid语句与Latex语句</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：在使用Hexo管理博客文章时，如果使用的Hexo主题（比如tranquilpeak主题）不支持Latex与mermaid语法，这个问题该如何解决？Typora与Hexo对这两种语法的支持有什么差异？如果博客文章是在Typora上编辑，且文件中包含Latex与mermaid语句时，如何用最小的代价实现这些文章能够通过Hexo渲染并发布</p>
+<p>Abstract: When using Hexo to manage blog posts, if the Hexo theme used (such as tranquilpeak theme) does not support Latex and mermaid syntax, how to solve this problem? What is the difference between Typora and Hexo’s support for these two syntaxes? If the blog post is edited on Typora and the file contains Latex and mermaid sentences, how can these posts be rendered and published by Hexo with the least cost?</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>本博客的文章都是使用Typora完成编辑的，Typora是一款Markdown编辑器，其集成了Mermaid库，可以方便地在文章中添加诸如流程图，甘特图，时序图与类图等图表。Typora对Latex也进行了很好的支持，也能够轻松实现在文章中添加数学公式。我们简单总结一下，Markdown中实现图表可以使用mermaid，Markdown中实现数学公式可以使用Latex语句。</p>
+<p>本博客使用的是Hexo这款基于Node.js的静态框架，生成的静态页面托管在Github上，这就决定了Typora中支持的特征不一定在Hexo中完美支持，必然存在一些差异。默认情况下Hexo是不支持mermaid的，而Latex的数学公式。使用Hexo主题不同，对这两个功能的支持也不同。本博客使用的是Hexo的tranquilpeak主题，该主题就不支持mermaid与Latex，本文就讨论一下，如何在该主题中完成对这两个功能的支持。当然解决问题的方法千千万万，本文讨论的只是其中一种，其目的就是在遇到相似问题时提供一种思路而已。</p>
+<h3 id="支持Mermaid语法"><a href="#支持Mermaid语法" class="headerlink" title="支持Mermaid语法"></a>支持Mermaid语法</h3><p>一些比较流行的Hexo主题，有的已经在主题代码中实现了对Mermaid语法的支持，仅需要对主题配置文件<code>_config.yml</code>稍作修改，即可开启Hexo中博客Mardown文章对Marmaid语法支持。但如果使用Hexo的tranquilpeak主题，需要自己动手完成的就相对较多。Mermaid的语法支持可以在前端实现，前端实现离不开JavaScript代码，整体思路就是在主题页面模版文件中找到一合适位置，添加使用JavaScript一文件，即mermaid.min.js。</p>
+<p>Markdown文章中，Mermaid语法样式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">​&lt;pre class="mermaid"&gt;graph TD;</span><br><span class="line">	A--&gt;B;</span><br><span class="line">	A--&gt;C;</span><br><span class="line">	B--&gt;D;</span><br><span class="line">	C--&gt;D;</span><br><span class="line">​&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Typora中输入上述内容就可以的到如下一个图表：</p>
+<p><img src="/posts/hexo-04-use-mermaid-and-matjax-with-hexo-tranquilpeak-theme/image-20201219130807547.png" alt="image-20201219130807547"></p>
+<p>而下面的图片是由前端在页面加载时根据mermaid语句渲染而的，也是本文中，我们需要实现的目标。如果渲染不成功看到的即为文本，请注意两者差异：</p>
+<pre class="mermaid">graph TD;
+    A--&gt;B;
+    A--&gt;C;
+    B--&gt;D;
+    C--&gt;D;</pre>
+
+
+
+<p>如果Hexo不支持Mermaid语法，则生产的静态页面显示的还是文本，不是图表。检查页面元素发现，静态页面中的内容如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class="mermaid"&gt;graph TD;</span><br><span class="line">    A--&amp;gt;B;</span><br><span class="line">    A--&amp;gt;C;</span><br><span class="line">    B--&amp;gt;D;</span><br><span class="line">    C--&amp;gt;D;&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+
+<p>本章节开头就写到，可以在前端实现对mermaid语法的支持，也就是说要想办法使用将类class为mermaid元素转换成图表。实现这一目的，我们就需要添加插件支持，在Hexo目录下运行如下命令安装所需插件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install --save hexo-filter-mermaid-diagrams</span><br></pre></td></tr></table></figure>
+
+<p>插件安装完成之后，需要对主题（本例使用tranquilpeak主题）配置文件<code>_config.yml</code>文件做少许修改，在配置文件末尾，添加如下内容：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Mermaid (markdwon to flow chart, seq chart, class chart ...)</span></span><br><span class="line"><span class="attr">mermaid:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="comment"># Available themes: default | dark | forest | neutral</span></span><br><span class="line">  <span class="attr">theme:</span> <span class="string">default</span></span><br></pre></td></tr></table></figure>
+
+<p>接下来要做的是，搜索并下载最新版本（截至2020-12-19，版本为8.8.4）<code>mermaid.min.js</code>与<code>mermaid.min.js.map</code>的这两个文件。将文件保存在当前主题的<code>/source/assets/js</code>目录下。</p>
+<p>然后就是在主题中添加代码使用这个js文件，插件Github首页建议的是修改<code>after-footer.ejs</code>, tranquilpeak主题没有此文件，<code>themes/tranquilpeak/layout/_partial/script.ejs</code>可以作为替代方案，在该文件中做出如下修改：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">    .....  </span><br><span class="line">	&lt;/script&gt;</span><br><span class="line">  &lt;% } else if (theme.mermaid.enable) { %&gt;  // 修改 开始位置</span><br><span class="line">    &lt;%- js('assets/js/mermaid.min.js') %&gt;  // 或者使用CDN</span><br><span class="line">    &lt;script&gt;</span><br><span class="line">        $(document).ready(function() {</span><br><span class="line">            var mermaid_config = {</span><br><span class="line">                startOnLoad: true,</span><br><span class="line">                theme: '&lt;%- theme.mermaid.theme %&gt;',</span><br><span class="line">                flowchart:{</span><br><span class="line">                    useMaxWidth: false,</span><br><span class="line">                    htmlLabels: true</span><br><span class="line">                }                </span><br><span class="line">            }</span><br><span class="line">            mermaid.initialize(mermaid_config);</span><br><span class="line">        });</span><br><span class="line">    &lt;/script&gt;   // 修改 结束位置</span><br><span class="line">  &lt;% } else if (theme.gitalk.enable) { %&gt;</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<p>我在示例代码中保留部分原有代码，以便各位更好定位所需添加代码在原文中的位置，代码第3行与第9行，就是我们在主题配置文件中添加的相关配置项。如果想使用CDN而不是本地文件，也可以对第4行进行修改或者结合配置文件，通过配置实现CDN与本地文件的切换。</p>
+<p>完成上述内容基本上就完成了Hexo tranquilpeak主题对mermaid语法的支持配置。</p>
+<h3 id="支持Latex语法"><a href="#支持Latex语法" class="headerlink" title="支持Latex语法"></a>支持Latex语法</h3><p>Hexo 一些比较流行主题也在主题代码中完成了Latex语法的支持，遗憾的是Hexo tranquilpeak主题却没有，所以还需手动完成对Latex语法的支持。Hexo 对Latex语法的支持可以在后端实现。这里需要注意的是，由于Hexo 是静态博客框架，所以博客文章都是静态页面，没有真正意义上的后端服务器，这里所谓的后端完成，其实是在Hexo将Markdown渲染成html文件这个过程。</p>
+<p>要实现Latex语法支持，就需要用到<code>hexo-filter-mathjax</code>这个Hexo插件，使用这个插件的时候需要注意，该插件不需要任何前端脚本与其他Math相关插件的支持，因此，若之前已经尝试了别的Math相关插件，或者前端脚本，请先卸载这些插件并移除相关前端脚本。在Hexo目录下运行如下命令安装所需插件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-filter-mathjax</span><br><span class="line">$ hexo clean</span><br></pre></td></tr></table></figure>
+
+<p>安装完该插件后，就需要对Hexo配置文件进行必要修改适配。请注意不是Hexo主题配置文件，是Hexo项目配置文件<code>_config.yml</code>。在配置文件末尾添加如下内容：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">mathjax:</span></span><br><span class="line">  <span class="attr">tags:</span> <span class="string">none</span> <span class="comment"># or 'ams' or 'all'</span></span><br><span class="line">  <span class="attr">single_dollars:</span> <span class="literal">true</span> <span class="comment"># enable single dollar signs as in-line math delimiters</span></span><br><span class="line">  <span class="attr">cjk_width:</span> <span class="number">0.9</span> <span class="comment"># relative CJK char width</span></span><br><span class="line">  <span class="attr">normal_width:</span> <span class="number">0.6</span> <span class="comment"># relative normal (monospace) width</span></span><br><span class="line">  <span class="attr">append_css:</span> <span class="literal">true</span> <span class="comment"># add CSS to pages rendered by MathJax</span></span><br><span class="line">  <span class="attr">every_page:</span> <span class="literal">false</span> <span class="comment"># if true, every page will be rendered by MathJax regardless the `mathjax` setting in Front-matter</span></span><br></pre></td></tr></table></figure>
+
+<p>该插件的使用方法比较简单，仅需要在文章的预定义部分添加<code>mathjax: true</code>，这个控制项即可，示例如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: On the Electrodynamics of Moving Bodies</span><br><span class="line">categories: Physics</span><br><span class="line">date: 1905-06-30 12:00:00</span><br><span class="line">mathjax: true</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<p>插件Github首页推荐使用<code>hexo-renderer-pandoc</code>替代默认的<code>hexo-renderer-marked</code>，说是pandoc渲染插件相比默认的marked插件能够更好的处理Markdown文章中的数学公式，默认的渲染插件无法处理Latex与Markdown的语法冲突。由于截止目前我在使用marked渲染插件时还没遇到这样的通途，所以也就没尝试这个新的渲染插件，如果以后遇见，就在新的文章中讨论分享。</p>
+<p>如果完成上述支持的配置就可以进行测试了，我们以如下Latex语句为例进行测试：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">i\hbar\frac{\partial}{\partial t}\psi=-\frac{\hbar^2}{2m}\nabla^2\psi+V\psi</span><br><span class="line">$$</span><br></pre></td></tr></table></figure>
+
+<p>上述语句在Typora中会生成如下公式（注意下列公式为图片）：</p>
+<p><img src="/posts/hexo-04-use-mermaid-and-matjax-with-hexo-tranquilpeak-theme/image-20201219141838371.png" alt="image-20201219141838371"></p>
+<p>下列公式，为插件渲染后公式，<br><mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align: -1.602ex" xmlns="http://www.w3.org/2000/svg" width="25.757ex" height="5.018ex" role="img" focusable="false" viewbox="0 -1509.9 11384.6 2217.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"/></g><g data-mml-node="mi" transform="translate(345, 0)"><path data-c="210F" d="M182 599Q182 611 174 615T133 619Q118 619 114 621T109 630Q109 636 114 656T122 681Q125 685 202 688Q272 695 286 695Q304 695 304 684Q304 682 295 644T282 597Q282 592 360 592H399Q430 592 445 587T460 563Q460 552 451 541L442 535H266L251 468Q247 453 243 436T236 409T233 399Q233 395 244 404Q295 441 357 441Q405 441 445 417T485 333Q485 284 449 178T412 58T426 44Q447 44 466 68Q485 87 500 130L509 152H531H543Q562 152 562 144Q562 128 546 93T494 23T415 -13Q385 -13 359 3T322 44Q318 52 318 77Q318 99 352 196T386 337Q386 386 346 386Q318 386 286 370Q267 361 245 338T211 292Q207 287 193 235T162 113T138 21Q128 7 122 4Q105 -12 83 -12Q66 -12 54 -2T42 26L166 530Q166 534 161 534T129 535Q127 535 122 535T112 534Q74 534 74 562Q74 570 77 576T84 585T96 589T109 591T124 592T138 592L182 595V599Z"/></g><g data-mml-node="mfrac" transform="translate(907, 0)"><g data-mml-node="mi" transform="translate(400.5, 676)"><path data-c="1D715" d="M202 508Q179 508 169 520T158 547Q158 557 164 577T185 624T230 675T301 710L333 715H345Q378 715 384 714Q447 703 489 661T549 568T566 457Q566 362 519 240T402 53Q321 -22 223 -22Q123 -22 73 56Q42 102 42 148V159Q42 276 129 370T322 465Q383 465 414 434T455 367L458 378Q478 461 478 515Q478 603 437 639T344 676Q266 676 223 612Q264 606 264 572Q264 547 246 528T202 508ZM430 306Q430 372 401 400T333 428Q270 428 222 382Q197 354 183 323T150 221Q132 149 132 116Q132 21 232 21Q244 21 250 22Q327 35 374 112Q389 137 409 196T430 306Z"/></g><g data-mml-node="mrow" transform="translate(220, -686)"><g data-mml-node="mi"><path data-c="1D715" d="M202 508Q179 508 169 520T158 547Q158 557 164 577T185 624T230 675T301 710L333 715H345Q378 715 384 714Q447 703 489 661T549 568T566 457Q566 362 519 240T402 53Q321 -22 223 -22Q123 -22 73 56Q42 102 42 148V159Q42 276 129 370T322 465Q383 465 414 434T455 367L458 378Q478 461 478 515Q478 603 437 639T344 676Q266 676 223 612Q264 606 264 572Q264 547 246 528T202 508ZM430 306Q430 372 401 400T333 428Q270 428 222 382Q197 354 183 323T150 221Q132 149 132 116Q132 21 232 21Q244 21 250 22Q327 35 374 112Q389 137 409 196T430 306Z"/></g><g data-mml-node="mi" transform="translate(566, 0)"><path data-c="1D461" d="M26 385Q19 392 19 395Q19 399 22 411T27 425Q29 430 36 430T87 431H140L159 511Q162 522 166 540T173 566T179 586T187 603T197 615T211 624T229 626Q247 625 254 615T261 596Q261 589 252 549T232 470L222 433Q222 431 272 431H323Q330 424 330 420Q330 398 317 385H210L174 240Q135 80 135 68Q135 26 162 26Q197 26 230 60T283 144Q285 150 288 151T303 153H307Q322 153 322 145Q322 142 319 133Q314 117 301 95T267 48T216 6T155 -11Q125 -11 98 4T59 56Q57 64 57 83V101L92 241Q127 382 128 383Q128 385 77 385H26Z"/></g></g><rect width="1127" height="60" x="120" y="220"/></g><g data-mml-node="mi" transform="translate(2274, 0)"><path data-c="1D713" d="M161 441Q202 441 226 417T250 358Q250 338 218 252T187 127Q190 85 214 61Q235 43 257 37Q275 29 288 29H289L371 360Q455 691 456 692Q459 694 472 694Q492 694 492 687Q492 678 411 356Q329 28 329 27T335 26Q421 26 498 114T576 278Q576 302 568 319T550 343T532 361T524 384Q524 405 541 424T583 443Q602 443 618 425T634 366Q634 337 623 288T605 220Q573 125 492 57T329 -11H319L296 -104Q272 -198 272 -199Q270 -205 252 -205H239Q233 -199 233 -197Q233 -192 256 -102T279 -9Q272 -8 265 -8Q106 14 106 139Q106 174 139 264T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Q21 299 34 333T82 404T161 441Z"/></g><g data-mml-node="mo" transform="translate(3202.8, 0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"/></g><g data-mml-node="mo" transform="translate(4258.6, 0)"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"/></g><g data-mml-node="mfrac" transform="translate(5036.6, 0)"><g data-mml-node="msup" transform="translate(400.7, 676)"><g data-mml-node="mi"><path data-c="210F" d="M182 599Q182 611 174 615T133 619Q118 619 114 621T109 630Q109 636 114 656T122 681Q125 685 202 688Q272 695 286 695Q304 695 304 684Q304 682 295 644T282 597Q282 592 360 592H399Q430 592 445 587T460 563Q460 552 451 541L442 535H266L251 468Q247 453 243 436T236 409T233 399Q233 395 244 404Q295 441 357 441Q405 441 445 417T485 333Q485 284 449 178T412 58T426 44Q447 44 466 68Q485 87 500 130L509 152H531H543Q562 152 562 144Q562 128 546 93T494 23T415 -13Q385 -13 359 3T322 44Q318 52 318 77Q318 99 352 196T386 337Q386 386 346 386Q318 386 286 370Q267 361 245 338T211 292Q207 287 193 235T162 113T138 21Q128 7 122 4Q105 -12 83 -12Q66 -12 54 -2T42 26L166 530Q166 534 161 534T129 535Q127 535 122 535T112 534Q74 534 74 562Q74 570 77 576T84 585T96 589T109 591T124 592T138 592L182 595V599Z"/></g><g data-mml-node="mn" transform="translate(613.1, 363) scale(0.707)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"/></g></g><g data-mml-node="mrow" transform="translate(220, -686)"><g data-mml-node="mn"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"/></g><g data-mml-node="mi" transform="translate(500, 0)"><path data-c="1D45A" d="M21 287Q22 293 24 303T36 341T56 388T88 425T132 442T175 435T205 417T221 395T229 376L231 369Q231 367 232 367L243 378Q303 442 384 442Q401 442 415 440T441 433T460 423T475 411T485 398T493 385T497 373T500 364T502 357L510 367Q573 442 659 442Q713 442 746 415T780 336Q780 285 742 178T704 50Q705 36 709 31T724 26Q752 26 776 56T815 138Q818 149 821 151T837 153Q857 153 857 145Q857 144 853 130Q845 101 831 73T785 17T716 -10Q669 -10 648 17T627 73Q627 92 663 193T700 345Q700 404 656 404H651Q565 404 506 303L499 291L466 157Q433 26 428 16Q415 -11 385 -11Q372 -11 364 -4T353 8T350 18Q350 29 384 161L420 307Q423 322 423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 181Q151 335 151 342Q154 357 154 369Q154 405 129 405Q107 405 92 377T69 316T57 280Q55 278 41 278H27Q21 284 21 287Z"/></g></g><rect width="1578" height="60" x="120" y="220"/></g><g data-mml-node="msup" transform="translate(6854.6, 0)"><g data-mml-node="mi"><path data-c="2207" d="M46 676Q46 679 51 683H781Q786 679 786 676Q786 674 617 326T444 -26Q439 -33 416 -33T388 -26Q385 -22 216 326T46 676ZM697 596Q697 597 445 597T193 596Q195 591 319 336T445 80L697 596Z"/></g><g data-mml-node="mn" transform="translate(833, 413) scale(0.707)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"/></g></g><g data-mml-node="mi" transform="translate(8091.1, 0)"><path data-c="1D713" d="M161 441Q202 441 226 417T250 358Q250 338 218 252T187 127Q190 85 214 61Q235 43 257 37Q275 29 288 29H289L371 360Q455 691 456 692Q459 694 472 694Q492 694 492 687Q492 678 411 356Q329 28 329 27T335 26Q421 26 498 114T576 278Q576 302 568 319T550 343T532 361T524 384Q524 405 541 424T583 443Q602 443 618 425T634 366Q634 337 623 288T605 220Q573 125 492 57T329 -11H319L296 -104Q272 -198 272 -199Q270 -205 252 -205H239Q233 -199 233 -197Q233 -192 256 -102T279 -9Q272 -8 265 -8Q106 14 106 139Q106 174 139 264T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Q21 299 34 333T82 404T161 441Z"/></g><g data-mml-node="mo" transform="translate(8964.3, 0)"><path data-c="2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"/></g><g data-mml-node="mi" transform="translate(9964.6, 0)"><path data-c="1D449" d="M52 648Q52 670 65 683H76Q118 680 181 680Q299 680 320 683H330Q336 677 336 674T334 656Q329 641 325 637H304Q282 635 274 635Q245 630 242 620Q242 618 271 369T301 118L374 235Q447 352 520 471T595 594Q599 601 599 609Q599 633 555 637Q537 637 537 648Q537 649 539 661Q542 675 545 679T558 683Q560 683 570 683T604 682T668 681Q737 681 755 683H762Q769 676 769 672Q769 655 760 640Q757 637 743 637Q730 636 719 635T698 630T682 623T670 615T660 608T652 599T645 592L452 282Q272 -9 266 -16Q263 -18 259 -21L241 -22H234Q216 -22 216 -15Q213 -9 177 305Q139 623 138 626Q133 637 76 637H59Q52 642 52 648Z"/></g><g data-mml-node="mi" transform="translate(10733.6, 0)"><path data-c="1D713" d="M161 441Q202 441 226 417T250 358Q250 338 218 252T187 127Q190 85 214 61Q235 43 257 37Q275 29 288 29H289L371 360Q455 691 456 692Q459 694 472 694Q492 694 492 687Q492 678 411 356Q329 28 329 27T335 26Q421 26 498 114T576 278Q576 302 568 319T550 343T532 361T524 384Q524 405 541 424T583 443Q602 443 618 425T634 366Q634 337 623 288T605 220Q573 125 492 57T329 -11H319L296 -104Q272 -198 272 -199Q270 -205 252 -205H239Q233 -199 233 -197Q233 -192 256 -102T279 -9Q272 -8 265 -8Q106 14 106 139Q106 174 139 264T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Q21 299 34 333T82 404T161 441Z"/></g></g></g></svg></mjx-container><br>其在渲染生成的HTML文件中为一SVG图形，HTML相关代码如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mjx-container</span> <span class="attr">class</span>=<span class="string">"MathJax"</span> <span class="attr">jax</span>=<span class="string">"SVG"</span> <span class="attr">display</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">svg</span> <span class="attr">style</span>=<span class="string">"vertical-align: -1.602ex"</span> <span class="attr">xmlns</span>=<span class="string">"http://www.w3.org/2000/svg"</span> <span class="attr">width</span>=<span class="string">"25.757ex"</span> <span class="attr">height</span>=<span class="string">"5.018ex"</span> <span class="attr">role</span>=<span class="string">"img"</span> <span class="attr">focusable</span>=<span class="string">"false"</span> <span class="attr">viewBox</span>=<span class="string">"0 -1509.9 11384.6 2217.9"</span>&gt;</span></span><br><span class="line">    ......</span><br><span class="line">  <span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mjx-container</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>考虑到文章篇幅，svg元素中的内容在此省略。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>以上就是，在使用Hexo tranquilpeak主题时，如何在Hexo博客中实现Latex语法与mermaid语法的支持的所有内容。在使用Hexo一些主题时，可能不需要自己做这些配置。但是如果你使用的主题没有对这两项内容进行支持，就可以参考上述内容，独自完成Latex语法与mermaid语法的支持。能有此文全因自己好奇。在文章最后想说一下，这里没有专家，记录这些主要是为了自己以后回顾学习之方便，文章有不足之处也实属正常。见解不同，诚切赐教，关注微信公众号，一起讨论学习。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Hexo/" class="tag">#Hexo</a><a href="/tags/使用技巧/" class="tag">#使用技巧</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/0813-pyenv-install-error-secure-channel-issue.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Python 杂记之 解决Win 7中安装与配置pyenv-win时因secure channel错误所引起的问题</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/machining-01-surface-roughness-knowledge.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">机械加工 之表面粗糙度的定义与总结</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

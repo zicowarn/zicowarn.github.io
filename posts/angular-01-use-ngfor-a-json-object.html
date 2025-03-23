@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Angular 如何使用结构型指令*ngFor历遍json对象 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Angular 如何使用结构型指令*ngFor历遍json对象 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/angular-01-use-ngfor-a-json-object.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2020-10-13T01:39:50.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Angular-相关-实战经验/">Angular 相关 - 实战经验</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>October</span>
+            <span>13,</span>
+            <span>2020</span>
+        </div>
+        
+
+        <h1 class="title">Angular 如何使用结构型指令*ngFor历遍json对象</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a> </p>
+<p>摘要：本文主要介绍如何使用Angular三个常用的内置结构型指令 —— NgIf、NgFor和NgSwitch之一ngFor历遍一个json对象。Ngfor历遍列表很简单，ngfor历遍json实例又该如何操作呢？</p>
+<p>Abstract: This article mainly introduces how to in Angular use ngFor, one of Three of the common, built-in structural directives—NgIf, NgFor, and NgSwitch, to traverse a json object. Ngfor traverses the array is very simple, how should ngfor traverse the json instance?</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a> </p>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p><code>NgFor</code> 会需要一个循环变量和一个列表。通过Pipe, PipeTransform来完成。也就是说ngfor主要是历遍列表的。一般情况下，遇到此类问题，首先想到的就是获取所有json对象中的键名，并定义一个类的公共属性，并将列表传入该属性，就可以在前端html代码中使用ngFor历遍键名并根据键值访问json对象，从而完成json对象的历遍。那有没有更加简单与直接的方法呢？本文就讨论一下我在项目中遇到类似的问题的解决方法。</p>
+<h3 id="方法一，管道Pipe"><a href="#方法一，管道Pipe" class="headerlink" title="方法一，管道Pipe"></a>方法一，管道Pipe</h3><p>管道的方法也是Angular官方比较推荐的，也是遇到类似问题应该想到并能够使用解决问题的方法。管道可以理解为一些简单的函数，其可以在<a target="_blank" rel="noopener" href="https://angular.cn/guide/glossary#template-expression">模板表达式</a>中用来接受输入值并返回一个转换后的值。管道的导入和实现代码如下。管道的类使用<code>@Pipe</code>装饰器。在自定义管道类中实现 <a target="_blank" rel="noopener" href="https://angular.cn/api/core/PipeTransform"><code>PipeTransform</code></a> 接口来执行转换。Angular 调用 <code>transform</code> 方法，该方法使用绑定的值作为第一个参数，即下方代码中的value，把其它任何参数（如下方代码中的args）都以列表的形式作为第二个参数，并返回转换后的值。通过管道中的数据绑定来检测变更，你可以通过带有管道的<a target="_blank" rel="noopener" href="https://angular.cn/guide/glossary#data-binding">数据绑定</a>来显示值并响应用户操作。如果是原始类型的输入值，比如 <code>String</code> 或 <code>Number</code> ，或者是对象引用型的输入值，比如 <code>Date</code> 或 <code>Array</code> ，那么每当 Angular 检测到输入值或引用有变化时，就会执行该输入管道。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Pipe</span>, <span class="title class_">PipeTransform</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/core&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Pipe</span>(&#123;<span class="attr">name</span>: <span class="string">&#x27;keys&#x27;</span>&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">KeysPipe</span> <span class="keyword">implements</span> <span class="title class_">PipeTransform</span> &#123;</span><br><span class="line">  <span class="title function_">transform</span>(value, <span class="attr">args</span>:<span class="built_in">string</span>[]) : <span class="built_in">any</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> keys = [];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> key <span class="keyword">in</span> value) &#123;</span><br><span class="line">      keys.<span class="title function_">push</span>(&#123;<span class="attr">key</span>: key, <span class="attr">value</span>: value[key]&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> keys;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>前端HTML模版，使用管道的示例代码如下，</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> *<span class="attr">ngFor</span>=<span class="string">&quot;#entry of content | keys&quot;</span>&gt;</span>           </span><br><span class="line">  Key: &#123;&#123;entry.key&#125;&#125;, value: &#123;&#123;entry.value&#125;&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>由名为<code>keys</code>的管道转换得来的值，每个元素entry，都包含key和value。使用管道的还有另一个好处，在使用管道的时候除了穿入需要转换的值以外还可以穿入其他的参数，书写方式如下。下方模版中<code>param</code>即为参数，在上面管道定义的代码中可以通过args[0]获取该参数。进而在转换json对象时，可以根据穿入的参数进行诸如“修改”，“过滤”，“添加”与“删除”等操作。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">span</span> *<span class="attr">ngFor</span>=<span class="string">&quot;#entry of content | keys:&#x27;param&#x27;&quot;</span>&gt;</span>           </span><br><span class="line">  Key: &#123;&#123;entry.key&#125;&#125;, value: &#123;&#123;entry.value&#125;&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在Angular中，管道Pipe分为 pure pipe (纯管道) 和 impure pipe (非纯管道)。纯管道和非纯管道是相对于管道所传的参数（如上例的 param）而言的。如果管道是纯管道，则管道的触发只会针对基本类型的参数的变化或者引用类型引用的变化（ a primitive input value (<code>String</code>, <code>Number</code>, <code>Boolean</code>, <code>Symbol</code>) or a changed object reference (<code>Date</code>, <code>Array</code>, <code>Function</code>, <code>Object</code>)）；然而， 对于非纯管道，不管是基本类型参数的改变还是引用类型内部数据变化（而非引用变化）都可以触发管道。管道时纯管道还是非纯管道的设置时通过把 <code>pure</code> 标志设置来实现的。当为 <code>false</code>时就可以来把管道设置成非纯。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Pipe</span>(&#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&#x27;keys&#x27;</span>,</span><br><span class="line">  <span class="attr">pure</span>: <span class="literal">true</span> <span class="comment">// default</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>本文示例使用的默认值，即纯管道。</p>
+<h3 id="方法二，使用Object-keys方法"><a href="#方法二，使用Object-keys方法" class="headerlink" title="方法二，使用Object.keys方法"></a>方法二，使用Object.keys方法</h3><p>JSON 作为存储和传输数据的一种格式。本身是没有类似于Python中Dictionary数据类型的诸如keys()和values()的内置方法的。ES5中内置了一个名为Object.keys的方法，用于返回一个对象的属性名称数组，其使用方法如下。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> object1 = &#123;</span><br><span class="line">  <span class="attr">a</span>: <span class="string">&#x27;somestring&#x27;</span>,</span><br><span class="line">  <span class="attr">b</span>: <span class="number">42</span>,</span><br><span class="line">  <span class="attr">c</span>: <span class="literal">false</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Object</span>.<span class="title function_">keys</span>(object1));</span><br></pre></td></tr></table></figure>
+
+<p>虽然有了获取json对象属性（键）名称数组的方法。但是在Angular的HTML模版中是不能直接使用该方法是非法的。既然如此就可以换个思路，由于在模版中，使用组件的公共属性是合法的，那么就可以先定义一个组件的公共属性，并将方法Object.keys以别名的方法赋值至该公共属性。具体代码实现如下。代码中<code>objectKeys = Object.keys;</code>就是为了完成上述操作的。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Component</span>, <span class="title class_">ElementRef</span>, <span class="title class_">OnInit</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/core&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span>(&#123;</span><br><span class="line">  <span class="attr">selector</span>: <span class="string">&#x27;app-demo&#x27;</span>,</span><br><span class="line">  <span class="attr">templateUrl</span>: <span class="string">&#x27;./demo.component.html&#x27;</span>,</span><br><span class="line">  <span class="attr">styleUrls</span>: [<span class="string">&#x27;./demo.component.scss&#x27;</span>]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">DemoComponent</span> <span class="keyword">implements</span> <span class="title class_">OnInit</span> &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> objectKeys = <span class="title class_">Object</span>.<span class="property">keys</span>;</span><br><span class="line">  <span class="keyword">public</span> datas = &#123;</span><br><span class="line">    <span class="string">&#x27;Block1&#x27;</span>: &#123;</span><br><span class="line">      <span class="string">&#x27;data1&#x27;</span> : <span class="string">&quot;Block 1 data 1&quot;</span>,</span><br><span class="line">      <span class="string">&#x27;data1-pop&#x27;</span>: <span class="number">.035</span>,</span><br><span class="line">      <span class="string">&#x27;data2&#x27;</span> : <span class="string">&quot;Block 1 data 1&quot;</span>,</span><br><span class="line">      <span class="string">&#x27;data2-pop&#x27;</span>: <span class="number">.2</span>,</span><br><span class="line">      <span class="string">&#x27;data3&#x27;</span> : <span class="string">&quot;Block 1 data 1&quot;</span>,</span><br><span class="line">      <span class="string">&#x27;data3-pop&#x27;</span>: <span class="number">.35</span>,</span><br><span class="line">      <span class="string">&#x27;data4&#x27;</span> : <span class="string">&quot;Block 1 data 1&quot;</span>,</span><br><span class="line">      <span class="string">&#x27;data4-pop&#x27;</span>: <span class="number">.5</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&#x27;Block2&#x27;</span>: &#123;</span><br><span class="line">				...</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"></span>) &#123; &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">ngOnInit</span>(): <span class="built_in">void</span> &#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>前端模版的书写方式如下。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ng-container</span> *<span class="attr">ngFor</span>=<span class="string">&quot;let itemkey of objectKeys(datas[entry])&quot;</span> &gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">div</span> *<span class="attr">ngIf</span>=<span class="string">&quot;!itemkey.includes(&#x27;pop&#x27;)&quot;</span> <span class="attr">fxLayout</span>=<span class="string">&quot;column&quot;</span> <span class="attr">class</span>=<span class="string">&quot;signleitem&quot;</span> <span class="attr">fxFlex</span>=<span class="string">50</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">label</span>&gt;</span>&#123;&#123;itemkey&#125;&#125;<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">div</span> <span class="attr">fxLayout</span>=<span class="string">&quot;row&quot;</span> <span class="attr">fxLayoutAlign</span>=<span class="string">&quot;start none&quot;</span> <span class="attr">class</span>=<span class="string">&quot;item-content&quot;</span> <span class="attr">fxFill</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">input</span> <span class="attr">placeholder</span>=<span class="string">&quot;&quot;</span> [(<span class="attr">ngModel</span>)]=<span class="string">datas[entry][itemkey]</span>&gt;</span></span><br><span class="line">					<span class="tag">&lt;<span class="name">span</span>&gt;</span>&#123;&#123; (datas[entry][itemkey+&#x27;-pop&#x27;] * 100) | number:&#x27;1.0-0&#x27;&#125;&#125; %<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ng-container</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>与方法一不同的是，此时历遍的数组中的元素仅为json对象的键名。此种方法也不能在历遍完成对键值的过滤。但在一些应用场景下，该方法要比方法一更加直接和高效。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>两种方法都能解决问题，在使用中可以根据实际需要选的最合适的自己项目的方法。文中内容就是对这个两种方法进行简单对比。Angular相关内容为自己新学知识，文章有不足之处也实属正常。见解不同，诚切赐教，关注微信公众号，一起讨论学习。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Angular/" class="tag">#Angular</a><a href="/tags/ngFor/" class="tag">#*ngFor</a><a href="/tags/json/" class="tag">#json</a><a href="/tags/历遍/" class="tag">#历遍</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/aws-cloudfront-01-create-cdn-network.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">AWS 使用CloudFront创建CDN网络</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/aws-common-02-awscli-configuration.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">AWS 如何使用IAM创建一个最小访问权限的用户并使用aws-cli来部署lambda函数程序包</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

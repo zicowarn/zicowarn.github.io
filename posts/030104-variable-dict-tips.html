@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Python 变量之字典与实战经验 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Python 变量之字典与实战经验 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/030104-variable-dict-tips.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2018-11-19T07:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Python-相关-3-基本语法/">Python 相关 - 3. 基本语法</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>November</span>
+            <span>19,</span>
+            <span>2018</span>
+        </div>
+        
+
+        <h1 class="title">Python 变量之字典与实战经验</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h2 id="Python-标准数据类型"><a href="#Python-标准数据类型" class="headerlink" title="Python 标准数据类型"></a><strong>Python 标准数据类型</strong></h2><p>大家好，最近更新比较慢，临近圣诞节和新年，公司的事情也就异常多。连续几天的会议，还要加紧修复bug，为新版本软件的发布做准备。好了言归正传，书接上回。Python 定义了一些标准数据类型，用于存储各种类型的数据。Python有五个标准的数据类型，分别是：</p>
+<span id="more"></span>
+
+<ul>
+<li>Numbers（数字）</li>
+<li>String（字符串）</li>
+<li>List（列表）</li>
+<li>Tuple（元组）</li>
+<li>Dictionary（字典）</li>
+</ul>
+<p>字典在Python中应该算是最后一个重要的基本变量，出现在代码中的频率也比较高。常被用作为一种可变的数据容器。今天就给大家介绍一下Python最后一个标准数据类型字典，即Dictionary的一些基础知识和在实际应用中的使用技巧。</p>
+<h2 id="Dictionary-字典的特征"><a href="#Dictionary-字典的特征" class="headerlink" title="Dictionary 字典的特征"></a><strong>Dictionary 字典的特征</strong></h2><p>作为一种可变容器模型，那么字典Dict在声明之后就能够任意被修改，比如添加，删除，或者更改。既然名为字典也就意味着其查询索引方式类如真实意义上的字典。Python的自己由一组<strong>键（key）与值（value）</strong>组成。两者之间用冒号隔开（<strong>：</strong>）。组与组之间与逗号（，）隔开。最后用花括号(大括号) “**{}**” 包裹所有的键值组，就得到一个字典实例，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">di = &#123;key_1 : value_1, key_2 : value_2, key_3: value_3&#125;</span><br></pre></td></tr></table></figure>
+
+<p>字典中，每一组键值，其键需要有唯一性，但是其值则不需要。在Python中，字典键值的唯一性就限制了它的数据类型选择范围。结合前面文章所介绍的的标准数据类型，除<strong>列表</strong>以外：数值型，元组，字符串都能够作为字典类型的<strong>键</strong>，经过实践可以告诉大家，任何类的实例都可以作为字典的键。因为类一旦实例化，其类实例在内存中的地址具有唯一性，因此也可以作为字典的键，参考下面代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">class</span> <span class="title class_">A</span>:</span><br><span class="line"><span class="meta">... </span>   <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line"><span class="meta">... </span>            <span class="keyword">pass</span>...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = A()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = &#123; <span class="number">1</span>: <span class="string">&quot;a&quot;</span>, <span class="number">2</span>: <span class="string">&quot;b&quot;</span>, a:<span class="string">&quot;Object&quot;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d</span><br><span class="line">&#123;&lt;__main__.A instance at <span class="number">0x0000000004D2A188</span>&gt;: <span class="string">&#x27;Object&#x27;</span>, <span class="number">1</span>: <span class="string">&#x27;a&#x27;</span>, <span class="number">2</span>: <span class="string">&#x27;b&#x27;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d.keys()</span><br><span class="line">[&lt;__main__.A instance at <span class="number">0x0000000004D2A188</span>&gt;, <span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">&gt;&gt; d.keys()[<span class="number">0</span>]</span><br><span class="line">&lt;__main__.A instance at <span class="number">0x0000000004D2A188</span></span><br><span class="line">&gt;&gt;&gt;&gt; d.keys()[<span class="number">0</span>].isB = <span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d.keys()[<span class="number">0</span>]</span><br><span class="line">&lt;__main__.A instance at <span class="number">0x0000000004D2A188</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>字典中，每组键值中的值，没有限定，可以是任意的数据类型。1. 键值是否可变，字典并不做约束，仅仅与数据类型本身有关。如下面代码的例子中，元组可以作为一对键值的值，因为元组本身不可变，所以该对键值的值不可变，但是不能因此认为字典的值不可改变。 2. 一对键值中，虽然字典也可以作为键值的值，而且在日常使用的时候也不会出现问题，但是在实际使用的时候，如果作为值的字典中存在bytes类的键值时，当尝试使用deepcopy复制字典实例的时候，可能会引发异常，当然类似的异常也会存在与复制相似结构的列表时诱发。各位可以留个印象，当以后遇见类似问题，或许可以帮助你确定异常诱发的原因。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>mydict = &#123;<span class="string">&quot;str&quot;</span>: <span class="string">&quot;String&quot;</span>, <span class="string">&quot;list&quot;</span>: [<span class="string">&quot;list1&quot;</span>, <span class="string">&quot;list2&quot;</span>], <span class="string">&quot;tuple&quot;</span>: (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) , <span class="string">&quot;dictionary&quot;</span> : &#123;<span class="string">&quot;a&quot;</span>: <span class="string">&quot;1&quot;</span>, <span class="string">&quot;b&quot;</span>:<span class="number">2</span>&#125;&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>mydict</span><br><span class="line">&#123;<span class="string">&#x27;list&#x27;</span>: [<span class="string">&#x27;list1&#x27;</span>, <span class="string">&#x27;list2&#x27;</span>], <span class="string">&#x27;dictionary&#x27;</span>: &#123;<span class="string">&#x27;a&#x27;</span>: <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;b&#x27;</span>: <span class="number">2</span>&#125;, <span class="string">&#x27;str&#x27;</span>: <span class="string">&#x27;String&#x27;</span>, <span class="string">&#x27;tuple&#x27;</span>: (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)&#125;</span><br><span class="line">&gt;&gt;&gt;</span><br><span class="line">注：上述代码中我们会发现一个问题，字典键值打印时，键值组的顺序和自己声明字典时的顺序</span><br><span class="line">不一致。这样的问题在字典历遍或者索引的时候也会遇到。标准的Python中会有一个名为</span><br><span class="line">collections的模块，在该模块下有一个名为OderedDict的类，该类为<span class="type">Dict</span>的子类，但具</span><br><span class="line">有保持字典中键值顺序与声明时相一致的特性。</span><br></pre></td></tr></table></figure>
+
+<p>总的来说，对于字典中键值对，键是由唯一且不可变的数据类型定义，准确地来说是可以哈希（hashable）的数据类型。值可以为任意数据类型。当同一键值被重复赋值，最后一次值将被采用。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_jpg/LNbO7CDlxmbTEl8FZc5icO1wlmSzmh1hmz96edbdYgnGu6yzrRGLqSfoLLonV16JRlvMHD1qCQHbo6QtKzdu3uA/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="img"></p>
+<p>声明后的字典实例，修改添加和改变都很简单。其中为字典中添加一个元素和更改一个元素的书写方式是一样的。如下方代码：如果字典情况位置，键3值的修改和键4值的添加，方法一样。而列表再添加值的时候是需要使用类方法append()的。而如果使用数字作为键值，代码文件就由如<strong>d[3] = ‘d’</strong> 的内容， 这样的书写方法不利于代码的标准化，而且类似的需求完全可以由列表来实现。所以个人建议为了代码的标准化，使用字典时，还是应尽量避免数值类型作为键的值，避免代码出现歧义。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = &#123; <span class="number">1</span>: <span class="string">&quot;a&quot;</span>, <span class="number">2</span>: <span class="string">&quot;b&quot;</span>, <span class="number">3</span>: <span class="string">&quot;c&quot;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d[<span class="number">3</span>]</span><br><span class="line"><span class="string">&#x27;c&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d[<span class="number">3</span>] = <span class="string">&#x27;d&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d[<span class="number">4</span>] = <span class="string">&#x27;e&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d</span><br><span class="line">&#123;<span class="number">1</span>: <span class="string">&#x27;a&#x27;</span>, <span class="number">2</span>: <span class="string">&#x27;b&#x27;</span>, <span class="number">3</span>: <span class="string">&#x27;d&#x27;</span>, <span class="number">4</span>: <span class="string">&#x27;e&#x27;</span>&#125;</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>字典的删除操作，使用字典的类方法clear()可以删除字典中的所有元素，但是字典实例依旧存在。也可以使用关键字<strong>del</strong>来实现对字典单一元素和整个字典的清除。注意：使用关键字del删除整个字典，该字典的实例将从内存中清除，使用被清除的字典会引发异常。如下面代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = &#123;<span class="number">1</span>: <span class="string">&#x27;a&#x27;</span>, <span class="number">2</span>: <span class="string">&#x27;b&#x27;</span>, <span class="number">3</span>: <span class="string">&#x27;d&#x27;</span>, <span class="number">4</span>: <span class="string">&#x27;e&#x27;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">del</span> d[<span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d</span><br><span class="line">&#123;<span class="number">1</span>: <span class="string">&#x27;a&#x27;</span>, <span class="number">2</span>: <span class="string">&#x27;b&#x27;</span>, <span class="number">3</span>: <span class="string">&#x27;d&#x27;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d.clear()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d</span><br><span class="line">&#123;&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = &#123; <span class="number">1</span>: <span class="string">&quot;a&quot;</span>, <span class="number">2</span>: <span class="string">&quot;b&quot;</span>, <span class="number">3</span>: <span class="string">&quot;c&quot;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">del</span> d[<span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d</span><br><span class="line">&#123;<span class="number">1</span>: <span class="string">&#x27;a&#x27;</span>, <span class="number">2</span>: <span class="string">&#x27;b&#x27;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">del</span> d</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">NameError: name <span class="string">&#x27;d&#x27;</span> <span class="keyword">is</span> <span class="keyword">not</span> defined</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Dictionary-字典的索引"><a href="#Dictionary-字典的索引" class="headerlink" title="Dictionary 字典的索引"></a><strong>Dictionary 字典的索引</strong></h2><p>Python中字典键值的索引总的来说有两种方法，一种使用方括号和键，类似列表的方法来索引和访问字典中的元素。第二种是使用get()类方法和键来索引和访问，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = &#123;<span class="number">1</span>: <span class="string">&#x27;a&#x27;</span>, <span class="number">2</span>: <span class="string">&#x27;b&#x27;</span>, <span class="number">3</span>: <span class="string">&#x27;d&#x27;</span>, <span class="number">4</span>: <span class="string">&#x27;e&#x27;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d[<span class="number">1</span>]</span><br><span class="line"><span class="string">&#x27;a&#x27;</span></span><br><span class="line">&gt;&gt; d.get(<span class="number">1</span>)</span><br><span class="line"><span class="string">&#x27;a&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>两种方法在效率上并没有差别，早前读过一篇文章讨论两种索引方式的效率。结果如下，结果显示使用方括号更直接高效。个人建议大家将图示的结果仅作为一个参考，因为也有Python开发人员有不同意见，认为实验方式有问题。</p>
+<p>在实际应用的时候，我个人觉得两种方法的效率其实并没有太大差别，更值得关注的是get()方法能够更好地避免因为键不存在引起的索引异常。如下面代码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = &#123;<span class="number">1</span>: <span class="string">&#x27;a&#x27;</span>, <span class="number">2</span>: <span class="string">&#x27;b&#x27;</span>, <span class="number">3</span>: <span class="string">&#x27;d&#x27;</span>, <span class="number">4</span>: <span class="string">&#x27;e&#x27;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d[<span class="number">6</span>]</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">KeyError: <span class="number">6</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d.get(<span class="number">6</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d.get(<span class="number">6</span>, <span class="string">&quot;No Value&quot;</span>)</span><br><span class="line"><span class="string">&#x27;No Value&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>由上述代码可以发现，在遇到字典中不存在的键的问题的时候，方括号+键的方式会引发异常，为了避免异常还要添加代码（通常为if语句）来检测该字典中是否存在所求键值组。而使用get()方法则能避免引发这个异常，当字典中不存在所求键值组的时，使用该方法返回空，或者你也可以给定第二个变量作为默认值，当该键值不存在则会返回默认值。在实际使用中该方法优选，可以很大程度地减少代码数量。</p>
+<p>在这里我给大家介绍一个Python字典索引的<strong>实战经验</strong>，具体方法如下方代码。假如一个字典有数字和字符串混合键，想要得到所有数字键的键值组。经典方法为，索引字典中的每一个键值组，检查键的数据类型，将符合条件的键值组的值加入一个列表里面，最终就可以得到所有符合要求的键值组的值的组合。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d = &#123;<span class="string">&#x27;1&#x27;</span>: <span class="string">&quot;a&quot;</span>, <span class="number">1</span>:<span class="string">&quot;b&quot;</span>, <span class="string">&#x27;2&#x27;</span>: <span class="string">&quot;c&quot;</span>, <span class="number">2</span> : <span class="string">&quot;d&quot;</span>, <span class="string">&#x27;3&#x27;</span>: <span class="string">&quot;e&quot;</span>, <span class="number">3</span>: <span class="string">&quot;f&quot;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d</span><br><span class="line">&#123;<span class="number">1</span>: <span class="string">&#x27;b&#x27;</span>, <span class="number">2</span>: <span class="string">&#x27;d&#x27;</span>, <span class="number">3</span>: <span class="string">&#x27;f&#x27;</span>, <span class="string">&#x27;1&#x27;</span>: <span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;3&#x27;</span>: <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;2&#x27;</span>: <span class="string">&#x27;c&#x27;</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>d.keys()</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;2&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>intKeys = <span class="built_in">filter</span>(<span class="keyword">lambda</span> e: <span class="built_in">isinstance</span>(e, <span class="built_in">int</span>), d.keys())</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>intKeys</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>listValuesOfIntKeys = <span class="built_in">map</span>(d.get, intKeys)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>listValuesOfIntKeys</span><br><span class="line">[<span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;d&#x27;</span>, <span class="string">&#x27;f&#x27;</span>]</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>使用上述方法，可以避免索引整个字典，代码简洁有效。这里值得关注的是使用filter()+lambda关键字来筛选一个列表，和使用map()函数一次性地用不同参数调用同一函数（在这里为字典的get()方法）。这样的方法或许可以提供一种不同的解决问题的思路。</p>
+<p>索引的特殊情况，历遍字典所有键值组。经典方法为<strong>for + in</strong> 的组合来进行迭代。请参考下方代码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> key <span class="keyword">in</span> d:</span><br></pre></td></tr></table></figure>
+
+<p>该种方法也有效，但是不推荐使用。主要原因在于，底层代码要检验键值的唯一性，该方法会增加发生异常的频率。还有一个原因是for循环中的d[key] 会导致键再次被哈希，当字典较大时，这样的操作会消耗更多的时间。</p>
+<p>我个人比较推荐使用下面的方法，这样的方法同时迭代键与值，而且更见安全。这在Python 2.7 中常被使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> key, value <span class="keyword">in</span> d.iteritems():</span><br></pre></td></tr></table></figure>
+
+<p>Python 3.0 会使用下面的方法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> key, value <span class="keyword">in</span> d.items():</span><br></pre></td></tr></table></figure>
+
+<h2 id="关于字典的内置函数和类方法"><a href="#关于字典的内置函数和类方法" class="headerlink" title="关于字典的内置函数和类方法"></a><strong>关于字典的内置函数和类方法</strong></h2><p>字典作为Python的标准数据类型，Python这种语言自然为其准备了一些内置方法，常见的主要如下：</p>
+<blockquote>
+<ol>
+<li>len(dict) 函数：用于得到字典的长度，因为为键值组，所以键的数量和值的数量相当。</li>
+<li>str(dict) 函数：用于输出字典可打印的字符串，其表示内容，可通过继承字典类型， 复写<strong>repr</strong>(self)类函数来格式化输出内容。</li>
+<li>cmp(dict1, dict2）函数：用于比较字典的键值组是否完全一致，如果相同则返回真， 否则为假。</li>
+</ol>
+</blockquote>
+<p>字典在Python中也算是一种类，既然是类就有类方法。上文中介绍了一些常见的类方法比如使用键得到值的get()方法，清除字典内所有元素的clear()方法和得到字典内所有键值组键的方法keys()。 除此之外常用的方法还有：</p>
+<blockquote>
+<ol>
+<li><p>dict.copy() 类方法： 用于浅复制一个字典， 注。</p>
+</li>
+<li><p>dict.items() 类方法：返回值为该字典”（键，值）“样式的元组组成的列表 ，注。</p>
+</li>
+<li><p>dict.update(dict2) 类方法：使用dict2中的值，来更新dict中有相同键的键</p>
+<p>值组的值。</p>
+</li>
+<li><p>dict.values() 类方法：返回字典中所有值组成的列表。</p>
+</li>
+<li><p>dict.has_key(key) 类方法：用于判断字典中是否含有该键，有为true，否则为假。</p>
+</li>
+<li><p>dict.pop(key, default) 类方法：该方法与get()相似，删除一组键值，如果该键不</p>
+<p>存在则返回default值。 注： Python 2.x中有iteritems方法，在Python 3.0 中该方法被items()替代。 关于浅复制和深复制的内容，我将为在以后的文章中介绍给大家。</p>
+</li>
+</ol>
+</blockquote>
+<p>使用Python语言的内置方法和字典的类方法并结合一下编程技巧，我相信，各位读者能够正确使用字典来解决自己在项目中遇见的问题， 并在完成项目的同时会发现一些新的技巧，进而不断地提高自己的代码质量和代码效率。</p>
+<p>Python基本数据类型中的字典和其使用技巧今天就介绍到这里，我也会尽我所能提高更新频率。努力归纳自己在工作中遇见的问题，并把自己找到的解决方法介绍给大家。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/变量/" class="tag">#变量</a><a href="/tags/实战经验/" class="tag">#实战经验</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/030201-operator.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Python 运算符</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/030103-variable-tuple-tips.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Python 变量之元组与实战经验</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

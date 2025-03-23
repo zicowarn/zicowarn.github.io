@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Inno Setup 如何更换向导页面标题部分的背景 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Inno Setup 如何更换向导页面标题部分的背景 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/inno-05-beautify-wizard-laben.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2019-08-10T00:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Inno-Setup-相关-实战经验/">Inno Setup 相关 - 实战经验</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>August</span>
+            <span>10,</span>
+            <span>2019</span>
+        </div>
+        
+
+        <h1 class="title">Inno Setup 如何更换向导页面标题部分的背景</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>开发部领导新的要求，希望在产品安装包的向导页面做些美化。比如，显示公司的logo在向导页面的标题部分。</p>
+<span id="more"></span>
+
+<p><img src="/posts/inno-05-beautify-wizard-laben/inno-label-part.png"></p>
+<p>所谓标题即Label部分就是上图中红色方格标注的部分。 标注部分右侧是logo图标。</p>
+<h3 id="1-初探，如何更换logo部分"><a href="#1-初探，如何更换logo部分" class="headerlink" title="1. 初探，如何更换logo部分"></a>1. 初探，如何更换logo部分</h3><p>Inno Setup开发文档里里有介绍如何更换Label中右侧的logo的方法。可以通过在**[Setup]**可以定义<code>WizardSmallImageFile</code>=”logo文件路径”来实现。但其要求的logo图片都是长宽相等的。长款不等的图片在显示会被拉伸，其效果惨不忍睹。该选项支持多重文件，即:你可以一次定义多个分辨率的logo文件，Inno Setup在安装的时候会根据系统当前的DPI设置，来自动选择合适分辨率的图片。多重定义的方法如下：</p>
+<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Example:</span><br><span class="line">WizardSmallImageFile=mysmallimage.bmp,mysmallimage2.bmp</span><br></pre></td></tr></table></figure>
+
+<p>Logo文件分辨率要求如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">100%	55x55</span><br><span class="line">125%	64x68</span><br><span class="line">150%	83x80</span><br><span class="line">175%	92x97</span><br><span class="line">200%	110x106</span><br><span class="line">225%	119x123</span><br><span class="line">250%	138x140</span><br></pre></td></tr></table></figure>
+
+<p>图片被拉伸通常发生在以下两种情况，一、显示器的设置发生了变化。二、Inno Setup向导页面被设定未可缩放。向导页面的缩放可以通过<code>WizardSizePercen</code>和<code>WizardResizable</code>。<code>WizardSizePercent</code>的合法值为从100值150。该参数的目的是允许你在不改变文字大小的前提下等比例缩放所以的安装和卸载向导页面。150意思是缩放为默认大小的150%，即增到50%。这里<code>WizardResizable</code>的合法值为yes和no，而当<code>WizardStyle</code>（其合法值为classic和modern）被设置为modern的时候，就默认为<code>WizardResizable</code>的值为yes，也同时默认为<code>WizardSizePercen</code>为120%。具体解释可以查看Inno Setup的官方文档。</p>
+<h3 id="2-深入，如何得到当前的显示器的DPI"><a href="#2-深入，如何得到当前的显示器的DPI" class="headerlink" title="2. 深入，如何得到当前的显示器的DPI"></a>2. 深入，如何得到当前的显示器的DPI</h3><p>上文说到，图片的拉伸除了与向导页面有关，与系统的显示设置也相关，那如何得到当前显示的DPI呢？在Win7之前的系统中，要得到当前显示器的DPI，在Inno Setup的**[Code]**部分可以使用<code>TGraphicsObject.PixelsPerInch</code> 这个属性得到当前系统显示器设定的DPI。TGraphicsObject 这里有个小例子，代码如下：</p>
+<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">procedure</span> <span class="title">CheckDPI</span>;</span></span><br><span class="line"><span class="keyword">var</span></span><br><span class="line">  CurrentDPI, StandardDPI, MediumDPI, LargeDPI: Integer;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="comment">&#123; Get the current DPI, 从向导页面的字体中得到当前的DPI &#125;</span> </span><br><span class="line">  CurrentDPI  := WizardForm.Font.PixelsPerInch;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">&#123; Store defaults determined from Windows DPI settings &#125;</span></span><br><span class="line">  StandardDPI := <span class="number">96</span>;  <span class="comment">&#123; 100% &#125;</span></span><br><span class="line">  MediumDPI   := <span class="number">120</span>; <span class="comment">&#123; 125% &#125;</span></span><br><span class="line">  LargeDPI    := <span class="number">144</span>; <span class="comment">&#123; 150% &#125;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (CurrentDPI &gt;= StandardDPI) <span class="keyword">and</span> (CurrentDPI &lt; MediumDPI) <span class="keyword">then</span> </span><br><span class="line">  <span class="keyword">begin</span></span><br><span class="line">    <span class="comment">&#123; Execute some custom code for small to medium DPI &#125;</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (CurrentDPI &gt;= MediumDPI) <span class="keyword">and</span> (CurrentDPI &lt; LargeDPI) <span class="keyword">then</span></span><br><span class="line">  <span class="keyword">begin</span></span><br><span class="line">    <span class="comment">&#123; Execute some custom code for medium to large DPI &#125;</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span> (CurrentDPI &gt;= LargeDPI) <span class="keyword">then</span></span><br><span class="line">  <span class="keyword">begin</span></span><br><span class="line">    <span class="comment">&#123; Execute some custom code for large DPI or above &#125;</span></span><br><span class="line">  <span class="keyword">end</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+
+<p>从Inno Setup 的5.6的版本开始，在多重定义的时候，Inno Setup就会根据当前DPI自动选择图片大小。这个自动选择是如何实现的呢。 下面的代码就使用了<code>PixelsPerInch</code>这个属性，并尝试模拟了自动选择这部分功能。</p>
+<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">[Setup]</span><br><span class="line">; Use <span class="number">100</span>% images by <span class="keyword">default</span></span><br><span class="line">WizardImageFile=WizardImage <span class="number">100</span>.bmp</span><br><span class="line">WizardSmallImageFile=WizardSmallImage <span class="number">100</span>.bmp</span><br><span class="line"></span><br><span class="line">[Files]</span><br><span class="line">; Embed all other sizes <span class="keyword">to</span> the installer</span><br><span class="line">Source: &quot;WizardImage *.bmp&quot;; Excludes: &quot;* <span class="number">100</span>.bmp&quot;; Flags: dontcopy</span><br><span class="line">Source: &quot;WizardSmallImage *.bmp&quot;; Excludes: &quot;* <span class="number">100</span>.bmp&quot;; Flags: dontcopy</span><br><span class="line"></span><br><span class="line">[Code]</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">GetScalingFactor</span>:</span> Integer;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="keyword">if</span> WizardForm.Font.PixelsPerInch &gt;= <span class="number">192</span> <span class="keyword">then</span> Result := <span class="number">200</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">  <span class="keyword">if</span> WizardForm.Font.PixelsPerInch &gt;= <span class="number">144</span> <span class="keyword">then</span> Result := <span class="number">150</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">  <span class="keyword">if</span> WizardForm.Font.PixelsPerInch &gt;= <span class="number">120</span> <span class="keyword">then</span> Result := <span class="number">125</span></span><br><span class="line">    <span class="keyword">else</span> Result := <span class="number">100</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">procedure</span> <span class="title">LoadEmbededScaledBitmap</span><span class="params">(Image: TBitmapImage; NameBase: <span class="keyword">string</span>)</span>;</span></span><br><span class="line"><span class="keyword">var</span></span><br><span class="line">  <span class="keyword">Name</span>: <span class="keyword">String</span>;</span><br><span class="line">  FileName: <span class="keyword">String</span>;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="keyword">Name</span> := Format(<span class="string">&#x27;%s %d.bmp&#x27;</span>, [NameBase, GetScalingFactor]);</span><br><span class="line">  ExtractTemporaryFile(<span class="keyword">Name</span>);</span><br><span class="line">  FileName := ExpandConstant(<span class="string">&#x27;&#123;tmp&#125;\&#x27;</span> + <span class="keyword">Name</span>);</span><br><span class="line">  Image.Bitmap.LoadFromFile(FileName);</span><br><span class="line">  DeleteFile(FileName);</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">procedure</span> <span class="title">InitializeWizard</span>;</span></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="comment">&#123; If using larger scaling, load the correct size of images &#125;</span></span><br><span class="line">  <span class="keyword">if</span> GetScalingFactor &gt; <span class="number">100</span> <span class="keyword">then</span> </span><br><span class="line">  <span class="keyword">begin</span></span><br><span class="line">    LoadEmbededScaledBitmap(WizardForm.WizardBitmapImage, <span class="string">&#x27;WizardImage&#x27;</span>);</span><br><span class="line">    LoadEmbededScaledBitmap(WizardForm.WizardBitmapImage2, <span class="string">&#x27;WizardImage&#x27;</span>);</span><br><span class="line">    LoadEmbededScaledBitmap(WizardForm.WizardSmallBitmapImage, <span class="string">&#x27;WizardSmallImage&#x27;</span>);</span><br><span class="line">  <span class="keyword">end</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+
+<p>那么有没有在不用重复定义，仅用一张图片然后根据当前的DPI来进行人为的缩放，也能达到良好的显示效果呢，当然有，方法如下：</p>
+<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span></span><br><span class="line">  CustomPage: TWizardPage;</span><br><span class="line">  BtnImage: TBitmapImage;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">procedure</span> <span class="title">InitializeWizard</span>;</span></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  CustomPage := CreateCustomPage(wpLicense, <span class="string">&#x27;Heading&#x27;</span>, <span class="string">&#x27;Sub heading.&#x27;</span>);</span><br><span class="line">  ExtractTemporaryFile(<span class="string">&#x27;image.bmp&#x27;</span>);</span><br><span class="line">  BtnImage := TBitmapImage.Create(WizardForm); <span class="comment">//在当前页面即wpLicense页面创建一个Image按钮。</span></span><br><span class="line">  <span class="keyword">with</span> BtnImage <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">      Parent := CustomPage.Surface;</span><br><span class="line">      Bitmap.LoadFromFile(ExpandConstant(<span class="string">&#x27;&#123;tmp&#125;&#x27;</span>)+<span class="string">&#x27;\image.bmp&#x27;</span>);</span><br><span class="line">      AutoSize := True;</span><br><span class="line">      AutoSize := False;  <span class="comment">// 缩放之前 关系BtnImage的自由大小属性</span></span><br><span class="line">      Height := ScaleX(Height); <span class="comment">// 然后根据当前BtnImage的大小进行缩放</span></span><br><span class="line">      Width := ScaleY(Width);</span><br><span class="line">      Stretch := True;</span><br><span class="line">      Left := ScaleX(<span class="number">90</span>);</span><br><span class="line">      Top := WizardForm.SelectTasksPage.Top + WizardForm.SelectTasksPage.Height -</span><br><span class="line">             Height - ScaleY(<span class="number">8</span>);</span><br><span class="line">      Cursor := crHand;</span><br><span class="line">      OnClick := @ImageOnClick;</span><br><span class="line">    <span class="keyword">end</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-进阶，Win8之后新系统得到当前的显示器的DPI"><a href="#3-进阶，Win8之后新系统得到当前的显示器的DPI" class="headerlink" title="3. 进阶，Win8之后新系统得到当前的显示器的DPI"></a>3. 进阶，Win8之后新系统得到当前的显示器的DPI</h3><p>由于Windows 8.1之后的系统中，用户可以调整每个监视器的DPI缩放比例，并且Font.PixelsPerInch始终为主监视器返回DPI值，因此<strong>第2节</strong>中的方法就不在适用新的系统了。如果在多显示多DPI的复杂环境中，<strong>第2节</strong>中的方法表现的也不尽如人意。某些时候，可以监听WM_DPICHANGED事件，然后手动并使窗口适应变化的DPI（但此更改可以只是将窗口移动到具有不同DPI设置的监视器）。而 要获取某个窗口的DPI，就需要考虑别的解决方案了。我在网上找到了相关的介绍，但是我当前的项目中不需要这些，也就没对代码进行测试。感兴趣的朋友可以自己尝试一下，代码如下：</p>
+<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">[Code]</span><br><span class="line"><span class="keyword">const</span></span><br><span class="line">  S_OK = <span class="number">$00000000</span>;</span><br><span class="line">  LOGPIXELSY = <span class="number">90</span>;</span><br><span class="line">  MONITOR_DEFAULTTONULL = <span class="number">$00000000</span>;</span><br><span class="line">  MONITOR_DEFAULTTOPRIMARY = <span class="number">$00000001</span>;</span><br><span class="line">  MONITOR_DEFAULTTONEAREST = <span class="number">$00000002</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span></span><br><span class="line">  HDC = THandle;</span><br><span class="line">  HMONITOR = THandle;</span><br><span class="line">  MONITOR_DPI_TYPE = (</span><br><span class="line">    MDT_EFFECTIVE_DPI,</span><br><span class="line">    MDT_ANGULAR_DPI,</span><br><span class="line">    MDT_RAW_DPI</span><br><span class="line">  );</span><br><span class="line"><span class="keyword">const</span></span><br><span class="line">  MDT_DEFAULT = MDT_EFFECTIVE_DPI;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">GetDC</span><span class="params">(hWnd: HWND)</span>:</span> HDC;</span><br><span class="line">  <span class="keyword">external</span> <span class="string">&#x27;GetDC@user32.dll stdcall&#x27;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ReleaseDC</span><span class="params">(hWnd: HWND; hDC: HDC)</span>:</span> Integer;</span><br><span class="line">  <span class="keyword">external</span> <span class="string">&#x27;ReleaseDC@user32.dll stdcall&#x27;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">GetDeviceCaps</span><span class="params">(hdc: HDC; <span class="keyword">index</span>: Integer)</span>:</span> Integer;</span><br><span class="line">  <span class="keyword">external</span> <span class="string">&#x27;GetDeviceCaps@gdi32.dll stdcall&#x27;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">MonitorFromWindow</span><span class="params">(hwnd: HWND; dwFlags: DWORD)</span>:</span> HMONITOR;</span><br><span class="line">  <span class="keyword">external</span> <span class="string">&#x27;MonitorFromWindow@user32.dll stdcall&#x27;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">GetDpiForMonitor</span><span class="params">(hmonitor: HMONITOR; dpiType: MONITOR_DPI_TYPE;</span></span></span><br><span class="line"><span class="params"><span class="function">  <span class="keyword">out</span> dpiX: UINT; <span class="keyword">out</span> dpiY: UINT)</span>:</span> HRESULT;</span><br><span class="line">  <span class="keyword">external</span> <span class="string">&#x27;GetDpiForMonitor@shcore.dll stdcall delayload&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">IsWindows81OrLater</span>:</span> Boolean;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  Result := GetWindowsVersion &gt;= <span class="number">$06030000</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">GetPrimaryMonitorDPI</span>:</span> Integer;</span><br><span class="line"><span class="keyword">var</span></span><br><span class="line">  DC: HDC;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="comment">// no need for try..finally block here; just get the desktop DC handle,</span></span><br><span class="line">  <span class="comment">// get the DPI and release the obtained handle</span></span><br><span class="line">  DC := GetDC(<span class="number">0</span>);</span><br><span class="line">  Result := GetDeviceCaps(DC, LOGPIXELSY);</span><br><span class="line">  ReleaseDC(<span class="number">0</span>, DC);</span><br><span class="line"><span class="keyword">end</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">GetWindowMonitorDPI</span><span class="params">(Handle: HWND)</span>:</span> Integer;</span><br><span class="line"><span class="keyword">var</span></span><br><span class="line">  HorzDPI: UINT;</span><br><span class="line">  VertDPI: UINT;</span><br><span class="line">  Monitor: HMONITOR;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="comment">// if we&#x27;re not on at least Windows 8.1, then return the primary monitor</span></span><br><span class="line">  <span class="comment">// DPI since earlier systems did not allow per monitor DPI settings</span></span><br><span class="line">  <span class="keyword">if</span> <span class="keyword">not</span> IsWindows81OrLater <span class="keyword">then</span></span><br><span class="line">    Result := GetPrimaryMonitorDPI</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  <span class="comment">// otherwise determine which monitor the given window intersects and try</span></span><br><span class="line">  <span class="comment">// to get DPI settings of the found monitor (if any; check MSDN docs for</span></span><br><span class="line">  <span class="comment">// the explanation and other options how to find the nearest monitor)</span></span><br><span class="line">  <span class="keyword">begin</span></span><br><span class="line">    <span class="comment">// try to get the monitor which the window intersects</span></span><br><span class="line">    Monitor := MonitorFromWindow(Handle, MONITOR_DEFAULTTONULL);</span><br><span class="line">    <span class="comment">// if there&#x27;s any, then...</span></span><br><span class="line">    <span class="keyword">if</span> Monitor &lt;&gt; <span class="number">0</span> <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">      <span class="comment">// try to get DPI for that monitor; if it succeeds, return the value,</span></span><br><span class="line">      <span class="comment">// raise an exception otherwise (for details check the MSDN docs)</span></span><br><span class="line">      <span class="keyword">if</span> GetDpiForMonitor(Monitor, MDT_DEFAULT, HorzDPI, VertDPI) = S_OK <span class="keyword">then</span></span><br><span class="line">        Result := VertDPI</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        RaiseException(<span class="string">&#x27;GetDpiForMonitor function call failed!&#x27;</span>);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      RaiseException(<span class="string">&#x27;The given window does not intersect any monitor!&#x27;</span>);</span><br><span class="line">  <span class="keyword">end</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这是Windows SDK中介绍的方法，整个设计相对来说比较复杂。简单来说，将上述代码加入你的项目中，当你需要显示器的DPI的时候就调用<code>GetWindowMonitorDPI</code>函数，然后根据DPI结合<strong>第2节</strong>中的方法来缩放或者选择你要显示的图片。</p>
+<h3 id="4-回到项目，更换向导页面标题部分的背景"><a href="#4-回到项目，更换向导页面标题部分的背景" class="headerlink" title="4. 回到项目，更换向导页面标题部分的背景"></a>4. 回到项目，更换向导页面标题部分的背景</h3><p>上述的内容，也是我再寻找解决新需求的过程中，搜集和整理的部分内容，记录下来也是为了以后需要的时候知道应该向那个方向努力。我告诉开发主管的是，我个人不建议将我们安装应用程序的向导页面设置为可缩放，因为这样需要做出的改变特别多，而且当前的大小也能满足使用需求。但美化工作不能少，第一步的任务核心就是页面简介背景部分，代码如下：</p>
+<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">[Files]</span><br><span class="line">Source: &quot;Logo-header.bmp&quot;; Flags: dontcopy</span><br><span class="line"></span><br><span class="line">[Code]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">procedure</span> <span class="title">InitializeWizard</span><span class="params">()</span>;</span></span><br><span class="line"><span class="keyword">var</span></span><br><span class="line">  BitmapImage: TBitmapImage;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="comment">// </span></span><br><span class="line">  ExtractTemporaryFile(<span class="string">&#x27;Logo-header.bmp&#x27;</span>);</span><br><span class="line">  BitmapImage := TBitmapImage.Create(WizardForm);</span><br><span class="line">  BitmapImage.Parent := WizardForm.MainPanel;</span><br><span class="line">  BitmapImage.Width := WizardForm.MainPanel.Width;</span><br><span class="line">  BitmapImage.Height := WizardForm.MainPanel.Height;</span><br><span class="line">  BitmapImage.Stretch := True;</span><br><span class="line">  BitmapImage.AutoSize := False;</span><br><span class="line">  BitmapImage.Bitmap.LoadFromFile(ExpandConstant(<span class="string">&#x27;&#123;tmp&#125;\Logo-header.bmp&#x27;</span>));</span><br><span class="line">	</span><br><span class="line">  <span class="comment">// 禁用 原始页面的小图标</span></span><br><span class="line">  WizardForm.WizardSmallBitmapImage.Visible := False;</span><br><span class="line">  <span class="comment">// 启用 页面简介标题</span></span><br><span class="line">  WizardForm.PageDescriptionLabel.Visible := True;</span><br><span class="line">  <span class="comment">// 启用 页面名称标题</span></span><br><span class="line">  WizardForm.PageNameLabel.Visible := True;</span><br><span class="line">  <span class="comment">// 限定页面简介标题宽度</span></span><br><span class="line">  WizardForm.PageDescriptionLabel.Width :=</span><br><span class="line">    WizardForm.PageDescriptionLabel.Width - ScaleX(<span class="number">120</span>);</span><br><span class="line">  <span class="comment">// 限定页面名称标题宽度</span></span><br><span class="line">  WizardForm.PageNameLabel.Width :=</span><br><span class="line">    WizardForm.PageNameLabel.Width - ScaleX(<span class="number">120</span>)</span><br><span class="line"> <span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码的核心思想就是，准备一张图片，该图片并不会被拷贝在目标文件夹中，在页面初始的时候，设定页面标题简述部分的背景，由于原始页面小logo被禁用，就需要缩进标题名称和简介文本的宽度，防止其覆盖图片的部分内容。</p>
+<p><img src="/posts/inno-05-beautify-wizard-laben/inno-welcome-part.png" alt="image-20200220170839898"></p>
+<p>任务第二部分内容，就是更改欢迎页面的背景图片，即上图中红色部分框选的地方。首先在**[Setup]<strong>中定义属性为<a target="_blank" rel="noopener" href="http://www.jrsoftware.org/ishelp/index.php?topic=setup_disablewelcomepage"><code>DisableWelcomePage=no</code></a>，意指启用欢迎页面。 然后在</strong>[Setup]<strong>部分定义<code>WizardBitmapImage</code>属性即可。结束页面（下图）与开始页面相似，只需在</strong>[Setup]**部分定义<code>WizardBitmapImage2</code> 属性即可。</p>
+<p><img src="/posts/inno-05-beautify-wizard-laben/inno-finish-part.png" alt="image-20200220170935862"></p>
+<p>需要说明的是，如果属性<code>WizardBitmapImage2</code>为被定义，而属性<code>WizardBitmapImage</code>被定义，则结束页面会选择<code>WizardBitmapImage</code>中定义的图片作为上图中红色部分圈选的背景图片。</p>
+<h3 id="5-扩展，欢迎页面和结束页面整页照片"><a href="#5-扩展，欢迎页面和结束页面整页照片" class="headerlink" title="5. 扩展，欢迎页面和结束页面整页照片"></a>5. 扩展，欢迎页面和结束页面整页照片</h3><p>我们在<strong>第4节</strong>部分，了解了如何在使用Inno Setup的属性设定，更改欢迎和结束页面的左侧背景图片，那么有没有一种可能，即省去这两个页面的文字（通常需要考虑翻译的问题），直接使用一张图片作为整个页面的背景呢？有，本节我们就探索一下。中心思想为四部：</p>
+<ul>
+<li>在各自的父页面上拉伸“ WizardBitmapImage”（欢迎）和“ WizardBitmapImage2”（完成），因为这两个页面都有图片部分，就不需要再初始化TBitmapImage了。</li>
+<li>隐藏其它内容，例如 标题和段落.</li>
+<li>确保安装程序永远不需要重新启动计算机，否则会在结束图片上会显示上重新启动提示。</li>
+<li>请确保在**[Run]**部分中没有任何<code>postinstall</code>条目。否则结束页面上也会显示提示信息。</li>
+</ul>
+<p><img src="/posts/inno-05-beautify-wizard-laben/inno-finish-part-full.png" alt="image-20200220171021313"></p>
+<p>实现这部分的代码如下：</p>
+<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[Setup]</span><br><span class="line">DisableWelcomePage=no</span><br><span class="line">WizardImageFile=Demo.bmp  <span class="comment">// 如果WizardImageFile2 没定义则结束页面也使用该图片</span></span><br><span class="line"></span><br><span class="line">[Code]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">procedure</span> <span class="title">InitializeWizard</span><span class="params">()</span>;</span></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="comment">// 欢迎页面</span></span><br><span class="line">  <span class="comment">// 隐藏 部分内容</span></span><br><span class="line">  WizardForm.WelcomeLabel1.Visible := False;</span><br><span class="line">  WizardForm.WelcomeLabel2.Visible := False;</span><br><span class="line">  <span class="comment">// 拉伸页面宽度</span></span><br><span class="line">  WizardForm.WizardBitmapImage.Width := WizardForm.WizardBitmapImage.Parent.Width;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 结束页面</span></span><br><span class="line">  <span class="comment">// 隐藏 部分内容</span></span><br><span class="line">  WizardForm.FinishedLabel.Visible := False;</span><br><span class="line">  WizardForm.FinishedHeadingLabel.Visible := False;</span><br><span class="line">  <span class="comment">// 拉伸页面宽度</span></span><br><span class="line">  WizardForm.WizardBitmapImage2.Width := WizardForm.WizardBitmapImage2.Parent.Width;</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="6-扩展2，在向导页脚左侧显示版本号"><a href="#6-扩展2，在向导页脚左侧显示版本号" class="headerlink" title="6. 扩展2，在向导页脚左侧显示版本号"></a>6. 扩展2，在向导页脚左侧显示版本号</h3><p>需要的显示结果如下图所示：</p>
+<p><img src="/posts/inno-05-beautify-wizard-laben/inno-bottom-left-part.png" alt="image-20200221093833941"></p>
+<p>代码如下：</p>
+<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[Code]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">procedure</span> <span class="title">InitializeWizard</span><span class="params">()</span>;</span></span><br><span class="line"><span class="keyword">var</span></span><br><span class="line">  VersionLabel: TNewStaticText;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  <span class="comment">// 定义一个静态文本实例</span></span><br><span class="line">  VersionLabel := TNewStaticText.Create(WizardForm);</span><br><span class="line">  <span class="comment">// 从Setup部分的设定中获取版本号</span></span><br><span class="line">  VersionLabel.Caption := Format(<span class="string">&#x27;Version: %s&#x27;</span>, [<span class="string">&#x27;&#123;#SetupSetting(&quot;AppVersion&quot;)&#125;&#x27;</span>]);</span><br><span class="line">  <span class="comment">// 所有页面有效</span></span><br><span class="line">  VersionLabel.Parent := WizardForm;</span><br><span class="line">  <span class="comment">// 左侧位置</span></span><br><span class="line">  VersionLabel.Left := ScaleX(<span class="number">16</span>);</span><br><span class="line">  <span class="comment">// 保证 文本与按钮的 在水平方向 中心对齐</span></span><br><span class="line">  VersionLabel.Top :=</span><br><span class="line">    WizardForm.BackButton.Top +</span><br><span class="line">    (WizardForm.BackButton.Height <span class="keyword">div</span> <span class="number">2</span>) -</span><br><span class="line">    (VersionLabel.Height <span class="keyword">div</span> <span class="number">2</span>)</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+
+<p>对齐的方式，以按钮的左上位置为基点，加上按钮高度与文本高度之差即可。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Inno-Setup/" class="tag">#Inno Setup</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/hexo-01-code-raise-error.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Hexo 中特殊纯文本字符串引起异常</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/inno-04-registry-hcr.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Inno Setup Windows 注册表关键字HKEY\_CLASSES\_ROOT相关内容</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

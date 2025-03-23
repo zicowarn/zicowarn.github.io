@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Python 杂记之 如何在实现子进程到父进程的环境变量更新 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Python 杂记之 如何在实现子进程到父进程的环境变量更新 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/0808-ma-run-vcvars-set-devenv-ci.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2020-07-17T09:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Python-相关-8-Python-杂记/">Python 相关 - 8. Python 杂记</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>July</span>
+            <span>17,</span>
+            <span>2020</span>
+        </div>
+        
+
+        <h1 class="title">Python 杂记之 如何在实现子进程到父进程的环境变量更新</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：Python 是如何访问和控制系统的环境变量的，Python中的父进程与子进程间的环境变量关系是何？能不能在运行时修改环境变量？子进程中对环境变量修改能不能传递给对父进程？如果能，怎么样实现这样的变化？如何使用subprocess.Popen运行vcvars.bat，然后在持续集成时，完成devenv清理和创建的前期准备。</p>
+<p>Abstract: How does Python access and control the system‘s environment variables？ What is the relationship between the environment variables of the parent process and the child process in Python? Can environment variables be modified at runtime? Can the modification of environment variables in the child process be passed to the parent process? If so, how to achieve such a change? How to use subprocess.Popen to run vcvars.bat, and then complete the preliminary preparations for the <strong>Clean</strong> and <strong>Build</strong> of <strong>devenv</strong> during <strong>CI</strong>.</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h3 id="任务背景"><a href="#任务背景" class="headerlink" title="任务背景"></a>任务背景</h3><p> 该任务是：当前所用的完成持续集成的脚本是Python语言实现的。在现有的脚本的核心内容是，使用subprocess.Popen方法来调用devenv命令，从而实现项目的清理clean和构建build。</p>
+<p>今年伊始，项目中引用了.NET组件。一部分代码使用.NET完成了一个交互界面窗口。由于使用了.NET，编译的时候就需要对.NET的程序集进行强名称签名等一系列操作。例如，在导出类型库时会使用到的类型库导出工具Tlbexp.exe（一般在Visual Studio项目属性中**[生成]**部分中的“为COM互操作注册”被勾选时），以及程序集注册工具Regasm.exe等。此类工具的路径为：C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\。理论上，当在命令行中使用devenv命令工具时，该工具就会自动查找上述的工具目录，并保证在编译解决方案的时候能够访问到这些工具。实践得知，devenv不能完成诸如此类环境变量的设置。进而在使用devenv时，因为项目配置中的所用到的工具因为无法找到会发生编译错误。</p>
+<p>既然devenv不能实现理论结果，那就需要用到vsvars32.bat个batch文件了了。该文件是visual studio自带的文件，本质就是配置环境变量，工作目录的一些批处理命令。任务中遇到的问题是Tlbexp.exe无法找到，问题的本质是工具的路径不在系统环境中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">VS140COMNTOOLS=C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\</span><br></pre></td></tr></table></figure>
+
+<h3 id="初始代码"><a href="#初始代码" class="headerlink" title="初始代码"></a>初始代码</h3><p>话不多少，直接上代码，项目一开始我们使用的是如下的代码，代码的主要内容是使用subprocess模块下的Popen方法来调用cmd命令devenv完成代码的清除clean和构建build，部分代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> subprocess <span class="keyword">as</span> sp</span><br><span class="line"></span><br><span class="line"><span class="comment"># 省略部分</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mCompile</span>(<span class="params">slnPath, compilArgs</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;[summary]</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        slnPath ([type]): [description]</span></span><br><span class="line"><span class="string">        compilArgs ([type]): [description]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Raises:</span></span><br><span class="line"><span class="string">        RuntimeError: [description]</span></span><br><span class="line"><span class="string">        ValueError: [description]</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    compilerExe = <span class="string">&quot;C://Porgamm Files (x86)//Microsoft Visual Studio XX.X/CommonX//IDE//devenv&quot;</span></span><br><span class="line">    startupinfo = sp.STARTUPINFO()</span><br><span class="line">    startupinfo.dwFlags |= sp.STARTF_USESHOWWINDOW</span><br><span class="line"></span><br><span class="line">    logClean = <span class="string">&quot;clean.txt&quot;</span></span><br><span class="line">    stepClean = sp.Popen([compilerExe, <span class="string">&quot;/clean&quot;</span>, compilArgs, slnPath, <span class="string">&quot;/OUT&quot;</span>, logClean ], stdout=sp.PIPE, stderr=sp.STDOUT, startupinfo=startupinfo)</span><br><span class="line">    stdoutdata, stderrdata = stepClean .communicate()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> stepClean.returncode != <span class="number">0</span>:</span><br><span class="line">        msg = <span class="string">&quot;Error: Failed to clean the solution &quot;</span> + slnPath</span><br><span class="line">        <span class="keyword">if</span> stdoutdata != <span class="literal">None</span>:</span><br><span class="line">            msg = msg + <span class="string">&quot;\nError Message: &quot;</span> + stdoutdata</span><br><span class="line">        <span class="keyword">raise</span> RuntimeError(msg)</span><br><span class="line">    </span><br><span class="line">    logBuild = <span class="string">&quot;build.txt&quot;</span></span><br><span class="line">    stepCompile = sp.Popen([compilerExe, <span class="string">&quot;/rebuild&quot;</span>, compilArgs, slnPath, <span class="string">&quot;/OUT&quot;</span>, logBuild], stdout=sp.PIPE, stderr=sp.STDOUT, startupinfo=startupinfo)</span><br><span class="line">    stdoutdata, stderrdata = stepCompile.communicate()</span><br><span class="line">    <span class="keyword">if</span> stepCompile.returncode != <span class="number">0</span>:</span><br><span class="line">        msg = <span class="string">&quot;Error: Failed to compile the solution &quot;</span> + slnPath</span><br><span class="line">        <span class="keyword">if</span> stdoutdata != <span class="literal">None</span>:</span><br><span class="line">            msg = msg + <span class="string">&quot;\nError Message: &quot;</span> + stdoutdata</span><br><span class="line">        <span class="keyword">raise</span> RuntimeError(msg)</span><br></pre></td></tr></table></figure>
+
+<p>上述代码中有STARTUPINFO相关内容，为了方便代码解释在此列出如下清单，清单中对每个结构体每个成员都通过注释的方式对成员的功能一一进行了解释：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="title class_">_STARTUPINFO</span></span><br><span class="line">&#123;</span><br><span class="line">    DWORD cb;            <span class="comment">//包含STARTUPINFO结构中的字节数.如果Microsoft将来扩展该结构,它可用作版本控制手段.应用程序必须将cb初始化为sizeof ( STARTUPINFO )</span></span><br><span class="line">    PSTR lpReserved;      <span class="comment">//保留。必须初始化为N U L L</span></span><br><span class="line">    PSTR lpDesktop;    <span class="comment">//用于标识启动应用程序所在的桌面的名字。如果该桌面存在，新进程便与指定的桌面相关联。如果桌面不存在，便创建一个带有默认属性的桌面，并使用为新进程指定的名字。    如果lpDesktop是NULL（这是最常见的情况 ),那么该进程将与当前桌面相关联</span></span><br><span class="line">    PSTR lpTitle;    <span class="comment">//用于设定控制台窗口的名称。如果l p Ti t l e 是N U L L ，则可执行文件的名字将用作窗口名</span></span><br><span class="line">    DWORD dwX;       <span class="comment">//用于设定应用程序窗口在屏幕上应该放置的位置的x 和y 坐标（以像素为单位）。</span></span><br><span class="line">    DWORD dwY;       <span class="comment">//只有当子进程用CW_USEDEFAULT作为CreateWindow的x参数来创建它的第一个重叠窗口时,    才使用这两个坐标。若是创建控制台窗口的应用程序，这些成员用于指明控制台窗口的左上角</span></span><br><span class="line"></span><br><span class="line">    DWORD dwXSize;  <span class="comment">//用于设定应用程序窗口的宽度和长度（以像素为单位）只有dwYsize</span></span><br><span class="line">    DWORD dwYSize;  <span class="comment">// 当子进程将CW_USEDEFAULT 用作CreateWindow 的nWidth参数来创建它的第一个重叠窗口时，才使用这些值。若是创建控制台窗口的应用程序，这些成员将用于指明控制台窗口的宽度</span></span><br><span class="line">    DWORD dwXCountChars;  <span class="comment">//用于设定子应用程序的控制台窗口的宽度和高度（以字符为单位）</span></span><br><span class="line">    DWORD dwYCountChars;</span><br><span class="line">    DWORD dwFillAttribute;   <span class="comment">//用于设定子应用程序的控制台窗口使用的文本和背景颜色</span></span><br><span class="line">    DWORD dwFlags;           <span class="comment">//请参见下一段和表4 - 7 的说明</span></span><br><span class="line">    WORD wShowWindow;        <span class="comment">//用于设定如果子应用程序初次调用的ShowWindow 将SW_SHOWDEFAULT 作为    nCmdShow 参数传递时，该应用程序的第一个重叠窗口应该如何出现。本成员可以是通常用于ShowWindow 函数的任何一个SW_*标识符</span></span><br><span class="line">    WORD cbReserved2;        <span class="comment">//保留。必须被初始化为0</span></span><br><span class="line">    PBYTE lpReserved2;       <span class="comment">//保留。必须被初始化为N U L L</span></span><br><span class="line">    HANDLE hStdInput;        <span class="comment">//用于设定供控制台输入和输出用的缓存的句柄。按照默认设置，hStdInput 用于标识键盘缓存，hStdOutput 和hStdError用于标识控制台窗口的缓存</span></span><br><span class="line">    HANDLE hStdOutput;</span><br><span class="line">    HANDLE hStdError;</span><br><span class="line">&#125; STARTUPINFO, *LPSTARTUPINFO;</span><br></pre></td></tr></table></figure>
+
+<p>在原始代码中使用上述结构体的<strong>dwFlags</strong>成员，该成员的值被设定为<strong>STARTF_USESHOWWINDOW</strong>，意指使用wShowWindow这个成员属性，其他相关值，请参阅下列清单。这样做的目的是，当需要隐藏窗口时，结合示例代码，仅需要在代码中添加startupinfo.wShowWindow = sp.SW_HIDE即可，但因devenv这样的命令不包含窗体，为了保持简约，所以就没有写入这些代码。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">                      表4-7 dwFlags 使用标志及含义</span><br><span class="line">标志                                    含义</span><br><span class="line"></span><br><span class="line">STARTF_USESIZE                 // 使用dwXSize 和dwYSize 成员</span><br><span class="line">STARTF_USESHOWWINDOW              //使用wShowWindow 成员</span><br><span class="line">STARTF_USEPOSITION              //使用dwX 和dwY 成员</span><br><span class="line">STARTF_USECOUNTCHARS                //使用dwXCountChars 和dwYCount Chars 成员</span><br><span class="line">STARTF_USEFILLATTRIBUTE          //使用dwFillAttribute 成员</span><br><span class="line">STARTF_USESTDHANDLES              //使用hStdInput 、hStdOutput 和hStdError 成员</span><br><span class="line">STARTF_RUN_FULLSCREEN              //强制在x86 计算机上运行的控制台应用程序以全屏幕方式启动运行</span><br></pre></td></tr></table></figure>
+
+<h3 id="初步修改"><a href="#初步修改" class="headerlink" title="初步修改"></a>初步修改</h3><p>我们要解决的“工具Tlbexp.exe无法找到”这个问题，就需要运行vsvars32.bat这batch文件，完成系统环境变量的更新。理论上仅需要在mComple这个函数中，即clean步骤前再次使用subprocess模块下的Popen方法来运行vsvars32.bat即可，相应代码应为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> subprocess <span class="keyword">as</span> sp</span><br><span class="line"></span><br><span class="line"><span class="comment"># 省略部分</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mCompile</span>(<span class="params">slnPath, compilArgs</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;[summary]</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        slnPath ([type]): [description]</span></span><br><span class="line"><span class="string">        compilArgs ([type]): [description]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Raises:</span></span><br><span class="line"><span class="string">        RuntimeError: [description]</span></span><br><span class="line"><span class="string">        ValueError: [description]</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    vsvarsbatch = <span class="string">&quot;C://Porgamm Files (x86)//Microsoft Visual Studio XX.X/CommonX//Tools//vsvars32.bat&quot;</span></span><br><span class="line">    compilerExe = <span class="string">&quot;C://Porgamm Files (x86)//Microsoft Visual Studio XX.X/CommonX//IDE//devenv&quot;</span></span><br><span class="line">    startupinfo = sp.STARTUPINFO()</span><br><span class="line">    startupinfo.dwFlags |= sp.STARTF_USESHOWWINDOW</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> vsvarsbatch != <span class="string">&quot;&quot;</span>:  <span class="comment">#  run vsvars32.bat of visual studio</span></span><br><span class="line">        cmd = [vsvarsbatch]</span><br><span class="line">        stepVSARS = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.STDOUT, startupinfo=startupinfo)</span><br><span class="line">        stdoutdata, stderrdata = stepVSARS.communicate()</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> stepVSARS.returncode != <span class="number">0</span>:</span><br><span class="line">            msg = <span class="string">&quot;Error: Failed to raun vsvars32.bat&quot;</span></span><br><span class="line">            <span class="keyword">if</span> stdoutdata != <span class="literal">None</span>:</span><br><span class="line">                msg = msg + <span class="string">&quot;\nError Message: &quot;</span> + stdoutdata</span><br><span class="line">            <span class="keyword">raise</span> RuntimeError(msg)</span><br><span class="line">        <span class="keyword">if</span> stepVSARS.wait() != <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(stderrdata.decode(<span class="string">&quot;mbcs&quot;</span>))</span><br><span class="line"></span><br><span class="line">    logClean = <span class="string">&quot;clean.txt&quot;</span></span><br><span class="line">    stepClean = sp.Popen([compilerExe, <span class="string">&quot;/clean&quot;</span>, compilArgs, slnPath, <span class="string">&quot;/OUT&quot;</span>, logClean ], stdout=sp.PIPE, stderr=sp.STDOUT, startupinfo=startupinfo)</span><br><span class="line">    stdoutdata, stderrdata = stepClean .communicate()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 省略部分</span></span><br></pre></td></tr></table></figure>
+
+<p>可现实是这样的代码达不到预期的结果，根本原因在于：<strong>程序中，进程之间的数据是隔离的，内存空间是不能共享的，进程之间要进行数据通信必须借助其他手段。子进程的结果父进程获取不到，其他的子进程当然也无法得到。</strong></p>
+<p>还会有疑问的地方可能是，<strong>可我们的问题焦点是系统的环境变量？</strong>程序中，每个进程都有自己的运行环境，这样的环境只能从父进程被继承到子进程中，而不能反向地从子进程传递到父进程。实际上，默认情况下subprocess模块下的Popen方法一直践行着这种规则，Popen方法有env这个参数，该参数用于指定子进程的环境变量，如果 env = None，子进程的环境变量将从父进程中继承。也就是说，如果环境变量不加修改，那么子进程的环境变量与父进程一致，与其他子进程也一致。由于环境变量传递的单向性，我们上述的初始修改代码是不能完成任务要求的。</p>
+<p>既然常规方法不行，那就使用一个<strong>非常规</strong>的方式，我们可以使用被称为“<strong>外带数据</strong>”（out-of-band）的进程通讯方式，将子进程中环境变量的变化传递给父进程。</p>
+<h3 id="最终修改"><a href="#最终修改" class="headerlink" title="最终修改"></a>最终修改</h3><p>针对初始修改中依旧存在的问题，我们再次对代码进行了修改。最终版本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> subprocess <span class="keyword">as</span> sp</span><br><span class="line"></span><br><span class="line"><span class="comment"># 省略部分</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mCompile</span>(<span class="params">slnPath, compilArgs</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;[summary]</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        slnPath ([type]): [description]</span></span><br><span class="line"><span class="string">        compilArgs ([type]): [description]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Raises:</span></span><br><span class="line"><span class="string">        RuntimeError: [description]</span></span><br><span class="line"><span class="string">        ValueError: [description]</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    vvsvarsbatch = <span class="string">&quot;C://Porgamm Files (x86)//Microsoft Visual Studio XX.X/CommonX//Tools//vsvars32.bat&quot;</span></span><br><span class="line">    compilerExe = <span class="string">&quot;C://Porgamm Files (x86)//Microsoft Visual Studio XX.X/CommonX//IDE//devenv&quot;</span></span><br><span class="line">    startupinfo = sp.STARTUPINFO()</span><br><span class="line">    startupinfo.dwFlags |= sp.STARTF_USESHOWWINDOW</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> vsvarsbatch != <span class="string">&quot;&quot;</span>:  <span class="comment">#  run vsvars32.bat of visual studio</span></span><br><span class="line">        cmd = [vsvarsbatch, <span class="string">&#x27;&amp;&amp;&#x27;</span>, <span class="string">&#x27;set&#x27;</span>]</span><br><span class="line">        stepVSARS = sp.Popen(cmd, stdout=sp.PIPE, stderr=sp.STDOUT, startupinfo=startupinfo)</span><br><span class="line">        stdoutdata, stderrdata = stepVSARS.communicate()</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> stepVSARS.returncode != <span class="number">0</span>:</span><br><span class="line">            msg = <span class="string">&quot;Error: Failed to raun vsvars32.bat&quot;</span></span><br><span class="line">            <span class="keyword">if</span> stdoutdata != <span class="literal">None</span>:</span><br><span class="line">                msg = msg + <span class="string">&quot;\nError Message: &quot;</span> + stdoutdata</span><br><span class="line">            <span class="keyword">raise</span> RuntimeError(msg)</span><br><span class="line">        <span class="keyword">if</span> stepVSARS.wait() != <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(stderrdata.decode(<span class="string">&quot;mbcs&quot;</span>))</span><br><span class="line"></span><br><span class="line">        output = stdoutdata.decode(<span class="string">&quot;mbcs&quot;</span>).split(<span class="string">&quot;\r\n&quot;</span>)</span><br><span class="line">        dict_new_env = <span class="built_in">dict</span>((e[<span class="number">0</span>].upper(), e[<span class="number">1</span>]) <span class="keyword">for</span> e <span class="keyword">in</span> [p.rstrip().split(<span class="string">&quot;=&quot;</span>, <span class="number">1</span>) <span class="keyword">for</span> p <span class="keyword">in</span> output] <span class="keyword">if</span> <span class="built_in">len</span>(e) == <span class="number">2</span>)</span><br><span class="line">        os.environ.update(dict_new_env)</span><br><span class="line"></span><br><span class="line">    logClean = <span class="string">&quot;clean.txt&quot;</span></span><br><span class="line">    stepClean = sp.Popen([compilerExe, <span class="string">&quot;/clean&quot;</span>, compilArgs, slnPath, <span class="string">&quot;/OUT&quot;</span>, logClean ], stdout=sp.PIPE, stderr=sp.STDOUT, startupinfo=startupinfo)</span><br><span class="line">    stdoutdata, stderrdata = stepClean .communicate()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 省略部分</span></span><br></pre></td></tr></table></figure>
+
+<p>在这次修改中，代码<strong>cmd = [vsvarsbatch]</strong> 变成了<strong>cmd = [vsvarsbatch, ‘&amp;&amp;’, ‘set’]**，因为vsvars32.bat脚本对环境变量的更新，是没有</strong>标准输出<strong>（stdout）的，即直接是看不到变化的，所以这里使用</strong>set<strong>，将子进程所有环境变量都打印到</strong>标准输出<strong>中，当</strong>组合命令**运行结束之后，在检查命令是否异常结束之后，通过stdoutdata获取set命令的标准输出，然后在将得到的标准输出转换为字典格式，再然后更新当前的环境变量，这样父进程中的环境变量得到了更新。之后代码中的子进程都会使用更新之后的环境变量，这样就达到了任务要求，解决了任务难题。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>个人认为，项目发生变化会带来新的问题，这并不意外。解决问题时，初始思考的不全面也是正常的，遇见问题认真分析仔细研究终究会找到解决问题的方法的。当然，解决一个问题的可以有很多不同的方法，上述方法也仅仅是一家之言，并非最优，若读者有别的思路也欢迎关注我的个人微信公众号，一起讨论学习。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/杂记/" class="tag">#杂记</a><a href="/tags/系统变量/" class="tag">#系统变量</a><a href="/tags/持续集成/" class="tag">#持续集成</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/css-01-use-css-hide-content.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">CSS 如何运用CSS来隐藏页面文本</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/inno-06-gacinstall.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Inno Setup 如何将.NET程序集（DLL）安装到GAC中</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>
