@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Hexo 如何在VS Code中调试Hexo的相关代码 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Hexo 如何在VS Code中调试Hexo的相关代码 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/hexo-03-howto-debug-hexo-in-vscode.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2020-09-03T01:25:45.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Hexo-相关-实战经验/">Hexo 相关 - 实战经验</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>September</span>
+            <span>3,</span>
+            <span>2020</span>
+        </div>
+        
+
+        <h1 class="title">Hexo 如何在VS Code中调试Hexo的相关代码</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：在使用Hexo部署自己的博客时，常常接触hexo generater，hexo clean和hexo deploy等命令，估计很少人想过如何调试Hexo这些命令的相关代码。作为基于Node的开源blog项目，其在VS Code中的调试环境是什么样的？如何建立这样的调试环境？调试时需要注意什么？ 在VSCode调试Node代码时，可能会遇见方法process.stdout.write和方法console.log的输出内容不在同一位置的问题，该问题如何解决?</p>
+<p>Abstract: When using hexo to deploy the blog, often use commands such as hexo generator, hexo clean and hexo deploy. Few people have thought about how to debug the Hexo codes related to these commands. As a node-based open source blog project, what is its debugging environment in VS Code? How to build a debugging environment for debugging Hexo code? What should pay attention to when debugging? When debugging Node code in VS Code, the output content of process.stdout.write and console.log are not in the same location, why? How to solve the problem?</p>
+<span id="more"></span>
+
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>按理说，日常Hexo的使用是不需要考虑代码调试的。一般情况下使用到的Hexo版本也是经过充分测试才发布的正式版本。可能还会有一些隐藏的小问题，但也足以应对日常使用。能想起来调试Hexo的相关代码，完全是出于好奇，想知道hexo deploy命令运行时到底做了些什么，hexo deploy背后的具体流程是什么，如何将项目中的README.md文件在部署时同时被拷贝到**.deploy_git**目录中，进而部署到Github中。带着这些问题，花费了点时间尝试之后，现将调试环境的部署方式记录下来，以便自己以后回顾学习。 </p>
+<h4 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h4><p>VS Code 编辑器对Node的调试环境做了很大的优化和支持。实际应用中，需要自己做的是很少的，在VS Code中<strong>运行</strong>和<strong>调试</strong>的设置都在launch.json这个配置文件中。VS Code也为Node项目提供了多配置模版snippets（点击按钮Add Configuration…即可看见配置模版列表），在方法一中我们先选择一个“<strong>Launch Program</strong>”的模版，基本的配置内容如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.2.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;node&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;request&quot;</span><span class="punctuation">:</span> <span class="string">&quot;launch&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Launch&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;program&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;workspaceRoot&#125;/index.js&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>其中重要的参数<strong>request</strong>的取值和基本区别如下，两者的应用场景差异的具体细节不是本文重点，就不在本文中进行详细解释。</p>
+<ul>
+<li>launch 模式：VS Code会启动一个独立的具有debug模式的程序。</li>
+<li>attach 模式：用于监听一个已经启动的程序。</li>
+</ul>
+<p>由于我们选择的是Lauch Program的配置模版，其<code>request</code>的参数默认为launch，该模式也是我们本文中使用的。在添加相应的内容之后，就可以在VS Code中，调试诸如hexo deploy的命令相关代码。接下来，只需要在Javascript文件“./node_modules/hexo-deployer-git/lib/deployer.js”中合适的位置添加断点，然后启动该配置，就可以看到程序在断点停留。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.2.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;node&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;request&quot;</span><span class="punctuation">:</span> <span class="string">&quot;launch&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Debug Hexo Deploy Direct&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;cwd&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;workspaceFolder&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;runtimeArgs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;--nolazy&quot;</span> <span class="comment">// 强制V8引擎完成代码的编译工作，这在远程调试时比较有用，可选</span></span><br><span class="line">      <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;program&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./node_modules/hexo-cli/bin/hexo&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;deploy&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;--debug&quot;</span> <span class="comment">//设置Hexo的 log基本，以便输出更多的日志内容</span></span><br><span class="line">      <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;console&quot;</span><span class="punctuation">:</span> <span class="string">&quot;internalConsole&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;outputCapture&quot;</span><span class="punctuation">:</span> <span class="string">&quot;std&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h4><p>我们也可以选择使用“<strong>Launch via npm</strong>”的模版，选用这个配置模版后会得到以下配置内容。npm作为node第三方依赖模块的管理工具，用npm运行js文件和node运行js文件的差异，我们不在本文中进行讨论。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.2.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Launch via NPM&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;request&quot;</span><span class="punctuation">:</span> <span class="string">&quot;launch&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;runtimeArgs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="string">&quot;run-script&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="string">&quot;debug&quot;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;runtimeExecutable&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npm&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;skipFiles&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="string">&quot;&lt;node_internals&gt;/**&quot;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;pwa-node&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>以上述模版信息为基础，修改添加一些选项后，我们得到以下配置内容。使用该配置内容，也能完成调试环境的搭建。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.2.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;node&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;request&quot;</span><span class="punctuation">:</span> <span class="string">&quot;launch&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Debug Hexo Deploy via npm&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;cwd&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;workspaceFolder&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;runtimeExecutable&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npm&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;runtimeArgs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;run&quot;</span><span class="punctuation">,</span> <span class="string">&quot;deploy&quot;</span></span><br><span class="line">      <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;console&quot;</span><span class="punctuation">:</span> <span class="string">&quot;internalConsole&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;outputCapture&quot;</span><span class="punctuation">:</span> <span class="string">&quot;std&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>上述配置中的<code>runtimeArgs</code>配置项中的<code>deploy</code>参数，意指Hexo项目的配置文件package.json中的<code>scripts</code>配置项目中的<code>deploy</code>，参见下列内容：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hexo-site&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;private&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hexo generate&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;clean&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hexo clean&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;deploy&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hexo deploy&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;server&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hexo server&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line">  ...</span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="方法三"><a href="#方法三" class="headerlink" title="方法三"></a>方法三</h4><p>有些人也推荐使用另一种方法，该方法以本文中的方法二为基础，不过需要安装依赖模块<strong>node-cli</strong>。安装该依赖模块的时候，需使用下列命令，以确保该模块被安装在devDependencies节点下，以便以后初始化项目时，运行npm install –production命令时，该依赖模块不会被安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -save-dev node-cli</span><br></pre></td></tr></table></figure>
+
+<p>在安装完node的CLI后，就需要对Hexo的package.json文件进行修改，在<code>scripts</code>中添加以下内容：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hexo-site&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;private&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hexo generate&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;clean&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hexo clean&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;deploy&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hexo deploy&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;server&quot;</span><span class="punctuation">:</span> <span class="string">&quot;hexo server&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;debug-deploy&quot;</span><span class="punctuation">:</span> <span class="string">&quot;node ./node_modules/hexo-cli/bin/hexo deploy --debug&quot;</span> <span class="comment">// 该行</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  ...</span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后修改VS Code的launch.json文件，选用方法二中使用的“<strong>Launch via npm</strong>”模版，然后参照以下内容完成配置，就可以搭建Hexo代码的调试环境。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.2.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;node&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;request&quot;</span><span class="punctuation">:</span> <span class="string">&quot;launch&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Debug Hexo Deploy via npm&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;cwd&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;workspaceFolder&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;runtimeExecutable&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npm&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;runtimeArgs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;run&quot;</span><span class="punctuation">,</span> <span class="string">&quot;debug-deploy&quot;</span></span><br><span class="line">      <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;console&quot;</span><span class="punctuation">:</span> <span class="string">&quot;internalConsole&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;outputCapture&quot;</span><span class="punctuation">:</span> <span class="string">&quot;std&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>以上三种方法都能用于VS Code中Hexo调试环境的搭建工作，三种方法也没有优劣之分，正所谓萝卜白菜各有所爱，使用哪一种方法全凭个人喜好。</p>
+<h3 id="应用技巧"><a href="#应用技巧" class="headerlink" title="应用技巧"></a>应用技巧</h3><p>Hexo的日志组件Logger的部分方法如下。前文中介绍的相关配置中的“–debug”，就是为了设置日志的输出等级，以便获取更多的程序运行信息。</p>
+<ul>
+<li>log.info()</li>
+<li>log.debug()</li>
+<li>log.warn()</li>
+<li>log.error()</li>
+</ul>
+<p>默认情况下，由于VS Code存在问题（<a target="_blank" rel="noopener" href="https://github.com/Microsoft/vscode/issues/19750">Issues 19750</a>，请点击查看具体内容），所以上述的logger方法，因其内部使用了“<strong>process.stdout.write()**”方法，这个方法输出的文本和</strong>“console.log()”<strong>方法所输出的文本，会输出到不同的地方（虽然理论上console.log内部使用的也是process.stdout.write方法，输出的文本内容应该位于同一地方），仅代码中的console.log输出的内容会显示在VS Code的</strong>DEBUG CONSOLE中**。这种情况下，由于缺少日志信息不利于调试，就需要解决该问题。解决方法就是在配置中添加下列代码：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="comment">//&quot;port&quot;: 9229,</span></span><br><span class="line">  <span class="attr">&quot;console&quot;</span><span class="punctuation">:</span> <span class="string">&quot;internalConsole&quot;</span><span class="punctuation">,</span> <span class="comment">//integratedTerminal意指 VS Code 的 TERMINAL</span></span><br><span class="line">  <span class="attr">&quot;outputCapture&quot;</span><span class="punctuation">:</span> <span class="string">&quot;std&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>outputCapture</code> 这项配置，如果设置为std，则标准输出stdout 与标准错误stderr的输出都将显示在调试控制台中，而不是在调试端口上的输出。这对于直接写入stdout / stderr流而不是使用console.*的程序或在使用其他第三方日志库时会很有帮助。</p>
+<p>能有此文全因自己好奇。在文章最后想说一下，这里没有专家，记录这些主要是为了自己以后回顾学习之方便，文章有不足之处也实属正常。见解不同，诚切赐教，关注微信公众号，一起讨论学习。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Hexo/" class="tag">#Hexo</a><a href="/tags/调试/" class="tag">#调试</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/aws-lambda-02-use-pythonpackage-pymssql.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">AWS 如何在lambda函数中使用Python依赖库pymssql</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/hexo-02-embed-html-and-downloads-code.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Hexo 解决嵌入的html被渲染的问题和code_dir的配置项的用法</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

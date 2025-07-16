@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Python 杂记之 如何动态重写类方法 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Python 杂记之 如何动态重写类方法 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/0803-ma-dynamic-classmethod-override.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2018-12-10T00:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Python-相关-8-Python-杂记/">Python 相关 - 8. Python 杂记</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>December</span>
+            <span>10,</span>
+            <span>2018</span>
+        </div>
+        
+
+        <h1 class="title">Python 杂记之 如何动态重写类方法</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h2 id="Python-是动态的编程语言"><a href="#Python-是动态的编程语言" class="headerlink" title="Python 是动态的编程语言"></a>Python 是动态的编程语言</h2><p> 在自己有关Python的第一篇文章中就介绍了Python的特性与优势，在文章中也介绍了其是一种动态的编程语言。在这里我再简单在当前文章中介绍一下，如下：</p>
+ <span id="more"></span>
+
+<blockquote>
+<p>能够在运行时修改自身程序结构的语言，就属于动态语言。那怎样才算是“运行时修改自身程序结构”捏？比如下面这几个例子都 算：在运行时给某个类增加成员函数及成员变量；在运行时改变某个类的父类；在运行时创建出某个函数.。 Python是可以实现动态类的创建类（在任意代码位置，符合正确的书写格式），或者给类增加删除属性。因为类也是对象，你可以在运行时动态的创建它们，就像其他任何对象一样。比如，你可以在函数中创建类，使用class关键字即可。” 既然是一种动态的高级语言，那么就意味着，其是在运行时就能改变其结构的编程语言。这在调试代码时，可以动态实时地改变变量，重写函数等，比起传统的C++与广泛运用的Java具有很强的优势。所叙述的结构包括：函数、变量与对象。已有的函数或方法可以被删除或是其他结构上的变化。</p>
+</blockquote>
+<h2 id="任务描述"><a href="#任务描述" class="headerlink" title="任务描述"></a>任务描述</h2><p> 最近在工作中遇到了一个问题：现有一Wxpython的Widget类，即继承TextCtrl的自定义类，该类有一个实例方法，在这暂且就称作method_x吧，整个项目都在使用该实例方法，虽然其内在调用关系十分复杂，这也是我一直诟病我们项目代码的地方，但其一直表现良好。我的需求是：在不改变这个类的，也不影响其他代码的的情况下，重写或者重新定义这个方法。这些只并且仅对特定实例有效。</p>
+<p> 首先我能想到的就是继承该类，进而得到一个子类，在子类里面仅Override覆盖该实例方法。这应该是最正常的方法，或者大部分人能想到的方法。可是我又不希望这样做，这样在后期维护的该类的时候还要为子类针对一下改变做出调整。而且在文章中还要import一下。那么有没有别的方法呢？考虑到Python是动态语言，动态调整函数和变量都是自己应用过的，那么这样的动态语言，能不能动态地修改（重写）一个类的实例方法呢？抱着这样的想法，我查阅了一些网页，成功实现了这样的想法，也在完成该任务，解决该问题的过程中更深层的理解了Python这种语言的动态特性。</p>
+<p> 最终我归纳出三种方法，可以实现类的实例方法的动态重写，在此我针对每种方法列出范例代码，并给出运行结果，并对这三种方法进行比较说明，本人并非专家，有见解不足之处，也希望各位高手留言赐教。</p>
+<h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h3><p> 使用函数的_<em>get()__内置方法，也是一个描述符，其本质是一个新式类, 在这个新式类中, 至少实现了___get()_\</em>, __set()__, <em>_delete()__中的一个, 这也被称为描述符协议，其中__get()_\</em>:在调用一个属性时被触发。 __get__(self, instance, owner) 定义当描述器的值被取得的时候的行为， instance 是拥有者对象的一个实例。 owner 是拥有者类本身。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>:    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">func1</span>(<span class="params">self</span>):        </span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;I am old func1&quot;</span>        </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">new_func1</span>(<span class="params">self</span>):        </span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;I am new func1&quot;</span></span><br><span class="line"></span><br><span class="line">objTest1 = Test()</span><br><span class="line"><span class="built_in">print</span> <span class="built_in">id</span>(new_func1)</span><br><span class="line">objTest2 = Test()</span><br><span class="line">objTest1.func1()</span><br><span class="line">objTest2.func1() </span><br><span class="line"></span><br><span class="line"><span class="comment"># 仅对该实例重写这个方法</span></span><br><span class="line"><span class="built_in">print</span> new_func1.__get__(objTest1, Test)</span><br><span class="line">objTest1.func1 = new_func1.__get__(objTest1, Test)</span><br><span class="line">objTest1.func1()</span><br><span class="line">objTest2.func1()</span><br></pre></td></tr></table></figure>
+
+<p>代码输出如下:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">C:\\&gt;python test.py</span><br><span class="line">55131384</span><br><span class="line">I am old func1</span><br><span class="line">Iam old func1</span><br><span class="line">&lt;bound method Test.new_func1 of &lt;__main__.Test instance at 0x0000000002F60C88&gt;&gt;</span><br><span class="line">I am new func1</span><br><span class="line">I am old func1</span><br></pre></td></tr></table></figure>
+
+<p>那么现在我们来尝试来理解一下这个方法的原理，上文说到__get()__是一个描述符，或称描述器，描述器分为两种，一共是资料描述器（data-descriptor), 一种是非资料描述器(non-data descriptor)。我们在这里使用的是非资料描述器， __get__(self, instance, owner) ，该方法的第二个参数是可选的（非必需）。 上面代码在使用该描述器的时候，就是将函数new_func1()绑定在类Test的实例objTest1上，而等号前面的是objTest1.func1 意味这，要将新绑定的实例方法覆盖到func1上，进而在再次调用实例方法func1()的时候，其实是在调用new_func1()。 该方法很有好处，可以理解为”几乎”是实现了一个方法的覆盖，你可以在新定义的方法中使用关键字self。 但是不能使用关键字super，即不能访问类的父类。</p>
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>使用Python的偏函数，Python的偏函数，与数学意义上的偏函数不同。其偏函数的思想可以理解为绑定了一部分参数的函数，其作用就是减少传入函数，使函数更短，更简洁。在这儿使用偏函数重写实例方法，目的就在与保证第一个参数self的传入。也就是partial()的第二个参数。把new_func1()的第一个参数固定了下来。保证重写的实例方法能访问self关键字。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> partial</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.m = <span class="string">&quot;message&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">func1</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;I am old func1&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">new_func1</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="built_in">print</span> self.m</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;I am new func1&quot;</span></span><br><span class="line"></span><br><span class="line">objTest1 = Test()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> <span class="built_in">id</span>(new_func1)</span><br><span class="line"></span><br><span class="line">objTest2 = Test()</span><br><span class="line"></span><br><span class="line">objTest1.func1()</span><br><span class="line"></span><br><span class="line">objTest2.func1() </span><br><span class="line"></span><br><span class="line"><span class="comment"># 仅对该实例重写这个方法</span></span><br><span class="line"><span class="comment">#print new_func1.__get__(objTest1, Test)</span></span><br><span class="line"><span class="comment">#objTest1.func1 = new_func1.__get__(objTest1, Test)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> <span class="built_in">id</span>(objTest1.func1)</span><br><span class="line">objTest1.func1 = partial(new_func1, objTest1)</span><br><span class="line"><span class="built_in">print</span> <span class="built_in">id</span>(objTest1.func1)</span><br><span class="line"></span><br><span class="line">objTest1.func1()</span><br><span class="line"></span><br><span class="line">objTest2.func1()</span><br></pre></td></tr></table></figure>
+
+<p>输出结果为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">C:\\&gt;python test.py</span><br><span class="line">52313336</span><br><span class="line">I am old func1</span><br><span class="line">I am old func1</span><br><span class="line">47500528</span><br><span class="line">47692840</span><br><span class="line">message</span><br><span class="line">I am new func1</span><br><span class="line">I am old func1</span><br></pre></td></tr></table></figure>
+
+<p>该种方法也简单有效，但是也要从functool中引入partial。也算是一种有效的解决方案。但是其也不能访问关键字super。输出的结果也显示，这样的改变只对特定实例有效。我个人觉得这也是一个简单容易理解的方法，相比较方法一而言，其原理理解起来也并不困难。也不需要更深层次的Python理论知识。</p>
+<h3 id="方法三"><a href="#方法三" class="headerlink" title="方法三"></a>方法三</h3><p>使用types包中的MethodType 函数。这个方法理解起来就相对更为简单。MethodType可以将一个函数绑定在特定的实例，或者类上。而且该类或者实例，可以没有方法，如果有相同名字的方法，就视为重写。如果绑定在实例上，则完全覆盖其实例的方法。如果绑定在类上，则对所有实例有效。两个绑定方法的区别就在与函数的第二个参数上。 MethodType把方法绑定在类实例上时，每个实例有自己单独的指向区域，互不干扰。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> types</span><br><span class="line"><span class="comment">#from functools import partial</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Test</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.m = <span class="string">&quot;message&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">func1</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span> <span class="string">&quot;I am old func1&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">new_func1</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="built_in">print</span> self.m</span><br><span class="line">    <span class="built_in">print</span> <span class="string">&quot;I am new func1&quot;</span></span><br><span class="line"></span><br><span class="line">objTest1 = Test()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> <span class="built_in">id</span>(new_func1)</span><br><span class="line"></span><br><span class="line">objTest2 = Test()</span><br><span class="line"></span><br><span class="line">objTest1.func1()</span><br><span class="line"></span><br><span class="line">objTest2.func1() </span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> <span class="built_in">id</span>(objTest1.func1)</span><br><span class="line"><span class="comment"># 仅对该实例重写这个方法</span></span><br><span class="line"><span class="comment">#print new_func1.__get__(objTest1, Test)</span></span><br><span class="line"><span class="comment">#objTest1.func1 = new_func1.__get__(objTest1, Test)</span></span><br><span class="line"><span class="comment">#objTest1.func1 = partial(new_func1, objTest1)</span></span><br><span class="line"></span><br><span class="line">objTest1.func1 = types.MethodType(new_func1, objTest1)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span> <span class="built_in">id</span>(objTest1.func1)</span><br><span class="line"></span><br><span class="line">objTest1.func1()</span><br><span class="line"></span><br><span class="line">objTest2.func1()</span><br></pre></td></tr></table></figure>
+
+<p>输出结果为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">C:\\&gt;python test.py</span><br><span class="line">60046584</span><br><span class="line">I am old func1</span><br><span class="line">I am old func1</span><br><span class="line">55233776</span><br><span class="line">55233776</span><br><span class="line">message</span><br><span class="line">I am new func1</span><br><span class="line">I am old func1</span><br></pre></td></tr></table></figure>
+
+<p>从上面的输出结果来看，时候该方法重写实例方法的时候，实例方法的id也没有改变，这是完全意义上方法重写，使用该方法重写类的实例方法，可以访问类的所有关键字。该方法绑定类方法时有一个很有趣区别，因为并不是当前任务需要，这些内容，我们以后在别的文章中进行讨论。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>三种方法以三个不同方向，三种不同的Python背景知识诠释了如何动态的重写（或绑定）一个实例的方法。在分析利弊与结合自己的使用需求，我个人最终选择了方法三, 每种方法都有自己的优缺点，比如方法一就不需要引入别的Python模块。但是至于那个方法是最优的解决方法，那应该是仁者见仁智者见智。这样的经历也是在自己在解决问题的过程中常常经历的。不断地思考探究，也能扎实自己的理论知识，向大拿高手学习的过程中，也为自己在以后遇见问题是，扩展了思考方向。让自己不断拷问自己，同样的需求是不是还有别的解决方案。然后探究，学习，尝试，掌握。 上述内容实自己总结归纳的，总有不足之处，望见谅并指正。</p>
+<p>参考目录：</p>
+<p><strong>Stackoverflow：</strong> <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/394770/override-a-method-at-instance-level">https://stackoverflow.com/questions/394770/override-a-method-at-instance-level</a></p>
+<p><strong>CSDN Blog:</strong> [<a target="_blank" rel="noopener" href="https://blog.csdn.net/yuanyangsdo/article/details/60776612]">https://blog.csdn.net/yuanyangsdo/article/details/60776612]</a>(</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/杂记/" class="tag">#杂记</a><a href="/tags/类方法/" class="tag">#类方法</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/0804-ma-list-leftadd-selfadd-op.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Python 杂记之 实现列表的自加和左移等操作</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/0802-ma-file-extension.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Python 杂记之 文件扩展名的区别</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

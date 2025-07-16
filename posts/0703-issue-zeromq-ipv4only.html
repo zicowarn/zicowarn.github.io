@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Python 应用之如何解决 AttributeError module object has no attribute [IPV4ONLY] 的问题 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Python 应用之如何解决 AttributeError module object has no attribute [IPV4ONLY] 的问题 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/0703-issue-zeromq-ipv4only.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2015-04-21T20:31:06.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Python-相关-7-Python-应用/">Python 相关 - 7. Python 应用</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>April</span>
+            <span>22,</span>
+            <span>2015</span>
+        </div>
+        
+
+        <h1 class="title">Python 应用之如何解决 AttributeError module object has no attribute [IPV4ONLY] 的问题</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：在使用Zero MQ函数setsocket(zmq.IPV4ONLY,0) 的时候。模块运行的时候会发生 self.socket_sub.setsockopt(zmq.IPV4ONLY, 0) AttributeError: ‘module’ object has no attribute ‘IPV4ONLY’ 的错误。本文讨论如何解决这一问题。</p>
+<p>Abstract: When using the Zero MQ function setsocket(zmq.IPV4ONLY,0). Happens when the module is running self.socket_sub.setsockopt(zmq.IPV4ONLY, 0) AttributeError:’module’ object has no attribute’IPV4ONLY’ error. This article discusses how to solve this problem.</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>在使用Zero MQ函数setsocket(zmq.IPV4ONLY,0) 的时候。模块运行的时候会发生 self.socket_sub.setsockopt(zmq.IPV4ONLY, 0) AttributeError: ‘module’ object has no attribute ‘IPV4ONLY’ 的错误。</p>
+<p>用pip freeze 查看当前安装的模块的信息的时候会得到以下输出：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pip freeze</span></span><br><span class="line">configobj==4.7.2</span><br><span class="line">pyzmq==2.2.0</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h3 id="可能原因一"><a href="#可能原因一" class="headerlink" title="可能原因一"></a>可能原因一</h3><p>如果出现问题的原因就是模块的版本太低，解决办法就是升级此模块。</p>
+<p>如果在使用命令： pip install pyzmq==14.5.0 出现下列错误提示时。</p>
+<p>error: command ‘gcc’ failed with exit status 1</p>
+<p>那么需要安装gcc : aptitude install gcc 可以解决问题</p>
+<h3 id="可能原因二"><a href="#可能原因二" class="headerlink" title="可能原因二"></a>可能原因二</h3><p>如果出现下列错误提示：</p>
+<p>fatal error: Python.h: No such file or directory</p>
+<p>则需要安装 python-dev: aptitude install python-dev 可以解决问题。</p>
+<h3 id="可能原因三"><a href="#可能原因三" class="headerlink" title="可能原因三"></a>可能原因三</h3><p>如果出现下列错误提示：</p>
+<p>gcc: error trying to exec ‘cc1plus’: execvp: No such file or directory</p>
+<p>则需要安装 g++ : sudo apt-get install g++ 可以解决问题。</p>
+<h3 id="可能原因四"><a href="#可能原因四" class="headerlink" title="可能原因四"></a>可能原因四</h3><p>如果还有问题，请检查 </p>
+<p>Paket: libzmq3</p>
+<p>Version: 4.0.5+dfsg-2 的版本信息。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>如果发现新的安装错误信息，欢迎大家关注本人个人公众号评论。才疏学浅，欢迎交流提意见彼此提高。需要声明一下51cto博客作者zuiwuxin就是作者本人，所以不存在版权问题。以后该博客将作为个人文章的主要发布地。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/实战经验/" class="tag">#实战经验</a><a href="/tags/ZeroMQ/" class="tag">#ZeroMQ</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/linux-0101-autossh-realizes-booting-to-create-ssh-tunnel.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">linux 使用autossh实现开机创建ssh tunnel的方法以及shell脚本</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/0704-issue-no-module-named-django-conf-urls-defaults.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Python 应用之如何解决加载django模块时的错误:no module named django.conf.urls.defaults</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

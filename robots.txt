@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://zicowarn.github.io/sitemap.xml

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Perl 如何创建包与UDP协议的再包装 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Perl 如何创建包与UDP协议的再包装 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/perl-03-language-package-UDP-protocol-repackaging.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2015-02-14T20:54:20.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Perl-相关-实战经验/">Perl 相关 - 实战经验</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>February</span>
+            <span>15,</span>
+            <span>2015</span>
+        </div>
+        
+
+        <h1 class="title">Perl 如何创建包与UDP协议的再包装</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：本文主要介绍，如何尝试自己的创建Perl语言的包与UDP协议的再包装使其起到类似python语言装饰器的效果</p>
+<p>Abstract: This article mainly introduces how to try to create your own Perl language package and repackaging the UDP protocol to make it look like a python language decorator.</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/perl </span></span><br><span class="line"><span class="comment"># Filename: BuildSocketUDP.pm</span></span><br><span class="line"><span class="keyword">package</span> BuildSocketUDP;</span><br><span class="line"><span class="keyword">require</span> Exporter;</span><br><span class="line"></span><br><span class="line">@ISA = <span class="string">qw(Exporter)</span>;</span><br><span class="line">@EXPORT = <span class="string">qw(readfile checkfile)</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> IO::Socket::INET; <span class="comment"># provides an object interface to creating and using Socket</span></span><br><span class="line"><span class="keyword">use</span> strict <span class="string">&#x27;vars&#x27;</span>; <span class="comment"># this generates a runtime error if you use symbolic references</span></span><br><span class="line"><span class="keyword">use</span> constant <span class="string">false =&gt;</span> <span class="number">0</span>;</span><br><span class="line"><span class="keyword">use</span> constant <span class="string">true  =&gt;</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># flush after every write</span></span><br><span class="line">$| = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">#Create a new instance</span></span><br><span class="line"><span class="function"><span class="keyword">sub</span> <span class="title">new</span> </span>&#123;</span><br><span class="line">  <span class="keyword">my</span> $self = &#123;&#125;; <span class="comment"># Connect the hash to the package Cocoa.</span></span><br><span class="line">  <span class="keyword">shift</span>;</span><br><span class="line">  <span class="keyword">my</span> ($ip, $port, $proto, $isserver) = @_;</span><br><span class="line">  <span class="keyword">my</span> $socket;</span><br><span class="line">  <span class="keyword">my</span> $self-&gt;&#123;<span class="string">&#x27;ip&#x27;</span>&#125; = $ip;</span><br><span class="line">  <span class="keyword">my</span> $self-&gt;&#123;<span class="string">&#x27;port&#x27;</span>&#125; = $port;</span><br><span class="line">  <span class="keyword">if</span> ($isserver == true &amp;&amp; $proto == <span class="string">&#x27;udp&#x27;</span>)</span><br><span class="line">  &#123;</span><br><span class="line">  	<span class="comment">#print &quot;Buldi socket for server\n&quot;;</span></span><br><span class="line">  	$socket = new IO::Socket::INET(</span><br><span class="line">	  <span class="string">LocalPort =&gt;</span> $port || <span class="string">&#x27;8765&#x27;</span>,</span><br><span class="line">    <span class="string">Blocking =&gt;</span> <span class="string">&#x27;0&#x27;</span>,</span><br><span class="line">	  <span class="string">Proto    =&gt;</span> $proto) <span class="keyword">or</span> <span class="keyword">die</span> <span class="string">&quot;* Error Server in Socket Creation : $!\n&quot;</span>;</span><br><span class="line">    <span class="keyword">print</span> <span class="string">&quot;UDP Server connected successful be created with port : $port\n&quot;</span>;</span><br><span class="line">    <span class="keyword">print</span> <span class="string">&quot;---------------------\n&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">#print &quot;Buldi socket for client\n&quot;;</span></span><br><span class="line">    $socket = new IO::Socket::INET(</span><br><span class="line">    <span class="string">PeerHost =&gt;</span> $ip  || <span class="string">&#x27;127.0.0.1&#x27;</span>,</span><br><span class="line">    <span class="string">PeerPort =&gt;</span> $port || <span class="string">&#x27;8765&#x27;</span>,</span><br><span class="line">    <span class="string">Blocking =&gt;</span> <span class="string">&#x27;0&#x27;</span>,</span><br><span class="line">    <span class="string">Proto    =&gt;</span> $proto) <span class="keyword">or</span> <span class="keyword">die</span> <span class="string">&quot;* Error Client in Socket Creation : $!\n&quot;</span>;</span><br><span class="line">    <span class="keyword">print</span> <span class="string">&quot;UDP Client connected successful be created with host : $ip\n&quot;</span>;</span><br><span class="line">    <span class="keyword">print</span> <span class="string">&quot;UDP Client connected successful be created with port : $port\n&quot;</span>;</span><br><span class="line">    <span class="keyword">print</span> <span class="string">&quot;---------------------\n&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">#print &quot;$socket&quot;.&quot;\n&quot;;</span></span><br><span class="line">  $self-&gt;&#123;<span class="string">&#x27;socket&#x27;</span>&#125; = $socket;</span><br><span class="line">  <span class="comment">#print $self-&gt;&#123;&#x27;socket&#x27;&#125;.&quot;AAAA\n&quot;;</span></span><br><span class="line">  <span class="keyword">bless</span> ($self);</span><br><span class="line">  <span class="keyword">return</span> $self; <span class="comment"># Return the reference to the hash.</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">#Subroutine to close the socket</span></span><br><span class="line"><span class="function"><span class="keyword">sub</span> <span class="title">closeSocket</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">my</span> $self = <span class="keyword">shift</span>;</span><br><span class="line">	($self-&gt;&#123;<span class="string">&#x27;socket&#x27;</span>&#125;)-&gt;<span class="keyword">close</span>() <span class="keyword">or</span> <span class="keyword">die</span> <span class="string">&quot;* Error to close the socket&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">#Subroutine to send the data</span></span><br><span class="line"><span class="function"><span class="keyword">sub</span> <span class="title">sendViasocket</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">my</span> $self = <span class="keyword">shift</span>;</span><br><span class="line">	<span class="keyword">my</span> ($data_out, $length , $description) = @_;</span><br><span class="line">	($self-&gt;&#123;<span class="string">&#x27;socket&#x27;</span>&#125;)-&gt;<span class="keyword">send</span>($data_out);</span><br><span class="line">  <span class="comment">#($self-&gt;&#123;&#x27;socket&#x27;&#125;)-&gt;flush;</span></span><br><span class="line">	<span class="comment">#print &quot;Send data successful via udp socket&gt;&gt; : $description &gt;&gt;: $data_out\n&quot;;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">#Subroutine to recv the data</span></span><br><span class="line"><span class="function"><span class="keyword">sub</span> <span class="title">recvViasocket</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">my</span> $self = <span class="keyword">shift</span>;</span><br><span class="line">	<span class="keyword">my</span> ($length, $description) = @_;</span><br><span class="line">	<span class="keyword">my</span> $data_in;</span><br><span class="line">	($self-&gt;&#123;<span class="string">&#x27;socket&#x27;</span>&#125;)-&gt;<span class="keyword">recv</span>($data_in, $length);</span><br><span class="line">  <span class="comment">#($self-&gt;&#123;&#x27;socket&#x27;&#125;)-&gt;flush;</span></span><br><span class="line">	<span class="comment">#print &quot;Recvied data successful via udp socket: $description &gt;&gt;: $data_in\n&quot;;</span></span><br><span class="line">	<span class="keyword">return</span> $data_in;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="number">1</span>; <span class="comment"># 当然不要忘了这个不知所以然的1</span></span><br></pre></td></tr></table></figure>
+
+<p>这只是给大家提供一种思路，毕竟是第一次尝试写类似的东西，难免存在不足之处，希望大家谅解，这样类似与Python语言装饰器的效果，给一些基本的包里面的方法提供了更多扩展和美化的作用，也为后来使用提供了方便。</p>
+<p>先上代码，由于整理博客，代码分析以后整理添加。欢迎交流提意见彼此提高。需要声明一下51cto博客作者zuiwuxin就是作者本人，所以不存在版权问题。以后该博客将作为个人文章的主要发布地。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Perl/" class="tag">#Perl</a><a href="/tags/UDP协议/" class="tag">#UDP协议</a><a href="/tags/Socket/" class="tag">#Socket</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/perl-02-CRC-16-algorithm.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Perl 实现CRC-16算法和应用</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/java-JNI-C-language-and-java.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">JAVA 通过JNI实现C语言设置Java二维字符串数组并返回该字符串数组</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>CSS 如何运用CSS来隐藏页面文本 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="CSS 如何运用CSS来隐藏页面文本 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/css-01-use-css-hide-content.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2020-08-29T09:13:51.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/CSS-相关-实战经验/">CSS 相关 - 实战经验</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>August</span>
+            <span>29,</span>
+            <span>2020</span>
+        </div>
+        
+
+        <h1 class="title">CSS 如何运用CSS来隐藏页面文本</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>摘要：究竟什么样的应用场景中才需要使用CSS来隐藏文本，为什么不直接修改HTML来删除想要隐藏的内容呢？使用CSS来隐藏页面文本，究竟是如何实现的？为什么要在项目中这么做，究竟为何？究竟什么是Kellum方法，该方法的使用范围与方法的局限性是？</p>
+<p>Abstract: What kind of application scenarios need to use CSS to hide text, why not directly modify the HTML to delete the content that you want to hide? How to use CSS to hide page text? Why do I do this in my own project? When is the Kellum method, the scope of use of the method and the limitations of the method?</p>
+<span id="more"></span>
+
+<h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>开篇立意，在探索全栈程序猿的路上我还坚持爬行着。在本文伊始想给大家大家讲一下，这里没有什么所谓专家和也没有能独挡一面的技术大拿，有的仅仅是一个愿意不断尝试，愿意学习的学生而已。不忘初心，正所谓阅文无数，不如明师指路；明师指路，不如自己去悟。说到底，学习知识做到知行合一才是真理。</p>
+<h3 id="任务背景"><a href="#任务背景" class="headerlink" title="任务背景"></a>任务背景</h3><p>为了学会CSS相关的内容，更为了把学到的东西用到实处，在实践中发现问题，再回过头来继续学习，螺旋上升，加快成长。从今天开始，所发的CSS相关的文章就是在记录自己学习使用CSS的时候走的每一步。</p>
+<p>为了学习前端知识，在过去一段时间尝试完成的项目是一个管理构建项目和查看构建状态的网页工具，在该项目中使用了Material Design Lite组件用于解决页面布局和基本的元素样式。使这个该组建也是为了学习和了解Material Design这种扁平化设计理念。官方网页介绍的使用方法如下，是在html页面中导入CSS和JavaScript两者资源。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./material.min.css&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;./material.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;https://fonts.googleapis.com/icon?family=Material+Icons&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>其中material.min.css文件，是自己在<a target="_blank" rel="noopener" href="https://getmdl.io/customize">https://getmdl.io/customize</a> 官方页面下，按照说明文档，自定义生成的，其使用的默认主色为indigo和强调色为pink。相关的使用方法与规范，请参见官方文档，本文不再做说明。</p>
+<h3 id="所遇问题"><a href="#所遇问题" class="headerlink" title="所遇问题"></a>所遇问题</h3><p>有关Material Design Lite使用方法的内容中关于字体图标Material+Icons的链接的部分，由于大家熟知的原因，使用这个地址的CDN是不被推荐的，另一方面，因为该小型管理项目最终也是在内部网络使用的，再者初始版本中使用的是w3 css开源主题，Roboto免费字体与Font Awesome开源图表库，这些内容也希望能新的样式中继续使用。所以类似这样的外部链接就有悖项目现实情况。当然网络中也有此类资源本地使用方法的介绍，相关内容因与本文无关，不在赘述。</p>
+<p>自己项目页面基本布局如下图所示，左侧为导航navibar部分，底部为页脚footer部分，右上为页眉header部分与右侧中部为主要内容显示部分。navibar会根据页面宽度自动显示与隐藏，这是Material Design Lite的组件特性。</p>
+<p><img src="/posts/css-01-use-css-hide-content/css-01-03.png" alt="图例2"></p>
+<p>项目中header部分的代码如下，注意，这里使用的是jade模版。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// header part</span><br><span class="line">header(class=&quot;mdl-layout__header&quot;)</span><br><span class="line">  div(class=&quot;mdl-layout__header-row&quot;)</span><br><span class="line">    span(class=&quot;mdl-layout-title&quot;). </span><br><span class="line">      #&#123;t(&#x27;index.title&#x27;, &#x27;My header title&#x27;)&#125;</span><br><span class="line">    div(class=&quot;mdl-layout-spacer&quot;)</span><br></pre></td></tr></table></figure>
+
+<p>由于是响应式的UI布局，当页面尺寸低于一个值时，左侧导航菜单就会被隐藏，同时按钮图标会显示在Header部分，估计很多朋友都见过类似的响应式布局，如此一来，就遇到了本文所述的关键问题。前文说道项目中没有引入Material+Icons的链接。也就无法显示正确显示这个按钮，具体情况如图所示：</p>
+<p><img src="/posts/css-01-use-css-hide-content/css-01-02.png" alt="图例3"></p>
+<p>该按钮是由material.min.js自动生成的，当页面宽度缩小到一定值时，页眉header部分的代码变为如下所示，对比之间的代码可见在div(class=”mdl-layout__header-row”)上面出现了一个新的div块，内部为一个图标元素，该图标即为上图中的菜单按钮，由于定义图标的资源未被引入，所以图标未正确显示。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">header</span> <span class="attr">class</span>=<span class="string">&quot;mdl-layout__header is-casting-shadow&quot;</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">aria-expanded</span>=<span class="string">&quot;false&quot;</span> <span class="attr">role</span>=<span class="string">&quot;button&quot;</span> <span class="attr">tabindex</span>=<span class="string">&quot;0&quot;</span> <span class="attr">class</span>=<span class="string">&quot;mdl-layout__drawer-button&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">&quot;material-icons&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">i</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;mdl-layout__header-row&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;mdl-layout-title&quot;</span>&gt;</span>My header title<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">   ...</span><br></pre></td></tr></table></figure>
+
+<p>按钮图标的内容content是由常量MaterialLayout.prototype.Constant_中的MENU_ICON来定义的，可以通过查看未压缩的material.js文档找到如下的定义：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">MaterialLayout</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">Constant_</span> = &#123;</span><br><span class="line">    <span class="attr">MAX_WIDTH</span>: <span class="string">&#x27;(max-width: 1024px)&#x27;</span>,</span><br><span class="line">    <span class="attr">TAB_SCROLL_PIXELS</span>: <span class="number">100</span>,</span><br><span class="line">    <span class="attr">RESIZE_TIMEOUT</span>: <span class="number">100</span>,</span><br><span class="line">    <span class="attr">MENU_ICON</span>: <span class="string">&#x27;&amp;#xE5D2;&#x27;</span>, # 按钮图标的值</span><br><span class="line">    <span class="attr">CHEVRON_LEFT</span>: <span class="string">&#x27;chevron_left&#x27;</span>,</span><br><span class="line">    <span class="attr">CHEVRON_RIGHT</span>: <span class="string">&#x27;chevron_right&#x27;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>由于项目现实条件约束，不能引入Material+Icons的链接，又因为最后使用的是压缩后的min.js文件，文件可读性太差，再者修改代码就要理解机制，所以修改相应的js代码也不现实。那能不能通过CSS控制元素的样式隐藏这个图标内容呢？这就是今天文章的主要内容。使用CSS来隐藏页面文本元素的方法很简单，关键代码如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.hide-text</span> &#123;</span><br><span class="line">  <span class="attribute">text-indent</span>: <span class="number">100%</span>; </span><br><span class="line">  <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实验表明，该方法适用于现有项目，解决了所遇问题，再使用的时候我就好奇背后的原理。也想知道上述CSS代码是如何实现隐藏文本的呢？背后逻辑与思想究竟又是什么？（诸位前辈莫笑，毕竟本人CSS理论知识不足，大部分就是现学现用的）。结合上述方法和项目本身条件，由于隐藏该内容的目的是想使用新的图标，所以，最终相关的CSS代码如下，由于文本文档被隐藏，这时使用新的按钮图标&lt;i&gt;来替换原始按钮图标也会被隐藏，所以就需要以背景的方式显示新的图标，由于Font Awesome图标的颜色为黑色，为此我还修改了相应svg文件中的“<strong>fill</strong>”属性，使其图标颜色为白色。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.mdl-layout__header</span> <span class="selector-class">.mdl-layout__drawer-button</span> <span class="selector-class">.material-icons</span> &#123;</span><br><span class="line">  <span class="attribute">background-size</span>: <span class="number">30px</span> <span class="number">30px</span>;</span><br><span class="line">  <span class="attribute">background</span>: <span class="built_in">url</span>(<span class="string">../fonts/bars-solid.svg</span>) no-repeat;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">30px</span>;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">30px</span>;</span><br><span class="line">  <span class="attribute">color</span>: white;</span><br><span class="line">  <span class="attribute">display</span>: block;</span><br><span class="line">  <span class="attribute">margin</span>: auto;</span><br><span class="line">  <span class="attribute">margin-top</span>: <span class="number">0.3em</span>;</span><br><span class="line">  <span class="attribute">text-indent</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个方法被称为为Kellum方法，在方法溯源上我没有去深究。在搜索外文资料时，输入该关键字确实能够过滤结果。该方法主要思想就是在设置文中不换行white-space: nowrap的前提下，无限制地增加首行缩进text-indent: 100%从而将文本内容推出到页面的显示范围。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">overflow</span>: hidden</span><br></pre></td></tr></table></figure>
+
+<p>该方法内overflow: hidden的使用算是非常聪明的地方，也说明了该方法设计者对CSS的经验之丰富。测试表明，如果在该方法中不使用overflow:hidden，那么如果文本中包含&lt;a&gt;元素的话，左侧的边界会被击穿，即文本中的第一个字符还是会被显示出来，感兴趣可以测试下下列代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">&quot;text/css&quot;</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="selector-tag">p</span> &#123;</span></span><br><span class="line"><span class="language-css"><span class="attribute">text-indent</span>:<span class="number">100%</span>;</span></span><br><span class="line"><span class="language-css"><span class="attribute">white-space</span>: nowrap;</span></span><br><span class="line"><span class="language-css">//<span class="attribute">overflow</span>:hidden</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>122345678abcdefghijklmnopqrstuvwxy</span><br><span class="line">	<span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;&quot;</span>&gt;</span>link<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>对该方法的讨论还远不止如此，有人建议使用“text-indent: 9999px”来替代“text-indent:100%”从而保证文本内容一定会被推出显示范围，而且如果使用9999px的话，可以不需结合overflow:hidden，此时文本的左侧边界不会被击穿。感兴趣的话，也可以结合上面的示例页面代码自己尝试一下。但也有一部分人对“9999px”在该方法中替代“100%”持反对态度，因为如果使用绝对值的话，浏览器就需要画出9999px边框，这样的话在性能方面就会有些损失。</p>
+<p>也有人在使用时发现，该方法并不适用于html的&lt;button&gt;元素，使用此方法时，Button元素的右侧，即带有缩进的文本的左侧边界也会被击穿，此时情况与上文中文本包含&lt;a&gt;元素时一致，可以使用下方代码进行测试：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">&quot;text/css&quot;</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="selector-tag">button</span></span></span><br><span class="line"><span class="language-css">&#123;</span></span><br><span class="line"><span class="language-css">	<span class="attribute">width</span>: <span class="number">120px</span>;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">height</span>: <span class="number">32px</span>;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">text-indent</span>: <span class="number">100%</span>; </span></span><br><span class="line"><span class="language-css">  <span class="attribute">white-space</span>: nowrap;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">overflow</span>: hidden</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span>&gt;</span>Button<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>上述代码的结果如下，可以看出文本左侧边界被“<strong>击穿</strong>”了。</p>
+<p><img src="/posts/css-01-use-css-hide-content/css-01-04.png" alt="图例1"></p>
+<p>为什么遇到&lt;button&gt;元素时，即便结合使用了overflow: hidden还是会出现页面被击穿的现象呢？这是因为一些类似于&lt;button&gt;的html元素本身自带内部填充intrinsic padding。重置button的padding属性就可以解决这一问题，当然将text-indent的值设置为大于100%，或使用前文中所说的9999px也能达到相似的结果。将下面的代码添加至上面的html代码中就能解决这个问题：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* &#123;</span><br><span class="line">    <span class="attribute">box-sizing</span>: border-box;</span><br><span class="line">    <span class="attribute">margin</span>: <span class="number">0</span>; <span class="attribute">padding</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>本人在CSS方面的知识并不丰富，一直在不断学习，文章中所述所写必然存在不足之处，望各位读者多多指正。如果哪位朋友有更好的解决方案，更希望能不吝赐教，大家一同学习，共同进步。欢迎关注我的微信公众号，留言讨论。</p>
+<h3 id="参考目录"><a href="#参考目录" class="headerlink" title="参考目录"></a>参考目录</h3><p>Hide text using css: <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/471510/hide-text-using-css">https://stackoverflow.com/questions/471510/hide-text-using-css</a></p>
+<p>why the kellum method doesn’t work with button elements? : <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/26992552/css-image-replacement-why-the-kellum-method-doesnt-work-with-button-elements">https://stackoverflow.com/questions/26992552/css-image-replacement-why-the-kellum-method-doesnt-work-with-button-elements</a></p>
+<p>CSS white-space 属性: <a target="_blank" rel="noopener" href="https://www.w3school.com.cn/cssref/pr_text_white-space.asp">https://www.w3school.com.cn/cssref/pr_text_white-space.asp</a></p>
+<p>CSS text-indent 属性: <a target="_blank" rel="noopener" href="https://www.w3school.com.cn/cssref/pr_text_text-indent.asp">https://www.w3school.com.cn/cssref/pr_text_text-indent.asp</a></p>
+<p>Replacing the -9999px hack (new image replacement) : <a target="_blank" rel="noopener" href="http://www.zeldman.com/2012/03/01/replacing-the-9999px-hack-new-image-replacement/">http://www.zeldman.com/2012/03/01/replacing-the-9999px-hack-new-image-replacement/</a></p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/前端/" class="tag">#前端</a><a href="/tags/CSS/" class="tag">#CSS</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/hexo-02-embed-html-and-downloads-code.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Hexo 解决嵌入的html被渲染的问题和code_dir的配置项的用法</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/0808-ma-run-vcvars-set-devenv-ci.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Python 杂记之 如何在实现子进程到父进程的环境变量更新</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

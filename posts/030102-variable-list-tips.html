@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Python 变量之列表与实战经验 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Python 变量之列表与实战经验 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/030102-variable-list-tips.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2018-11-15T07:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Python-相关-3-基本语法/">Python 相关 - 3. 基本语法</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>November</span>
+            <span>15,</span>
+            <span>2018</span>
+        </div>
+        
+
+        <h1 class="title">Python 变量之列表与实战经验</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h3 id="Python-标准数据类型"><a href="#Python-标准数据类型" class="headerlink" title="Python 标准数据类型"></a><strong>Python 标准数据类型</strong></h3><p>Python 定义了一些标准数据类型，用于存储各种类型的数据。Python有五个标准的数据类型，分别是：</p>
+<ul>
+<li>Numbers（数字）</li>
+<li>String（字符串）</li>
+<li>List（列表）</li>
+<li>Tuple（元组）</li>
+<li>Dictionary（字典）</li>
+</ul>
+<span id="more"></span>
+
+<p>Python 中的变量赋值不需要类型声明，也就是说声明变量不需要使用关键字。Python 中变量赋值之后该变量就被创建。可以简单对单一变量赋值，亦可对同一变量重新赋值（不同数据类型也可以），也可以同时为多个变量赋值，如下。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">counter = <span class="number">100</span> <span class="comment"># 赋值整型变量</span></span><br><span class="line">miles = <span class="number">1000.0</span> <span class="comment"># 浮点型</span></span><br><span class="line">name = <span class="string">&quot;John&quot;</span> <span class="comment"># 字符串</span></span><br><span class="line">ame = <span class="number">100</span> <span class="comment"># ame 被定义为新的数据类型</span></span><br><span class="line">ame1 = ame2 = ame3 = <span class="number">100</span> <span class="comment">#此三个变量被同时定义和赋值</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Python-数据类型之列表"><a href="#Python-数据类型之列表" class="headerlink" title="Python 数据类型之列表"></a><strong>Python 数据类型之列表</strong></h3><p>Python的变量灵活多变，不同的变量类型也有不同的使用技巧。上述的五种标准变量类型中string, list, tuple 都属于序列(sequence)类型。Python内置共有6种序列类型变量，分别为：</p>
+<h2 id="str-unicode-list-tuple-buffer-xrange-range"><a href="#str-unicode-list-tuple-buffer-xrange-range" class="headerlink" title="str, unicode, list, tuple, buffer, xrange(range)"></a><code>str, unicode, list, tuple, buffer, xrange(range)</code></h2><p>其中只有一种可变序列类型，即List列表，其余的如tuple和range（关于xrange和range的区别，我会在以后总结介绍，或者可以在百度知道搜索#<strong>python for in原理</strong>#参考我的回答）都属于不可变的序列类型。这里所谓的”变” （mutable）是说，在对象创建之后，可以通过一些操作改变其内部状态，简言之就是改变对象本身。因为最近的工作遇到了很多关于列表的问题，今天我就借助这篇文章给大家介绍Python基本变量类型中的List，同时也给大家介绍一下List和Python内置函数相互配合的使用技巧。</p>
+<h3 id="Python-列表赋值与快速赋值"><a href="#Python-列表赋值与快速赋值" class="headerlink" title="Python 列表赋值与快速赋值"></a><strong>Python 列表赋值与快速赋值</strong></h3><p>Python 列表使用方括号“[ ]”， 元素之间用逗号“，”分隔。列表元素的数据类型不限，可以是各种数据类型的集合，这点要比其他编程语言方便。列表元素个数不限，理论上只要内存足够大，元素个数就可以无限大。列表中的每个元素都分配一个数字作为索引，第一个索引值为0， 第二个为1，以此类推。List 列表普通赋值定义方法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list1 = [<span class="string">&#x27;physics&#x27;</span>, <span class="string">&#x27;chemistry&#x27;</span>, <span class="number">1997</span>, <span class="number">2000</span>]</span><br><span class="line">list2 = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span> ]</span><br><span class="line">list3 = [<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;d&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>然后就可以使用列表，但是在一些实际应用中需要初始化给定长度的列表，并对列表中每一个元素进行赋<strong>初值</strong>。如果列表长度在10以内，普通赋值依旧适用。如果列表长度过长，有可能需要写个循环进行赋值。<strong>技巧</strong>：可以使用下列方法对列表进行赋值：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>list1 = [<span class="number">0</span>] * <span class="number">5</span> <span class="comment"># 数字类型</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list1</span><br><span class="line">[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list2 = [<span class="string">&quot;&quot;</span>] * <span class="number">8</span> <span class="comment"># 字符串类型</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list2</span><br><span class="line">[<span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list3 = [<span class="literal">None</span>] * <span class="number">9</span> <span class="comment"># 空</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list3</span><br><span class="line">[<span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>, <span class="literal">None</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list4 = [<span class="literal">True</span>] *<span class="number">7</span> <span class="comment"># 布尔类型</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list4</span><br><span class="line">[<span class="literal">True</span>, <span class="literal">True</span>, <span class="literal">True</span>, <span class="literal">True</span>, <span class="literal">True</span>, <span class="literal">True</span>, <span class="literal">True</span>]</span><br></pre></td></tr></table></figure>
+
+<p> 该方法快速高效，可以对指定长度的列表进行快速初始化，弊端在于不能在限定元素的类型，但可以按序混合元素的数据类型，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>list5 = [<span class="literal">True</span>, <span class="string">&quot;&quot;</span>] * <span class="number">3</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>list5</span><br><span class="line">[<span class="literal">True</span>, <span class="string">&#x27;&#x27;</span>, <span class="literal">True</span>, <span class="string">&#x27;&#x27;</span>, <span class="literal">True</span>, <span class="string">&#x27;&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="Python-的列表索引，切片，改变与排序"><a href="#Python-的列表索引，切片，改变与排序" class="headerlink" title="Python 的列表索引，切片，改变与排序"></a><strong>Python 的列表索引，切片，改变与排序</strong></h3><p>Python 的列表索引方式和其他编程语言相似，即使用列表变量名，方括号与索引值进行索引。但Python与其他语言相比又有独特优势。即在方括号中使用冒号“<strong>：</strong>”+“<strong>数字</strong>” 对列表进行切片。切片可以理解为：取列表中指定的<strong>连续</strong>元素。如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>List1 = [<span class="string">&#x27;Google&#x27;</span>, <span class="string">&#x27;Runoob&#x27;</span>, <span class="string">&#x27;Taobao&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>List1[<span class="number">2</span>] <span class="comment"># 取第二个</span></span><br><span class="line"><span class="string">&#x27;Taobao&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>List1[-<span class="number">1</span>] <span class="comment"># 取倒数第一个</span></span><br><span class="line"><span class="string">&#x27;Taobao&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>List1[<span class="number">1</span>:] <span class="comment"># 取 从索引1至最后一个</span></span><br><span class="line">[<span class="string">&#x27;Runoob&#x27;</span>, <span class="string">&#x27;Taobao&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>List1[:<span class="number">2</span>] <span class="comment"># 取 从开始至索引2</span></span><br><span class="line">[<span class="string">&#x27;Google&#x27;</span>, <span class="string">&#x27;Runoob&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>Python 的列表是一个类的实例，也就意味着列表有自己的类方法。可以通过类方法对列表进行改变或者其他操作。常用类方法如下：</p>
+<ol>
+<li>list.append(obj) # 在列表末尾添加新的对象</li>
+<li>list.count(obj) # 某个元素在列表中出现的次数</li>
+<li>list.extend(seq) # 在列表末尾一次性追加另一个序列中的多个值（用新列表扩展原来的列表）</li>
+<li>list.index(obj) # 从列表中找出某个值第一个匹配项的索引位置</li>
+<li>list.insert(index, obj) # 将对象插入列表</li>
+<li>list.pop(obj=list[-1]) # 移除列表中的一个元素（默认最后一个元素），并且返回该元素的值</li>
+<li>list.remove(obj) # 移除列表中某个值的第一个匹配项</li>
+<li>list.reverse() # 反向列表中元素</li>
+<li>list.sort([func]) # 对原列表进行排序</li>
+</ol>
+<p>在这里我给大家介绍一下列表操作中，<strong>倒序排列</strong>(revers)和<strong>整理排序</strong>(sort)的实战经验。整理排序时，默认情况下，数字列表排序规则为：由小到大；字符串列表排列规则：由“0”到“10”，然后由a到z；数字和字符串混合型列表排序规则为：先数字，后字符。请参考下方例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>lt = [<span class="string">&#x27;a&#x27;</span>, <span class="number">1</span>, <span class="string">&quot;c&quot;</span>, <span class="number">3</span>, <span class="string">&quot;b&quot;</span>, <span class="number">2</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">sorted</span>(lt) <span class="comment"># 使用内置方法</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>lt</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;c&#x27;</span>, <span class="number">3</span>, <span class="string">&#x27;b&#x27;</span>, <span class="number">2</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>lt.sort() <span class="comment"># 使用类方法</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>lt</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>    </span><br><span class="line">注意，sort() 为数据类型列表的类方法，</span><br><span class="line"><span class="built_in">sorted</span>()为Python编程语言的内置函数。</span><br></pre></td></tr></table></figure>
+
+<p>由上述例子可知，使用Python内置函数，返回值为一个列表，使用列表的类方法则返回值为空。意思就是说：在整理排序时，内置函数不改变原始列表，而使用类方法则原始列表将发生变化。在处理某些问题的时候，我们需要保持原始列表不变，这时候就应该考虑，哪一种方法更合适。这样的情况在倒序排列的时候也会发生，使用reverse()类方法时，虽然得到了倒序排列的列表，但是列表本身发生了变化，为了避免类似情况发生，备份一下原始列表是一种方法，但是会比较复杂。在这里我给大家介绍一个实用技巧。我们可以通过一种特殊的列表切片方法直接生成出一个倒序排列的新的列表，请参考下方例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>lt = [<span class="string">&#x27;a&#x27;</span>, <span class="number">1</span>, <span class="string">&quot;c&quot;</span>, <span class="number">3</span>, <span class="string">&quot;b&quot;</span>, <span class="number">2</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>lt[::-<span class="number">1</span>] <span class="comment"># 采用切片法</span></span><br><span class="line">[<span class="number">2</span>, <span class="string">&#x27;b&#x27;</span>, <span class="number">3</span>, <span class="string">&#x27;c&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;a&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>lt</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;c&#x27;</span>, <span class="number">3</span>, <span class="string">&#x27;b&#x27;</span>, <span class="number">2</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>lt.reverse() <span class="comment"># 采用类方法</span></span><br><span class="line">&gt;&gt; lt</span><br><span class="line">[<span class="number">2</span>, <span class="string">&#x27;b&#x27;</span>, <span class="number">3</span>, <span class="string">&#x27;c&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;a&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>虽然python也有一个用于倒序排列的内置函数reversed(). 但是与sorted()函数不同，此函数返回值为一个列表迭(die)代器实例（iterator，以后的文章会详细介绍迭代器）而非一个新的列表，所以说用类似“**[::-1]**”的列表切片更为合适。</p>
+<p>Python编程语言还有一些其它的内置函数用于处理列表。比如：不同列表间比较cmp(list1, list2)，获取列表长度len(list)，最大值max(list)最小值min(list)，将元素变为列表list(seq)等。</p>
+<blockquote>
+<p>Tipp 1: 虽然list不是python的保留字符 可以用list作为变量名，而且不会产生错误。 但是还是不建议使用其作为变量名。</p>
+<p>Tipp 2: 其实python还有其他的不经常用到 的内置函数: 用all(list)来检查列表中是否所有元素都 为非空。 用any(list)来检查列表中是否有任何一个 为空。</p>
+</blockquote>
+<h3 id="Python-列表数据类型转换和实战经验"><a href="#Python-列表数据类型转换和实战经验" class="headerlink" title="Python 列表数据类型转换和实战经验"></a><strong>Python 列表数据类型转换和实战经验</strong></h3><p>列表数据转换问题，一般分为两种情况。列表中元素的数据类型转换问题和整个列表数据类型转换问题。</p>
+<p>列表元素数据类型转换，常见问题为数值类型和字符串类型间转换。例如将列表中的数字化字符串元素转换为数值类型元素，或反之； 或者将字符串列表的所有元素拼接，或反之。请参考下面例子。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>ll = [<span class="number">1</span>, <span class="number">2.3</span>, <span class="number">3.4</span>, <span class="number">4.5</span>, <span class="number">5.6</span>] <span class="comment"># 将数值型转换为字符</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ll</span><br><span class="line">[<span class="number">1</span>, <span class="number">2.3</span>, <span class="number">3.4</span>, <span class="number">4.5</span>, <span class="number">5.6</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">map</span>(<span class="built_in">str</span>, ll)</span><br><span class="line">[<span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;2.3&#x27;</span>, <span class="string">&#x27;3.4&#x27;</span>, <span class="string">&#x27;4.5&#x27;</span>, <span class="string">&#x27;5.6&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ss = [<span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;2.3&#x27;</span>, <span class="string">&#x27;3.4&#x27;</span>, <span class="string">&#x27;4.5&#x27;</span>, <span class="string">&#x27;5.6&#x27;</span>]  <span class="comment"># 将字符型转换为数值型</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">map</span>(<span class="built_in">float</span>, ss)</span><br><span class="line">[<span class="number">1.0</span>, <span class="number">2.3</span>, <span class="number">3.4</span>, <span class="number">4.5</span>, <span class="number">5.6</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tt = [<span class="string">&quot;h&quot;</span>, <span class="string">&quot;e&quot;</span>, <span class="string">&quot;l&quot;</span>, <span class="string">&quot;l&quot;</span>, <span class="string">&quot;o&quot;</span>] <span class="comment"># 元素拼合</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tt</span><br><span class="line">[<span class="string">&#x27;h&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;l&#x27;</span>, <span class="string">&#x27;l&#x27;</span>, <span class="string">&#x27;o&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&quot;&quot;</span>.join(tt)</span><br><span class="line"><span class="string">&#x27;hello&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>st = <span class="string">&quot;hello&quot;</span>  <span class="comment"># 字符串拆分</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(st)</span><br><span class="line">[<span class="string">&#x27;h&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;l&#x27;</span>, <span class="string">&#x27;l&#x27;</span>, <span class="string">&#x27;o&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p> 列表整体式地数据类型转换，常见问题：将列表整体转换为一个字符串和将一个字符串中的<strong>列表部分</strong>转换为一个列表。第一种情况请参考下方例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>ss = [<span class="string">&#x27;a&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;c&#x27;</span>, <span class="number">3</span>, <span class="string">&#x27;b&#x27;</span>, <span class="number">2</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ss</span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;c&#x27;</span>, <span class="number">3</span>, <span class="string">&#x27;b&#x27;</span>, <span class="number">2</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">str</span>(ss)</span><br><span class="line"><span class="string">&quot;[&#x27;a&#x27;, 1, &#x27;c&#x27;, 3, &#x27;b&#x27;, 2]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看出只需要使用python的内置方法str()就实现。可是如果是第二种情况呢？如果要将字符串化的列表转换为一个列表，<strong>千万不要</strong>使用内置函数list()。因为不会得到预期的结果，这里要使用内置函数eval()。参考下方代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>st = <span class="string">&quot;[&#x27;a&#x27;, 1, &#x27;c&#x27;, 3, &#x27;b&#x27;, 2]&quot;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">list</span>(st) <span class="comment"># 若使用list函数</span></span><br><span class="line">[<span class="string">&#x27;[&#x27;</span>, <span class="string">&quot;&#x27;&quot;</span>, <span class="string">&#x27;a&#x27;</span>, <span class="string">&quot;&#x27;&quot;</span>, <span class="string">&#x27;,&#x27;</span>, <span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;,&#x27;</span>, <span class="string">&#x27; &#x27;</span>, <span class="string">&quot;&#x27;&quot;</span>, <span class="string">&#x27;c&#x27;</span>, <span class="string">&quot;&#x27;&quot;</span>, <span class="string">&#x27;,&#x27;</span>, <span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;,&#x27;</span>, <span class="string">&#x27; &#x27;</span>, <span class="string">&quot;&#x27;&quot;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&quot;&#x27;&quot;</span>, <span class="string">&#x27;,&#x27;</span>, <span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;]&#x27;</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">eval</span>(st) <span class="comment"># 若使用eval函数</span></span><br><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="number">1</span>, <span class="string">&#x27;c&#x27;</span>, <span class="number">3</span>, <span class="string">&#x27;b&#x27;</span>, <span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+
+<p>Python基本数据类型中的List列表和列表的使用技巧今天就介绍到这里。想比大家都有这样的印象：如果能合理并巧妙地使用python内置函数来处理列表，将能够大大减少代码数量和提高代码质量。如果大家有别的想法或者其他使用技巧。欢迎订阅我的个人微信公共号，留言分享。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/变量/" class="tag">#变量</a><a href="/tags/实战经验/" class="tag">#实战经验</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/030103-variable-tuple-tips.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Python 变量之元组与实战经验</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/030101-variable-string-tips.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Python 变量之字符串与实战经验</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

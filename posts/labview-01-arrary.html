@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>LabView难点之一 Array的处理。 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="LabView难点之一 Array的处理。 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/labview-01-arrary.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2011-05-05T20:24:37.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/LabView-相关-实战经验/">LabView 相关 - 实战经验</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>May</span>
+            <span>6,</span>
+            <span>2011</span>
+        </div>
+        
+
+        <h1 class="title">LabView难点之一 Array的处理。</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：本文主要分享一些在LabView时，有关数组处理的一些浅见。</p>
+<p>Abstract: This article mainly shares some insights about array processing in LabView.</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>LabView难点之一 Array的处理，个人见解。</p>
+<p>Array也是数组，当需要处理一串的数据的时候需要这些。</p>
+<p>数组的种类：一维；二维；三维或者多维。</p>
+<p>数组的类型：数字类型；字符串类型；布尔型；混合类型。</p>
+<p>在LabvieW中，数组经常通过一个For-Schleife来创建。For-Schleife的特点决定了这些。而While-Schleife无法做到。LabVieW中For循环的内存提前给出，运算次数也预先知道。而While循环却无法知道循环次数。</p>
+<p>LabVIEW中，数组表现形式由三部分组成。数据类型，数据索引和数据。创建也相对简单，前后面板中都能找到相应的模板。数组创建一开始都是一维数组，简单转换成二维数组的方法就是拖动数组索引显示边框下边缘。或者右键中的Add  Dimension.</p>
+<p>数组的操作，也就是求数组长度，对数组排序，取出数组中的元素，替换数组中的元素或者初始化数组等各种运算。</p>
+<p>所要引用的模板</p>
+<ul>
+<li>Array Size ;  返回数组长度。</li>
+<li>Index Array ; 返回输入索引指定的元素。</li>
+<li>Replace Array Subset ; 返回替换输入数组中一个元素。</li>
+<li>Insert Into Array ;   返回在数组中指定的位置插入元素。</li>
+<li>Delete From Array ;  返回从数组中删除指定数目的元素。</li>
+<li>Initialize Array ;  初始化数组。</li>
+<li>Build Array ；创建一个新的数组。</li>
+<li>Array Subset ；从输入的数组中取出指定的元素。</li>
+<li>Rotate ID Array； 移动一个数组中的最后n个元素到数组最前面。</li>
+<li>Reverse ID Array；将数组前后顺序颠倒。</li>
+<li>Search ID Array；搜指定元素在一维数组中位置，若不存在返回-1.</li>
+<li>Split ID Array ；将数组在指定元素的位置处截断，分成两个数组。当输入大于长度，第二子数组为空。</li>
+<li>Sort ID Array ;将输入数组安升序排序。</li>
+<li>Array Max&Min;  返回数组中最大值和最小值。</li>
+<li>Transpose 2D Array ；矩阵装置。</li>
+<li>Interpolate ID Array ；线性插值。</li>
+<li>Threshold ID Array ; 一维数组阈值，线性插值的逆过程。</li>
+<li>Interleave ID Arrays ; 将输入端口输入的一维数组插入到输出的一维数组中。</li>
+<li>Decimate ID Array； 将一个数组分成数个数组。</li>
+<li>Reshape Array； 改变输入数组的维数。</li>
+</ul>
+<p>LabVIEW的数组。与其他编程语言，如C语言，相比不用事先规定数组的长度。如果内存允许，可达到2,147,483,647个。元素索引从哦开始 到n-1结束。</p>
+<p> 个人见解，要是有问题 请与我联系。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/LabView/" class="tag">#LabView</a><a href="/tags/Array/" class="tag">#Array</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/labview-02-variables.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">LabView难点之二 变量的处理</h3>
+                </div>
+            </div>
+        </a>
+        
+        <a class="prev"></a>
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

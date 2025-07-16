@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>SQLITE3 浮点值类型精度问题 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="SQLITE3 浮点值类型精度问题 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/sqlite3-01-float-type-precision-issue.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-04-08T03:27:20.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/SQLITE3-相关-1-浮点值类型精度问题/">SQLITE3 相关 - 1. 浮点值类型精度问题</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>April</span>
+            <span>8,</span>
+            <span>2024</span>
+        </div>
+        
+
+        <h1 class="title">SQLITE3 浮点值类型精度问题</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：当前项目遇到的问题：SQLITE3 数据库表在创建时，表中字段类型被设置成FLOAT，该字段的写入与读取时，小数点的的精度不一致。</p>
+<p>Abstract: A problem encountered in the current project: When a SQLITE3 database table is created, the field type in the table is set to FLOAT, and the precision of the decimal point is not consistent when the field is written and read.</p>
+<span id="more"></span>
+
+<p>项目中，数据库表在创建时，某一字段类型被设置成FLOAT类型用于保存文件的时间戳，但这是历史代码无法轻易改变。实践中遇到的问题是，存储数据时调试器显示的数据位1698925725.0340421，但是读取该条目该字段时，调试器显示1698925725.034042，那丢失的最后一个小数点1的原因是什么?</p>
+<h3 id="SQLite-中-FLOAT和REAL数据类型"><a href="#SQLite-中-FLOAT和REAL数据类型" class="headerlink" title="SQLite 中 FLOAT和REAL数据类型"></a>SQLite 中 <code>FLOAT</code>和<code>REAL</code>数据类型</h3><p>在SQLite中，<code>FLOAT</code>和<code>REAL</code>两种数据类型实际上是等效的。SQLite使用<code>REAL</code>数据类型来表示浮点数，并且<code>FLOAT</code>是<code>REAL</code>的一个别名（亲和）<a target="_blank" rel="noopener" href="https://sqlite.org/datatype3.html">SQLite.org文档，数据类型，标题3.1 列亲和力判定 </a>。这意味着在SQLite中，你可以使用<code>FLOAT</code>或<code>REAL</code>来定义一个浮点数字段，它们的行为和存储方式都是相同的。因此，无论你使用<code>FLOAT</code>还是<code>REAL</code>，都将得到相同的浮点数存储和处理效果。这两种类型在SQLite中是完全等价的，没有区别。</p>
+<h4 id="SQLite-存储类"><a href="#SQLite-存储类" class="headerlink" title="SQLite 存储类"></a>SQLite 存储类</h4><p>每个存储在 SQLite 数据库中的值都具有以下存储类之一：</p>
+<table>
+<thead>
+<tr>
+<th align="left">存储类</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">NULL</td>
+<td align="left">值是一个 NULL 值。</td>
+</tr>
+<tr>
+<td align="left">INTEGER</td>
+<td align="left">值是一个带符号的整数，根据值的大小存储在 1、2、3、4、6 或 8 字节中。</td>
+</tr>
+<tr>
+<td align="left">REAL</td>
+<td align="left">值是一个浮点值，存储为 8 字节的 IEEE 浮点数字。</td>
+</tr>
+<tr>
+<td align="left">TEXT</td>
+<td align="left">值是一个文本字符串，使用数据库编码（UTF-8、UTF-16BE 或 UTF-16LE）存储。</td>
+</tr>
+<tr>
+<td align="left">BLOB</td>
+<td align="left">值是一个 blob 数据，完全根据它的输入存储。</td>
+</tr>
+</tbody></table>
+<h4 id="关于SQLite-类型-亲和-Affinity-类型（部分）"><a href="#关于SQLite-类型-亲和-Affinity-类型（部分）" class="headerlink" title="关于SQLite 类型 亲和(Affinity)类型（部分）"></a>关于SQLite 类型 亲和(Affinity)类型（部分）</h4><p>SQLite支持列的<strong>亲和类型概念</strong>。任何列仍然可以存储任何类型的数据，当数据插入时，该字段的数据将会优先采用亲缘类型作为该值的存储方式。SQLite目前的版本支持以下五种亲缘类型：</p>
+<table>
+<thead>
+<tr>
+<th>数据类型·</th>
+<th>亲和类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>REAL<br>DOUBLE<br>DOUBLE PRECISIONF<br>LOAT</td>
+<td>REAL</td>
+<td>其规则基本等同于NUMERIC，唯一的差别是不会将”30000.0”这样的文本数据转换为INTEGER存储方式。</td>
+</tr>
+<tr>
+<td>NUMERIC DECIMAL(10,5) <br>BOOLEAN <br>DATE <br>DATETIME</td>
+<td>NUMERIC</td>
+<td>当文本数据被插入到亲缘性为NUMERIC的字段中时，如果转换操作不会导致数据信息丢失以及完全可逆，那么SQLite就会将该文本数据转换为INTEGER或REAL类型的数据，如果转换失败，SQLite仍会以TEXT方式存储该数据。对于NULL或BLOB类型的新数据，SQLite将不做任何转换，直接以NULL或BLOB的方式存储该数据。需要额外说明的是，对于浮点格式的常量文本，如”30000.0”，如果该值可以转换为INTEGER同时又不会丢失数值信息，那么SQLite就会将其转换为INTEGER的存储方式。</td>
+</tr>
+</tbody></table>
+<p>根据官方文档<a target="_blank" rel="noopener" href="https://sqlite.org/datatype3.html">SQLite.org文档，数据类型，标题3.1 列亲和力判定 </a>，</p>
+<p>对于未声明为<a target="_blank" rel="noopener" href="https://sqlite.org/stricttables.html">STRICT</a>的表，列的关联性由声明的列类型决定，按照以下规则按所示顺序：</p>
+<ol>
+<li>如果声明的类型包含字符串“INT”，则为它分配 INTEGER 关联性。</li>
+<li>如果列的声明类型包含任何字符串“CHAR”、“CLOB”或“TEXT”，则该列具有 TEXT 关联性。请注意，类型 VARCHAR 包含字符串“CHAR”，因此被分配了 TEXT 关联性。</li>
+<li>如果列的声明类型包含字符串“BLOB”或者未指定类型，则该列具有亲和性 BLOB。</li>
+<li>如果列的声明类型包含任何字符串“REAL”、“FLOA”或“DOUB”，则该列具有 REAL 关联性。</li>
+<li>否则，关联性为 NUMERIC。</li>
+</ol>
+<p>请注意，确定列亲和力的规则顺序很重要，一些注意事项：</p>
+<ul>
+<li>声明类型为“CHARINT”的列将匹配规则 1 和 2，但第一个规则优先，因此列亲和力将为 INTEGER。</li>
+<li>类型名称后面的括号中的数字参数（例如：“VARCHAR(255)”）会被 SQLite 忽略 - SQLite 不会对字符串、BLOB 或 BLOB 的长度施加任何长度限制（除了大型全局<a target="_blank" rel="noopener" href="https://sqlite.org/limits.html#max_length">SQLITE_MAX_LENGTH</a>限制）数值。</li>
+<li>由于描述的词尾位“INT“，声明的“FLOATING POINT”类型将给出 INTEGER 关联性，而不是 REAL 关联性。并且声明的“<strong>STRING</strong>”类型具有 <strong>NUMERIC</strong> 亲和力，而不是 TEXT。</li>
+</ul>
+<h3 id="SQLITE的字段中如何保存浮点数"><a href="#SQLITE的字段中如何保存浮点数" class="headerlink" title="SQLITE的字段中如何保存浮点数"></a>SQLITE的字段中如何保存浮点数</h3><p>SQLITE的字段中如何保存浮点数的，例如1698925725.0340421，<code>REAL</code>数据类型用于存储浮点数。当你在SQLite数据库中定义一个<code>REAL</code>字段并存储一个浮点数值，如<code>1698925725.0340421</code>，SQLite会将这个浮点数转换为其内部二进制表示形式并存储它。</p>
+<p>SQLite使用IEEE 754标准来表示浮点数，这是计算机科学中广泛使用的浮点数表示方法。当你存储<code>1698925725.0340421</code>这样的浮点数时，SQLite会将其转换为二进制格式并存储。</p>
+<p>然而，由于浮点数的内部二进制表示和计算机硬件的浮点数运算精度限制，可能会出现精度损失。这意味着在某些情况下，读取存储的浮点数值时可能会略有舍入或精度损失。</p>
+<p>在SQLite中，当你查询或检索<code>REAL</code>字段时，它会尝试以最接近的方式还原存储的浮点数值，但由于浮点数的精度限制，可能会出现与原始值略有不同的结果。</p>
+<p>总之，当你在SQLite中存储浮点数时，它会将浮点数转换为其内部二进制表示形式并存储它，但由于浮点数的精度限制，可能会导致读取和存储的值略有不同。</p>
+<h3 id="浮点数值精度损失"><a href="#浮点数值精度损失" class="headerlink" title="浮点数值精度损失"></a>浮点数值精度损失</h3><p>在计算机科学中，浮点数的精度损失是一个普遍存在的问题，这是由于浮点数的内部二进制表示方式和计算机硬件的浮点数运算精度限制造成的。以下是一些可能导致浮点数精度损失的情况：</p>
+<ol>
+<li><strong>浮点数的内部表示方式</strong>：浮点数在计算机中使用二进制表示，而许多十进制浮点数（如0.1或0.01）在二进制中是无限循环的。这种十进制到二进制的转换可能会导致某些浮点数无法精确表示，具体参考之前的文章<a href="https://zicowarn.github.io/posts/18625.html">Python 杂记之 Python不认识0.1</a>)。</li>
+<li><strong>计算和运算</strong>：在进行浮点数计算和运算时，由于舍入误差和算法的局限性，可能会导致结果的精度损失。例如，连续的浮点数运算可能会累积舍入误差，从而导致最终结果的精度降低。</li>
+<li><strong>浮点数的有限精度</strong>：计算机硬件和软件通常使用有限的位数来表示和处理浮点数。例如，单精度浮点数（float）使用32位，双精度浮点数（double）使用64位。这种有限的精度限制了浮点数的表示范围和精度，可能会导致某些浮点数无法精确表示。</li>
+<li><strong>浮点数格式和存储</strong>：在某些情况下，浮点数的格式和存储方式也可能影响其精度。例如，浮点数的四舍五入、截断或舍入误差可能会导致精度损失。</li>
+<li><strong>不同的计算机和操作系统</strong>：不同的计算机架构和操作系统可能使用不同的浮点数表示和计算方法，这也可能导致浮点数的精度损失。</li>
+</ol>
+<h3 id="丢失的精度0-0000001"><a href="#丢失的精度0-0000001" class="headerlink" title="丢失的精度0.0000001"></a>丢失的精度0.0000001</h3><p>具体到今天的问题问题中。存储数据时调试器显示的数据为1698925725.0340421，读取时为1698925725.034042，这里丢失的0.0000001应该是<strong>浮点数的内部表示方式</strong>导致的。</p>
+<p>当存储一个十进制小数，如1698925725.0340421，作为浮点数时，它会被转换为其二进制浮点数表示形式并存储在数据库中。然而，由于计算机中浮点数的有限精度和内部表示方式，这个转换过程可能会导致一些精度损失。</p>
+<p>在此的情况下，这种精度损失导致了最后的0.0000001（或更准确地说，可能是更小的精度差异）在读取时丢失，使得读取的值为1698925725.034042而不是原始的1698925725.0340421。</p>
+<p>这种精度损失是浮点数在计算机中表示和处理时普遍存在的问题，特别是当涉及到非常接近的浮点数值时。为了避免或减少这种精度损失，你可以考虑使用更高的精度数据类型、进行适当的舍入或使用其他技术来处理浮点数。</p>
+<h3 id="精度损失的解决方法"><a href="#精度损失的解决方法" class="headerlink" title="精度损失的解决方法"></a>精度损失的解决方法</h3><p>要解决浮点数精度损失的问题，可以考虑以下几种方法：</p>
+<ol>
+<li><p><strong>使用更高的精度数据类型</strong>：可以使用SQLite中的<code>DOUBLE</code>或<code>REAL</code>（64位双精度浮点数）类型来存储浮点数，而不是使用<code>FLOAT</code>（32位单精度浮点数）。<code>DOUBLE</code>或<code>REAL</code>提供了更高的精度，这可以减少精度损失。</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> your_table (</span><br><span class="line">    your_column <span class="keyword">DOUBLE</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>存储为整数</strong>：如果可能的话，可以将浮点数乘以一个足够大的数（例如10的n次方，其中n是你想要的小数位数），然后将结果四舍五入到最接近的整数，并存储为整数。在检索时，可以将整数除以相同的数以获取原始的浮点数值。</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 存储</span></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> your_table (your_column) <span class="keyword">VALUES</span> (ROUND(<span class="number">1698925725.0340421</span> <span class="operator">*</span> <span class="number">10000000</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 检索</span></span><br><span class="line"><span class="keyword">SELECT</span> your_column <span class="operator">/</span> <span class="number">10000000.0</span> <span class="keyword">FROM</span> your_table;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>使用字符串存储</strong>：还可以考虑将浮点数转换为字符串并存储它，然后在检索时将其转换回浮点数。这样可以避免浮点数精度问题，但可能会增加存储和处理数据的复杂性。</p>
+ <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 存储</span></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> your_table (your_column) <span class="keyword">VALUES</span> (<span class="string">&#x27;1698925725.0340421&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 检索</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">CAST</span>(your_column <span class="keyword">AS</span> <span class="type">REAL</span>) <span class="keyword">FROM</span> your_table;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>四舍五入或舍入到指定的小数位数</strong>：在存储浮点数之前，可以选择将其四舍五入或舍入到指定的小数位数，以减少精度损失。</p>
+</li>
+</ol>
+<p>选择哪种方法取决于具体需求和应用场景。如果精度是非常重要的，建议使用更高的精度数据类型（如<code>DOUBLE</code>或<code>REAL</code>）或将浮点数存储为整数，并在需要时进行适当的转换。如果精度要求不是很高，也可以考虑使用四舍五入或舍入到指定的小数位数来减少精度损失。</p>
+<p>具体到项目中的问题，由于该字段储存的为时间戳，可以再分钟基本上使用。在容忍一些精度损失情况下，应用时可以将两个条目中的该字段时间戳乘以100（或其他适当的倍数）然后转换为整数进行比较。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>文中内容为个人总结，有不足之处，也望各位不吝赐教，多多指正，一起讨论学习。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/SQLITE3/" class="tag">#SQLITE3</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/electron-01-howto-setup-developmentenv.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">如何搭建Vue3 + TypeScript + Electron开发环境</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/machining-06-rarz-conversion.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">机械加工 之表面粗糙度Ra与Rz转换</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

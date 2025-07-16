@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Python 杂记之 wxPython 图形界面程序中多个显示器问题 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Python 杂记之 wxPython 图形界面程序中多个显示器问题 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/0811-wxpython-multiple-monitors-issue.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2016-04-19T13:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Python-相关-8-Python-杂记/">Python 相关 - 8. Python 杂记</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>April</span>
+            <span>19,</span>
+            <span>2016</span>
+        </div>
+        
+
+        <h1 class="title">Python 杂记之 wxPython 图形界面程序中多个显示器问题</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：在使用wxpython的时候也许会遇见这样的问题。软件用户或者潜在用户可能使用多个显示器，而且显示器设置并不是简单的投影而是扩展设置，这样的话，显示器的尺寸就超过了单一显示器的尺寸，而是两个现实器的综合。</p>
+<p>Abstract: When using the wxpython may encounter this problem. Software users or potential users may use multiple displays, and the display settings are not simple projections but extended settings. In this case, the size of the display exceeds the size of a single display, but a combination of two realities.</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>在使用wxpython的时候也许会遇见这样的问题。软件用户或者潜在用户可能使用多个显示器，而且显示器设置并不是简单的投影而是扩展设置，这样的话，显示器的尺寸就超过了单一显示器的尺寸，而是两个现实器的综合。</p>
+<h3 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h3><p>在需要调整窗口位置的时候，当使用SetPosition(Point, Flag)的时候就应该考虑到偏移量Offset。因为用户打开软件的可能并不是在主显示器上面，也许主窗口在第二个显示器上面。如果单纯的使用SetPostion()的话，可能窗口会在主显示器上面。</p>
+<p>那么首先如何简单准确地获得显示器的数量和每一个显示器的尺寸呢？ 下列两行代码可以帮你解决问题。displays 可以理解为wx.Display实力的列表。第二行代码返回一个尺寸，也就是分辨率的列表。</p>
+<p>该列表保存了所有现实的分辨率信息，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">displays = (wx.Display(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(wx.Display.GetCount()))</span><br><span class="line">sizes = [display.GetGeometry().GetSize() <span class="keyword">for</span> display <span class="keyword">in</span> displays]</span><br></pre></td></tr></table></figure>
+
+<p>因为用户显示器的分辨率可能会发生变化。用户显示器的设置也有可能不同，有可能第二显示器在主显示器的左边，也有可能在右边。那么单单或者显示器的分辨率，手动设置位置偏移量显得有点不够高效。</p>
+<p>首先我们要确定，主窗口或者Frame (toplevel Windows)的位置，是在主显示器上还是在第二个显示器上面。 </p>
+<p>使用此函数来得到主窗口的位置：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rts = wx.Display.GetFromWindow(parent)</span><br></pre></td></tr></table></figure>
+
+<p>参数parent, 是需要确定位置的窗口，返回值rts有三种可能（假设有两个显示器）：</p>
+<ul>
+<li>-1， 窗口位于连个显示器之间</li>
+<li>0， 主显示器上</li>
+<li>1， 第二个显示器上。</li>
+</ul>
+<p>当主窗口位于第二个现实上面的时候我们在调整窗口就要考虑偏移量。在忽略用户显示器设置的情况下，我们可以通过，</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wx.Display(indexOfMonitor).GetGeometry()</span><br></pre></td></tr></table></figure>
+
+<p>此方法获得任一显示器的与主显示器的相对位置。 该方法返回Rect实例。为一个tuple。 </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Rect(x, y, width, height)</span><br></pre></td></tr></table></figure>
+
+<p>x为该显示器与主显示器的(0,0)点x轴偏移量，</p>
+<p>y为该显示器与主显示器的(0,0)点y轴偏移量。</p>
+<p>可以通过：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">offset_x_pos = wx.Display(indexOfMonitor).GetGeometry().GetX()</span><br><span class="line">offset_y_pos = wx.Display(indexOfMonitor).GetGeometry().GetY()</span><br></pre></td></tr></table></figure>
+
+<p>获得单一轴的偏移量或者通过：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wx.Display(indexOfMonitor).GetGeometry().GetPosition()</span><br></pre></td></tr></table></figure>
+
+<p>一次获得两个轴的偏移量。</p>
+<p>才疏学浅，欢迎交流提意见彼此提高。需要声明一下51cto博客作者zuiwuxin就是作者本人，所以不存在版权问题。以后该博客将作为个人文章的主要发布地。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/杂记/" class="tag">#杂记</a><a href="/tags/wxPython/" class="tag">#wxPython</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/0810-pass-attribute-between-parent-and-child-class.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Python 杂记之 父类和子类间类属性（非实例属性）的设置获取的传递</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/perl-01-reopen-stdin-during-program-operation.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Perl 关于在程序运行过程中重新开启标准输入的问题</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

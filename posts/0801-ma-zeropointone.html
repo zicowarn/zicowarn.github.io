@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Python 杂记之 Python不认识0.1 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Python 杂记之 Python不认识0.1 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/0801-ma-zeropointone.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2018-12-01T00:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Python-相关-8-Python-杂记/">Python 相关 - 8. Python 杂记</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>December</span>
+            <span>1,</span>
+            <span>2018</span>
+        </div>
+        
+
+        <h1 class="title">Python 杂记之 Python不认识0.1</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>在计算机编程的过程中，常常会涉及到浮点数（小数）的算术运算。稍加留意就会发现，算术运算的结果时常是不正确的。如果程序中有条件语句if加逻辑判断来控制程序执行，由于判断结果也不符合预期，程序就会流向错误的节点。经典例子就是0.1的10次求和与1进行逻辑判断得出的结果为False，遇见相似的问题会把自己急出一身汗，却也弄不个所以然来。</p>
+<span id="more"></span>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span></span><br><span class="line"><span class="number">0.9999999999999999</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="为什么Pyhon不认识0-1"><a href="#为什么Pyhon不认识0-1" class="headerlink" title="为什么Pyhon不认识0.1"></a><strong>为什么Pyhon不认识0.1</strong></h2><p>通过上面的结果，可以大胆假设：<strong>其实Python不能正确理解0.1，因为若可以，结果就不会出问题</strong>。那么Python是不是不认识0.1呢？这是不是Python 这种编程语言的Bug（错误）？若不注意，在编程时会出现什么样的问题？出现这类问题的根本原因在哪？如何才能避免此类问题的出现呢？ 希望下面的内容能不能解决上述的疑问。</p>
+<p>首先，咱们看看浮点数在计算机里如何表示。先举个栗子，例如，小数(0.125)10，在十进制中其值等于1/10 + 2/100 + 5/1000 的值，这都很容易理解。如果将其转化为二进制小数则为(0.001)2， 是0/2 + 0/4 + 1/8.。的值，有点难懂是吧，可以参考下面的运算过程。 注意，两者在数值上相等，区别为：前者为十进制小数，后者为二进制小数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">a. 十进制小数 to 二进制小数的方法：<span class="string">&quot;乘2取正, 顺序输出&quot;</span>，即乘<span class="number">2</span>取整，余数继续</span><br><span class="line">乘<span class="number">2</span>取整重复至小数部分为零或达到指定精度，第一次为最高位，最后一次为最低位。</span><br><span class="line">例： 十进制小数(<span class="number">0.125</span>)<span class="number">10</span>的二进制小数算法如下: </span><br><span class="line">    <span class="number">0.125</span> * <span class="number">2</span> = <span class="number">0.25</span>   取整 <span class="number">0</span> 余 <span class="number">0.25</span></span><br><span class="line">    <span class="number">0.25</span> * <span class="number">2</span> = <span class="number">0.5</span>     取整 <span class="number">0</span> 余 <span class="number">0.5</span></span><br><span class="line">    <span class="number">0.5</span> * <span class="number">2</span> = <span class="number">1.0</span>      取整 <span class="number">1</span> 余 <span class="number">0</span></span><br><span class="line">则 (<span class="number">0.001</span>)<span class="number">2</span> 为小数(<span class="number">0.125</span>)<span class="number">10</span>的表达。</span><br><span class="line"></span><br><span class="line">b. 二进制小数 to 十进制小数，小数点后的权位表达方法为 <span class="number">2</span>^(-<span class="number">1</span>), <span class="number">2</span>^(-<span class="number">2</span>),</span><br><span class="line"> <span class="number">2</span>^(-<span class="number">3</span>), ... , <span class="number">2</span>^(-n)。则如果将二进制小数(<span class="number">0.001</span>)<span class="number">2</span>转换为十进制方法如下:</span><br><span class="line">     <span class="number">0</span>/<span class="number">2</span> + <span class="number">0</span>/<span class="number">4</span> + <span class="number">1</span>/<span class="number">8</span> = (<span class="number">0.125</span>)<span class="number">10</span></span><br><span class="line">感兴趣的朋友可以使用下面代码进行尝试。</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> __future__ <span class="keyword">import</span> division</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">0.125</span></span><br><span class="line"><span class="number">0.125</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">1</span>/<span class="number">10</span> + <span class="number">2</span>/<span class="number">100</span> + <span class="number">5</span>/<span class="number">1000</span></span><br><span class="line"><span class="number">0.125</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">0</span>/<span class="number">2</span> + <span class="number">0</span>/<span class="number">4</span> + <span class="number">1</span>/<span class="number">8.</span></span><br><span class="line"><span class="number">0.125</span></span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>因为计算机内部的所有运算都是基于二进制的，在计算机内部，大部分的十进制的分数（大部的分数可以通过小数表达）却不能使用二进制完美地表达。这和十进分数1/3十分相似，可以取为0.3，或者精确一些取为0.33，或者再精确点取0.333，进而以此类推，在十进制下，可以无限接近，但是却不能绝对精确。相同的原因，十进制数(0.1)10不能通过一个二进制的小数准确地表达，内容如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">小数(0.1)10 转换为二进制小数，步骤如下：</span><br><span class="line">        0.1 * 2 = 0.2 取整 0 余 0.2</span><br><span class="line">        0.2 * 2 = 0.4 取整 0 余 0.4</span><br><span class="line">        0.4 * 2 = 0.8 取整 0 余 0.8</span><br><span class="line">        0.8 * 2 = 1.6 取整 1 余 0.6</span><br><span class="line">        0.6 * 2 = 1.2 取整 1 余 0.2 </span><br><span class="line">        ... </span><br><span class="line">然后就开始无限循环了 -_- 。</span><br></pre></td></tr></table></figure>
+
+<p>所以，在计算机内部，如果用一个二进制小数表达1/10 即 0.1 的时候，二进制的小数大概为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">0.00011001100110011001100110011001100110011001100110011010</span>)<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>其值非常接近余1/10 但却不相等。一般情况下，我们会需要一个同一的标准，在IEEE 754 双精度浮点标准下，Python会用53位的精度来表达1/10。而此时如果我们将上面的二进制转换为小数应该会得到下面的值:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">0.1000000000000000055511151231257827021181583404541015625</span>)<span class="number">10</span></span><br></pre></td></tr></table></figure>
+
+<p>其值非常接近于0.1却不等于0.1。这时候可能就有人会问，我在Python的交互界面下输入0.1时，交互界面打印出来的就是0.1啊，如下:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">0.1</span></span><br><span class="line"><span class="number">0.1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Decimal(<span class="number">0.1</span>)</span><br><span class="line">Decimal(<span class="string">&#x27;0.1000000000000000055511151231257827021181583404541015625&#x27;</span>)</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>其实这时候，Python的交互命令行只打印了这个值的一小部分，真实值（注意这里的真实值也与实际值1/10不相等）的近似值。如果想查看完整的小数表达，可以使用decimal模块下的Decimal()函数，如上。</p>
+<p>小结一下，<strong>Python确实不认识0.1。</strong>其实应该说，计算机不能准确地用二进制地方法表达0.1。如果能明白这些，就应该知道，<strong>这并不是Python这种语言的Bug</strong>，也不是自己代码的Bug，这是二进制浮点数的常见情况（不能称之为问题）。而且所有的编程语言会出现这种情况，所有支持浮点运算的计算机也都存在相似的情况，只是表现方式会有所差异。</p>
+<p>若不注意这些，在编写代码的时候会出现什么样的潜在问题呢？因为计算机不能正确的表达1/10，显而易见的问题就是我们文章一开头的求和问题。遇见这样的问题时，有人会提出Python和一些编程语言提供round()函数，用于取舍不就会得到最接近的值？那该函数是不是也能够用在此处解决这样的问题呢？我们来做个实验，这个实验和文章开头有点不一样，我们也做0.1的求和，但是不做那么多次的加法，三次足亦，如下：</p>
+<p>第一步，我们用最简单的方法求和，求三个0.1的和，然后和0.3进行比较，发现果然和预期（为真）的不一样。要注意：计算机不能正确表达0.1，同时0.3不能被正确表达。所以两者不相等。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span> == <span class="number">0.3</span></span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<p>第二步，我们用round()函数进行提前取舍，取舍精度都为1， 然后进行求和判断。发现结果也不符合预期，可以推测的是，先取舍再求和，最终结果也不和0.3相等。需要注意的是，这个过程不能验证，只要验证了结果就是对的，有点量子论里测不准的感觉，内容如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">round</span>(<span class="number">0.1</span>, <span class="number">1</span>) + <span class="built_in">round</span>(<span class="number">0.1</span>, <span class="number">1</span>) + <span class="built_in">round</span>(<span class="number">0.1</span>, <span class="number">1</span>) == <span class="built_in">round</span>(<span class="number">0.3</span>, <span class="number">1</span>)</span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<p>第三步， 我们不提前取舍，先求和然后取舍，进而与0.3 进行比较，此时结果就符合预期了，而且调整取舍精度也能再次得到预期的结果，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">round</span>(<span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span>, <span class="number">1</span>) == <span class="built_in">round</span>(<span class="number">0.3</span>, <span class="number">1</span>)</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">round</span>(<span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span>, <span class="number">10</span>) == <span class="built_in">round</span>(<span class="number">0.3</span>, <span class="number">10</span>)</span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的例子中不仅仅是因为，计算机里二进制浮点数不能正确表达十进制分数的；还有一个原因是内置round()函数的取舍也有问题。例如，一个小数2.675舍入到小数点后两位，按照四舍五入的原则，预期的结果应该为2.68。但是实际不是，是2.67，原因就是计算机浮点数不能正确表达十进制分数（小数）。十进制小数2.675的在计算机内转换为浮点数后如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2.67499999999999982236431605997495353221893310546875</span></span><br></pre></td></tr></table></figure>
+
+<p>因为，这个数的数值更接近与2.67而不是2.68，所以使用round()函数时会向下取舍。</p>
+<p>小结，因为计算机的二进制浮点数不能正确表达十进制分数，所以编程时遇见浮点数据运算就会得到诸如此类的奇异结果。但我们不能因为会遇见这样的怪异现象，就仇视或者惧怕浮点数和有意避免浮点数运算。此问题有种官方的叫法，叫做<strong>表达错误</strong>（representation error）。</p>
+<h2 id="表达错误"><a href="#表达错误" class="headerlink" title="表达错误"></a><strong>表达错误</strong></h2><p>在这个章节中我们探索一下，十进制的分（小）数在计算机里是如何转换为二进制的浮点数的。也希望借助此章节的内容，各位能够更加深入地理解为什么编程语言不能按照预期表达十进制数值。</p>
+<p>通过前面的章节我们已经确定，计算机确实不能正确地表达1/10，而如今绝大部分的计算机都使用IEEE-754的浮点数算法，而几乎所有的平台和版本的Python会将浮点数映射为IEEE-754的双精度浮点数。即，计算机会尽量将输入的十进制小数通过方程J/2^N转化为最接近的二进制小数，其中J为一个53位的整数，N为最佳指数。</p>
+<p>举例来说，就拿1/10来说，如果该有理数需要在Python中需要转化为计算机的双精度浮点数，通过上面的方程来转化会写作：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>/<span class="number">10</span> ≈ J/<span class="number">2</span>^N <span class="comment">#近似等于</span></span><br></pre></td></tr></table></figure>
+
+<p>转换等式，可得：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">J ≈ <span class="number">2</span>^N / <span class="number">10</span></span><br></pre></td></tr></table></figure>
+
+<p>因为双精度浮点数有52位来存储有效数字，而同时IEEE 754规定：在计算机内部保存有效数字时，默认这个小数（二进制）的第一位总是1，因此可以被舍去，只保存后面的内容。因此双精度浮点的有效数数字应该有53位。即在上式中J应该被定义为一个53位的整数。等式的右边应该无限接近于这个53位的整数即，应该满足大于等于2^52，小于2^53。通过计算可得当N等于56时满足条件，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">2</span>**<span class="number">52</span></span><br><span class="line"><span class="number">4503599627370496L</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">2</span>**<span class="number">56</span> // <span class="number">10</span></span><br><span class="line"><span class="number">7205759403792793L</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">2</span>**<span class="number">53</span></span><br><span class="line"><span class="number">9007199254740992L</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">2</span>**<span class="number">52</span> &lt;=  <span class="number">2</span>**<span class="number">56</span> // <span class="number">10</span>  &lt; <span class="number">2</span>**<span class="number">53</span></span><br><span class="line"><span class="literal">True</span></span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>接下来我们就要考虑这个等于2^56的整数是不是位最佳值，为此，需要得到该整数与10进行除法运算的商和余数，在这可以使用divmod()内置函数，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>q, r = <span class="built_in">divmod</span>(<span class="number">2</span>**<span class="number">56</span>, <span class="number">10</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>q, r</span><br><span class="line">(<span class="number">7205759403792793L</span>, <span class="number">6L</span>)</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在上式中其除法运算的余数大于5，即更接近10，所以该整数的最佳近似值，应该向上取整，即在原来商的基础上加1。</p>
+<p>因此，十进制的分数1/10，在IEEE 754 规定的双精度浮点的标准下，最佳近似值如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">7205759403792794</span> / <span class="number">2</span> ** <span class="number">56</span></span><br><span class="line"><span class="number">0.1</span></span><br></pre></td></tr></table></figure>
+
+<p>由于我们在计算的时，整数J向上取整了（式子为J/2^N)，也就意味着得到的浮点数应该比1/10要稍微大一点。而如果我们不向上取整，又会比1/10的实际值小一点点。反正不管怎么算，就是得能精确等于1/10，这就是为什么说Python从没见过1/10长什么样，即计算机其实不认识1/10。</p>
+<p>我们再往下探索一下：由上可知，按照IEEE 754 标准，如果我们将最后一步中分子分母约分（因为分子为偶数，即公因数为2），则可以得到下面的内容:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">3602879701896397</span> / <span class="number">2</span> ** <span class="number">55</span></span><br></pre></td></tr></table></figure>
+
+<p>这时候，J为3602879701896397，N为55。如果我们想看到这个浮点数所有的有效数字，可以将小数整数化，也就是说让J乘以10^55，就可以得到一个55位的整数，如下:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">3602879701896397</span> * <span class="number">10</span> ** <span class="number">55</span> // <span class="number">2</span> ** <span class="number">55</span></span><br><span class="line"><span class="number">1000000000000000055511151231257827021181583404541015625L</span></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>Decimal(<span class="number">0.1</span>)</span><br><span class="line">Decimal(<span class="string">&#x27;0.1000000000000000055511151231257827021181583404541015625&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>由上可得，得到的整数化的有效数字，和计算机内部存储的是相同的。也就证明了，整个推到过程是正确无误的。虽然计算机可以实现到53位的精度。但是因为编程语言中print足够聪明，所以如果直接输入0.1，打印出来的内容也就是0.1。因为大部分情况下，可能不需要这个高的精度，所以很多编程语言在做浮点数的算术运算的时候，一般取的是小数点后17位的精度，即：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="number">0.1</span></span><br><span class="line"><span class="number">0.1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> <span class="string">&quot;%.17f&quot;</span> % <span class="number">0.1</span></span><br><span class="line"><span class="number">0.10000000000000001</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h2><p>因为运算的每一步都需要会涉及到精确度和有效数字丢失的问题，所以编程中，浮点数的计算常常会得到不满足预期的结果，但是浮点数又是很重要的一种数据类型，又不能够舍弃。总之，当遇见代码中出现浮点算术运算问题的时候，就应该考虑到是不是遇见了上面的问题，进而就要找到合适的计算方式，对计算结果进行精度上的取舍。而如果代码中设计到大量的浮点数计算，在Python中，就可以考虑使用专门的模块来处理这些计算。</p>
+<h2 id="讨论"><a href="#讨论" class="headerlink" title="讨论"></a><strong>讨论</strong></h2><p>Python 的浮点数运算模块decimal，使用decimal中的Decimal函数可以允许浮点数以字符串的方式传入，这样就可以保有足够的（大于双精度浮点数的53位）有效数字，从而避免计算时精度的丢失。在本章的一开始遇见的0.1求和的问题就可以使用Decimal来解决，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> decimal <span class="keyword">import</span> Decimal</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = Decimal(<span class="string">&#x27;0.0&#x27;</span>) <span class="comment"># 注意：传入字符串。若传入浮点数，就丢失了精度</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line"><span class="meta">... </span>    x += Decimal(<span class="string">&#x27;0.1&#x27;</span>) </span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>x</span><br><span class="line">Decimal(<span class="string">&#x27;1.0&#x27;</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">print</span> <span class="string">&quot;%.17f&quot;</span> % x1<span class="number">.00000000000000000</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">float</span>(x) == <span class="number">1</span></span><br><span class="line"><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+<p>Decimal模块可以解决问题，在一些涉及到高精度计算或者一些金融方面的计算时，也能够保证不丢失精度，毕竟关乎钱的问题就不能允许有误差存在，但是这样的计算会却有牵扯到浮点数与字符串之间的转换问题，性能肯定会下降。程序设计是需要考虑到所有因素，假如17位的普通精度能够满足设计要求，而且计算允许一定的误差，同时又有性能上的要求，毕竟原生的浮点数计算速度会快很多，就可以使用math模块来解决类似的问题。</p>
+<p>关于math模块我们在这里借助一个新的例子，这个例子更为典型也十分有趣，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>nums = [<span class="number">1.23e+18</span>, <span class="number">1</span>, -<span class="number">1.23e+18</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="built_in">sum</span>(nums)</span><br><span class="line"><span class="number">0.0</span></span><br></pre></td></tr></table></figure>
+
+<p>求和过程丢失了一个1，感觉十分神奇。其计算结果就不是近似了，根本就是完全错误。主要原因就是函数sum()做的就是一个加法运算，该函数不在意过程中精度的损失，只是简单的求和。为了避免上面的计算错误，就可以使用math模块下的fsum()函数来处理，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> math</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>nums = [<span class="number">1.23e+18</span>, <span class="number">1</span>, -<span class="number">1.23e+18</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>math.fsum(nums)</span><br><span class="line"><span class="number">1.0</span></span><br></pre></td></tr></table></figure>
+
+<p>使用函数math.fsum()进行计算的时候，函数会回溯每一步计算的误差，在保持精度的同时得到计算的最优解，所以结果符合预期。总的来说，decimal模块可以被用于涉及到金融领域和科学计算的工程领域。但是一般问题中设计到浮点数计算的问题，math模块足够胜任。</p>
+<p>在程序开发上遇到问题，如果追本溯源，就肯定能够找到问题的根本原因，也能够借助一篇篇文章了解问题出现的机理，进而明白一些现实因素的局限性，也能够扩展自己知识面，也希望大家能够通过这篇文章真正理解，为什么计算机不能正确认识1/10，即明白二进制下如何表达浮点数的方法。</p>
+<h2 id="参考目录"><a href="#参考目录" class="headerlink" title="参考目录"></a><strong>参考目录</strong></h2><p>IEEE754 的内容 ：<a target="_blank" rel="noopener" href="https://de.wikipedia.org/wiki/IEEE_754">https://de.wikipedia.org/wiki/IEEE_754</a></p>
+<p>Python表达错误 ：<a target="_blank" rel="noopener" href="https://docs.python.org/2/tutorial/floatingpoint.html">https://docs.python.org/2/tutorial/floatingpoint.html</a></p>
+<p>Python浮点计算 ：<a target="_blank" rel="noopener" href="http://python3-cookbook.readthedocs.io/zh_CN/latest/c03/p02_accurate_decimal_calculations.html">http://python3-cookbook.readthedocs.io/zh_CN/latest/c03/p02_accurate_decimal_calculations.html</a></p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/杂记/" class="tag">#杂记</a><a href="/tags/浮点数/" class="tag">#浮点数</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/0802-ma-file-extension.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Python 杂记之 文件扩展名的区别</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/0701-issue-twosum.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Python 应用之 Two sum</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

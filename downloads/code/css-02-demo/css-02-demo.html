@@ -1,0 +1,103 @@
+<html lang="zh-cn">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/material.min.css">
+  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
+  <script src="js/material.min.js"></script>
+  <script src="js/css-02-demo.js"></script>
+  <style>
+    .page-content {
+      min-height: calc(100% - 64px);
+    }
+
+    .main-block {
+      min-height: 479px;
+    }
+
+    .content-footer.mdl-mini-footer {
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      -webkit-align-items: stretch;
+      -ms-flex-align: stretch;
+      align-items: stretch;
+    }
+
+    .content-footer {
+      width: 100%;
+      flex-direction: row !important;
+      justify-content: center;
+    }
+
+    .footer-drawer-separator {
+      height: 1px;
+      background-color: #dcdcdc;
+      margin: 8px 0;
+    }
+
+    footer h6 {
+      color: #fff;
+    }
+
+    .navibar-block {
+      height: 543px;
+    }
+
+    .mdl-navigation__link.is-active {
+      color: #000 !important;
+    }
+  </style>
+</head>
+
+<body style="width: 1630;height: 690px;">
+
+  <!-- The drawer is always open in large screens. The header is always shown,
+  even in small screens. -->
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <span class="mdl-layout-title">Header 部分</span>
+        <div class="mdl-layout-spacer"></div>
+        <div
+          class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
+          <div class="mdl-textfield__expandable-holder">
+            <input class="mdl-textfield__input" type="text" name="sample" id="fixed-header-drawer-exp">
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="mdl-layout__drawer navibar-block">
+      <span class="mdl-layout-title">导航菜单部分</span>
+      <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="javascript:void(0)", onclick="toggleLinks(event, 'navilink1_content')">Link 1</a>
+        <a class="mdl-navigation__link" href="javascript:void(0)", onclick="toggleLinks(event, 'navilink2_content')">Link 2</a>
+        <a class="mdl-navigation__link" href="javascript:void(0)", onclick="toggleLinks(event, 'navilink3_content')">Link 3</a>
+        <a class="mdl-navigation__link" href="javascript:void(0)", onclick="toggleLinks(event, 'navilink4_content')">Link 4</a>
+      </nav>
+    </div>
+    <main class="mdl-layout__content main-block">
+      <div class="page-content">
+        <div id="navilink1_content", class="mdl-layout__container navilinks" style="display:block">
+          <div id="nav1-chart" class="content-block" style="background-color: bisque;width: 100%; height: 100%;">Link 1 content block</div>
+        </div>
+        <div id="navilink2_content", class="mdl-layout__container navilinks" style="display:none">
+          <div id="nav2-chart" class="content-block" style="background-color:burlywood;width: 100%; height: 100%;">Link 2 content block</div>
+        </div>
+        <div id="navilink3_content", class="mdl-layout__container navilinks" style="display:none">
+          <div id="nav3-chart" class="content-block" style="background-color:cornsilk;width: 100%; height: 100%;">Link 3 content block</div>
+        </div>
+        <div id="navilink4_content", class="mdl-layout__container navilinks" style="display:none">
+          <div id="nav4-chart" class="content-block" style="background-color:cyan;width: 100%; height: 100%;">Link 4 content block</div>
+        </div>
+      </div>
+    </main>
+    <hr class="footer-drawer-separator" />
+    <footer class="mdl-mini-footer mdl-color--black content-footer">
+      <h6>Copyright @ 巴博萨船长 </h6>
+    </footer>
+  </div>
+
+</body>
+
+</html>

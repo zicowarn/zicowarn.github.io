@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Python 杂记之 父类和子类间类属性（非实例属性）的设置获取的传递 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Python 杂记之 父类和子类间类属性（非实例属性）的设置获取的传递 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/0810-pass-attribute-between-parent-and-child-class.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2016-06-24T13:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Python-相关-8-Python-杂记/">Python 相关 - 8. Python 杂记</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>June</span>
+            <span>24,</span>
+            <span>2016</span>
+        </div>
+        
+
+        <h1 class="title">Python 杂记之 父类和子类间类属性（非实例属性）的设置获取的传递</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：如果父类是个公用类，很多子项目中都运用到了，而子类也要作为一个基本类在该项目中的很多地方都要用到，但是的原始父类里面有些类属性，如何实现父类与子类间属性的设置与获取的传递呢？</p>
+<p>Abstract: If the parent class is a public class, it is used in many sub-projects, and the sub-class is also used as a basic class in many places in the project, but there are some class attributes in the original parent class, how to implement the parent class What about the transfer of property settings and acquisitions between subclasses?</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h3 id="导语"><a href="#导语" class="headerlink" title="导语"></a>导语</h3><p>前几天做一个项目，遇见类似这样一个问题。父类是个公用类，很多子项目中都运用到了，而子类也要作为一个基本类在该项目中的很多地方都要用到，但是的原始父类里面有些类属性（注意这里是类属性，不是实例属性）。在程序运行时候要进行重新设置。</p>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>Python中父类的类属性，类方法，实例属性都能够被子类继承，实力属性的再设置很简单，当然为了控制类属性的访问权限（Python中不能完全实现控制），也可以用@preproty装饰符优化和控制实力属性的设置，父类的类属性被子类继承，可以很容易的获得父类属性的内容，但是如果想设置父类的类属性，就要用 父类名.类属性名 称来实现，那么能不能用 子类名.类属性名 来实现类属性的同步设置呢。</p>
+<p>来看一个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Grandfather</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    mylist = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Father</span>(<span class="title class_ inherited__">Grandfather</span>):</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">Grandfather.mylist = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="built_in">print</span> Grandfather.mylist</span><br><span class="line"><span class="built_in">print</span> Father.mylist</span><br><span class="line">Father.mylist = [<span class="string">&#x27;a&#x27;</span>]</span><br><span class="line"><span class="built_in">print</span> Grandfather.mylist</span><br><span class="line"><span class="built_in">print</span> Father.mylist</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">[&#x27;a&#x27;]</span><br></pre></td></tr></table></figure>
+
+<p>发现，如果使用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Father.mylist = [<span class="string">&#x27;a&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>来实现类属性的设置，想象中，应该父类的类属性也能被重新设置，但是结果显示出，想象的和现实还是有差距的。</p>
+<p>我也尝试了用@preproty和@xxx.setter等修饰符，单独以及配合@classmethod修饰符来实现用Father.mylist的实现类属性的同步设置，但结果都失败了。其实可以继续使用Grandfather的类名加类属性及Grandfather来实现父类属性的设置但是，就感觉明明有了新父类，模块中交替使用这两个类名来设置类属性，确实有点不是太完美。</p>
+<p>后来经过尝试找到了一个新的方法，就是使用类元metaclass，至于metaclass的内容，大家可以在网上找到相应的文章，这里介绍两种使用方法。</p>
+<h3 id="第一种方法"><a href="#第一种方法" class="headerlink" title="第一种方法"></a>第一种方法</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MetaMyList</span>(<span class="title class_ inherited__">type</span>):</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_get_dummy</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> Grandfather.mylist</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_set_dummy</span>(<span class="params">self, value</span>):</span><br><span class="line">        Grandfather.mylist = value</span><br><span class="line"></span><br><span class="line">    mylist = <span class="built_in">property</span>(_get_dummy, _set_dummy)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Grandfather</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    mylist = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Father</span>(<span class="title class_ inherited__">Grandfather</span>):</span><br><span class="line"></span><br><span class="line">    __metaclass__ = MetaMyList</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">Grandfather.mylist = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="built_in">print</span> Grandfather.mylist</span><br><span class="line"><span class="built_in">print</span> Father.mylist</span><br><span class="line">Father.mylist = [<span class="string">&#x27;a&#x27;</span>]</span><br><span class="line"><span class="built_in">print</span> Grandfather.mylist</span><br><span class="line"><span class="built_in">print</span> Father.mylist</span><br></pre></td></tr></table></figure>
+
+<p>打印结果令人很满意：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">[&#x27;a&#x27;]</span><br><span class="line">[&#x27;a&#x27;]</span><br></pre></td></tr></table></figure>
+
+<p>因为我们创建类的时候使用了<strong>metaclass</strong>, 那么类被创建的时候就会添加mylist作为自己的类属性，但是当我们使用Father.mylist来设置类属性的时候，我们其实是在将这个值传递给了Grandfather。因为Grandfather该类已经被创建，所以override该类属性的property是不现实（也许可以，但是我读书少）。那么只有在创建Father的时候来override此类属性的property，而如果想实现，那就必须用到类元，及metaclass，这东西简单，但是确实是所有类的始祖。</p>
+<h3 id="第二种方法"><a href="#第二种方法" class="headerlink" title="第二种方法"></a>第二种方法</h3><p>第二中方法，当然，也是在理解第一种方法之后，后来在读别的文章的时候发现了第二种方法。这里写出来方便大家理解。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Grandfather</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    mylist = []</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Father</span>(<span class="title class_ inherited__">Grandfather</span>):</span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">__metaclass__</span>(<span class="title class_ inherited__">type</span>):</span><br><span class="line"><span class="meta">        @property</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">mylist</span>(<span class="params">cls</span>):</span><br><span class="line">            <span class="keyword">return</span> Grandfather.mylist</span><br><span class="line"><span class="meta">        @mylist.setter</span></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">mylist</span>(<span class="params">cls, value</span>):  <span class="comment"># @NoSelf</span></span><br><span class="line">            Grandfather.mylist = value</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">Grandfather.mylist = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="built_in">print</span> Grandfather.mylist</span><br><span class="line"><span class="built_in">print</span> Father.mylist</span><br><span class="line">Father.mylist = [<span class="string">&#x27;a&#x27;</span>]</span><br><span class="line"><span class="built_in">print</span> Grandfather.mylist</span><br><span class="line"><span class="built_in">print</span> Father.mylist</span><br></pre></td></tr></table></figure>
+
+<p>这里就很容易发现在python中类是可以动态在任意合法位置使用合法缩进创建的。其实两者方法的原理一样。但是我个人还是更喜欢第一种，代码更加简洁明快。</p>
+<p>才疏学浅，欢迎交流提意见彼此提高。需要声明一下51cto博客作者zuiwuxin就是作者本人，所以不存在版权问题。以后该博客将作为个人文章的主要发布地。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/杂记/" class="tag">#杂记</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/0101-why-did-you-choose-it.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">为什么，为什么选择Python</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/0811-wxpython-multiple-monitors-issue.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Python 杂记之 wxPython 图形界面程序中多个显示器问题</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

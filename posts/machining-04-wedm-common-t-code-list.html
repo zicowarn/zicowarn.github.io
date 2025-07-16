@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>机械加工 线切割数控加工T代码一览表 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="机械加工 线切割数控加工T代码一览表 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/machining-04-wedm-common-t-code-list.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2022-05-31T10:04:36.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/机械加工-相关-知识总结/">机械加工 相关 - 知识总结</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>May</span>
+            <span>31,</span>
+            <span>2022</span>
+        </div>
+        
+
+        <h1 class="title">机械加工 线切割数控加工T代码一览表</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：线切割数控机加工T代码一览表，全部代码语法格式都有详细的解释性描述。部分代码采用图文形式进行详细介绍描述。</p>
+<p>Abstract: List of T codes used in WEDM, all code syntax format with detailed explanatory descriptions. Some codes are described in detail in graphic form.</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h2 id="线切割数控加工T代码一览表"><a href="#线切割数控加工T代码一览表" class="headerlink" title="线切割数控加工T代码一览表"></a>线切割数控加工T代码一览表</h2><table>
+<thead>
+<tr>
+<th>M代码</th>
+<th>Sodick设备</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a name="BACK80" href="#T80">T80</a></td>
+<td>开启电极丝驱动</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK81" href="#T81">T81</a></td>
+<td>关闭电极丝驱动</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK82" href="#T82">T82</a></td>
+<td>工作槽排水管关闭</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK83" href="#T83">T83</a></td>
+<td>工作槽排水管开启</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK84" href="#T84">T84</a></td>
+<td>开启高压喷水模式</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK85" href="#T85">T85</a></td>
+<td>关闭高压喷水模式</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK87" href="#T87">T87</a></td>
+<td>开启喷水泵</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK88" href="#T88">T88</a></td>
+<td>关闭喷水泵</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK89" href="#T89">T89</a></td>
+<td>转换至非沉浸式加工模式</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK90" href="#T90">T90</a></td>
+<td>通过自动穿线机的顺序一进行断丝</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK91" href="#T91">T91</a></td>
+<td>通过自动穿线机的顺序二进行穿丝</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK94" href="#T94">T94</a></td>
+<td>转换至沉浸式加工模式</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK96" href="#T96">T96</a></td>
+<td>工作槽加注泵开启</td>
+<td></td>
+</tr>
+<tr>
+<td><a name="BACK97" href="#T97">T97</a></td>
+<td>工作槽加注泵关闭</td>
+<td></td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">图例 -，通用功能描述相同</span><br><span class="line">图例 x，设备不支持该命令</span><br></pre></td></tr></table></figure>
+
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/数控代码/" class="tag">#数控代码</a><a href="/tags/T代码/" class="tag">#T代码</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/machining-05-metal-tools-steels.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">机械加工 工具钢材一览表</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/machining-03-wedm-common-m-code-list.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">机械加工 线切割数控加工常用M代码一览表</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>机械加工 之表面粗糙度的定义与总结 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="机械加工 之表面粗糙度的定义与总结 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/machining-01-surface-roughness-knowledge.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2020-11-28T15:24:37.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/机械加工-相关-知识总结/">机械加工 相关 - 知识总结</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>November</span>
+            <span>28,</span>
+            <span>2020</span>
+        </div>
+        
+
+        <h1 class="title">机械加工 之表面粗糙度的定义与总结</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：本文内容涉及：机械加工时，用于指示加工质量的表面粗糙度的定义是什么？其计算方法与表示方法又是如何？各国工业加工对表面粗糙度的工业标准总结。各种加工工艺所能达到的表面精度总结与分析。</p>
+<p>Abstract: The content of this article involves: What is the definition of surface roughness used to indicate the quality of machining during machining? What is the calculation method and representation method? A summary of the industrial standards for surface roughness in industrial processing in various countries. Summary and analysis of the surface accuracy that can be achieved by various processing techniques.</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h2 id="机械加工-之表面粗糙度的定义与总结"><a href="#机械加工-之表面粗糙度的定义与总结" class="headerlink" title="机械加工 之表面粗糙度的定义与总结"></a>机械加工 之表面粗糙度的定义与总结</h2><h3 id="表面粗糙度定义"><a href="#表面粗糙度定义" class="headerlink" title="表面粗糙度定义"></a>表面粗糙度定义</h3><p>是通过真实表面法线向量方向与其理想形式的偏差来量化的。理解为加工表面具有的较小间距和微小峰谷的不平度。其两波峰或两波谷之间的距离（波距）很小（在1mm以下），它属于微观几何形状误差如果这些偏差大，则表面粗糙；如果它们很小，则表面是光滑的。理论（几何）表面粗糙度。如何获得表面粗糙度值车削时的理论表面粗糙度表示最小值切削条件下的粗糙度值，由公式如下：</p>
+<p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201129004330995.png" alt="image-20201129004330995"><br>上述公式中:</p>
+<ul>
+<li><p>Rz<sub>h</sub> ：理论表面粗糙度，单位µm。</p>
+</li>
+<li><p>f：进给速率（每转进给，Feed per revolution），单位mm/rev。</p>
+<p>进给速率的的计算公式如下：</p>
+<p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201129004401554.png" alt="image-20201129004401554"></p>
+<p>上述公式中</p>
+<ul>
+<li><strong>l</strong>为切割每分钟长度，单位mm/min。</li>
+<li><strong>n</strong>为主轴转速（Main Axis Spindle Speed），单位为min<sup>-1</sup>。</li>
+</ul>
+<p>例，当主轴转速为500min-1且每分钟切削长度为120mm / min时，每转进给量是多少？</p>
+<p>答，将n = 500，I = 120代入公式。</p>
+<p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201129004431547.png" alt="image-20201129004431547"></p>
+<p>即为0.24 mm/rev。</p>
+</li>
+<li><p>R<sub>r&epsilon;</sub>：也记作R<sub>e</sub>，内转角半径（Corner Radius of Insert），单位mm。</p>
+</li>
+</ul>
+<p>理解上述公式可参考下图。</p>
+<p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201128115916694.png" alt="image-20201128115916694"></p>
+<h3 id="Ra，Rz与Ry-定义"><a href="#Ra，Rz与Ry-定义" class="headerlink" title="Ra，Rz与Ry 定义"></a>Ra，Rz与Ry 定义</h3><p>Ra：轮廓算术平均偏差，取度L内轮廓偏距绝值算术平均值。主要的评定参数。<br>Rz：微观不平度十点高度，取度L内5轮廓峰高平均值与 5轮廓谷深平均值。一般只用来表示比较短小的表面。<br>Ry：轮廓最大高度，取度L内轮廓峰顶线与轮廓谷底线间距离。基本不单独使用，算是一个极限偏差值吧。</p>
+<h4 id="算数平均偏差Ra"><a href="#算数平均偏差Ra" class="headerlink" title="算数平均偏差Ra"></a>算数平均偏差Ra</h4><p>Ra 的计算公式如下：</p>
+<p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201129004450644.png" alt="image-20201129004450644"></p>
+<p>当粗糙度曲线用y = f（x）表示时，以X轴为平均线方向，以Y轴为粗糙度曲线的垂直放大倍率在采样参考长度“ℓ”的范围内时用微米表示。Ra能客观地反映被测轮廓的几何特性。Ra值可用电动轮廓仪直接测量，但不够直观。</p>
+<p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201128130650419.png" alt="image-20201128130650419"></p>
+<h4 id="微观不平度十点高度Rz"><a href="#微观不平度十点高度Rz" class="headerlink" title="微观不平度十点高度Rz"></a>微观不平度十点高度Rz</h4><p>Rz的计算公式如下：</p>
+<p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201129004534086.png" alt="image-20201129004534086"></p>
+<p>从平均线与最高峰之间的5个峰（Yp）之间的平均距离以及平均线与5个谷值之间的各个距离（Yv）的平均值（以微米为单位）即可得出Rz。Rz用于评定表面粗糙度高度参数有较好的直观性，易在光学仪器上测量，但反映被测轮廓几何形状特性有局限性。</p>
+<p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201128132407456.png" alt="image-20201128132407456"></p>
+<p>上图中Yp1，Yp2，Yp3，Yp4，Yp5，为从平均线到采样参考长度“ℓ”范围内最高的5个峰的距离。而Yv1，Yv2，Yv3，Yv4，Yv5，则为从平均线到最低5米谷在取样基准长度“ℓ”的范围内的距离。</p>
+<h4 id="轮廓最大高度Ry"><a href="#轮廓最大高度Ry" class="headerlink" title="轮廓最大高度Ry"></a>轮廓最大高度Ry</h4><p>Ry的计算公式如下：</p>
+<p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201129004548681.png" alt="image-20201129004548681"></p>
+<p>Ry是从采样基准长度（ℓ）范围内的最高峰和最低谷之间的距离（以微米为单位）到粗糙度曲线的平均线方向得出的。参数Ry，测量简单，当被测表面很小，不适宜采用Rz，Rz评定时，可采用Ry。</p>
+<p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201128133525881.png" alt="image-20201128133525881"></p>
+<h4 id="均方根值RMS"><a href="#均方根值RMS" class="headerlink" title="均方根值RMS"></a>均方根值RMS</h4><p>RMS的计算公式如下：</p>
+<p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201129004604616.png" alt="image-20201129004604616"></p>
+<p>上述式子中：</p>
+<ul>
+<li>L， 为评估长度</li>
+<li>Z(x)，为轮廓高度函数</li>
+</ul>
+<p>该公式近似等效于：</p>
+<p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201129004615765.png" alt="image-20201129004615765"></p>
+<p>RMS是轮廓长度与平均线偏差的均方根平均值，记录在评估长度内。Ra和RMS都是表面粗糙度的表示，但是各自的计算方式不同。Ra被计算为表面的微观粗糙度的平均峰和谷。RMS计算为表面的微观均方根的均方根。每个值都使用相同的表面峰和谷高度测量值，但使用不同的公式进行测量。</p>
+<h4 id="JIS标准中Ra，Rz与Ry符号与变化"><a href="#JIS标准中Ra，Rz与Ry符号与变化" class="headerlink" title="JIS标准中Ra，Rz与Ry符号与变化"></a>JIS标准中Ra，Rz与Ry符号与变化</h4><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>依据JIS B 0601-1994 标准</th>
+<th>依据JIS B 0601-2001 标准</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>轮廓最大高度</td>
+<td>R<sub>y</sub></td>
+<td>R<sub>z</sub></td>
+</tr>
+<tr>
+<td>微观不平度十点高度</td>
+<td>R<sub>z</sub></td>
+<td>R<sub>zJIS</sub></td>
+</tr>
+<tr>
+<td>轮廓算术平均偏差</td>
+<td>R<sub>a</sub></td>
+<td>R<sub>a</sub></td>
+</tr>
+</tbody></table>
+<h3 id="各国对于表面精度的定义工业标准（部分）"><a href="#各国对于表面精度的定义工业标准（部分）" class="headerlink" title="各国对于表面精度的定义工业标准（部分）"></a>各国对于表面精度的定义工业标准（部分）</h3><h4 id="中国："><a href="#中国：" class="headerlink" title="中国："></a>中国：</h4><ul>
+<li>GB/T 3505 2000 表面粗糙度术语表面及其参数；</li>
+<li>GB/T 1031-1995 表面粗糙度参数及其数值；</li>
+<li>GB/T 131-1993 机械制图表面粗糙度符号、代号及其注法。</li>
+</ul>
+<h4 id="日本："><a href="#日本：" class="headerlink" title="日本："></a>日本：</h4><ul>
+<li>JIS B 0601-2001，定义和名称JISB图。表面粗糙度。</li>
+<li>JIS B 0601-1982，定义和名称JISB图。表面粗糙度，旧版。</li>
+<li>JIS B 0031-1982，定义和名称JISB图。表面粗糙度，旧版。</li>
+<li>JIS B 0031-1994，定义和名称JISB图。表面粗糙度，旧版。</li>
+<li>JIS B 0601-1994，定义和名称JISB图。表面粗糙度，旧版。</li>
+</ul>
+<h4 id="英国："><a href="#英国：" class="headerlink" title="英国："></a>英国：</h4><ul>
+<li>BS EN ISO 4287:2000，常用参数的定义。</li>
+</ul>
+<h4 id="德国："><a href="#德国：" class="headerlink" title="德国："></a>德国：</h4><ul>
+<li>DIN 4768 （1990）各个领域（包括金属铸件）表面粗糙度的标准。</li>
+<li>DIN 4771 （1977）测量表面轮廓高度Pₜ。</li>
+<li>DIN 4775 （1982）测量工件的表面粗糙度。</li>
+<li>DIN 4776 （1990）测量表面粗糙度； 参数R 1，R 4，Rvk，Mr1，Mr2用于描述粗糙度轮廓中的材料部分（轮廓承载长度比）； 测量条件和评估程序。</li>
+<li>DIN 4777 （1982）表面计量； 电接触式测针仪器的轮廓过滤器； 相位校正滤波器。</li>
+<li>DIN ISO 1302 各个领域（包括金属铸件）表面粗糙度的标准。</li>
+</ul>
+<h4 id="法国："><a href="#法国：" class="headerlink" title="法国："></a>法国：</h4><ul>
+<li>NF E05-015 （1984），产品几何规格（GPS）-表面纹理：轮廓法-术语，定义和表面纹理参数</li>
+<li>NF E05-016 （1978），几何产品规范（GPS）-技术产品文档中的表面纹理指示</li>
+<li>NF E05-017 （1972），产品的表面状况，表面的测定方法。</li>
+</ul>
+<h4 id="欧洲："><a href="#欧洲：" class="headerlink" title="欧洲："></a>欧洲：</h4><ul>
+<li>EN 10049 2005， 该欧洲标准定义了未镀膜（冷轧和热轧酸洗钢）和镀有金属涂层（例如锌，铝，锡，铬）的金属扁平产品的表面粗糙度参数的测量条件</li>
+</ul>
+<h4 id="美国国家标准"><a href="#美国国家标准" class="headerlink" title="美国国家标准:"></a>美国国家标准:</h4><ul>
+<li>ASME B46.1-2009，表面纹理（表面粗糙度，  波度和位置）。</li>
+<li>ASME B46.1-1995，表面纹理（表面粗糙度，  波度和位置），旧版。</li>
+<li>ASME B46.1-1985，表面纹理（表面粗糙度，  波度和位置），旧版。</li>
+<li>ANSI B4.2-1978，表面纹理。 表面ANSI粗糙度，起伏和起伏。</li>
+</ul>
+<h4 id="国际标准："><a href="#国际标准：" class="headerlink" title="国际标准："></a>国际标准：</h4><ul>
+<li><p>ISO 1320-2002，主要标准，提供常用参数的定义。</p>
+</li>
+<li><p>ISO 25178-71-2012， 几何技术规范(GPS)，表面纹理.</p>
+</li>
+<li><p>ISO 468-1982，表面粗糙度—参数，其值和用于指定要求的一般规则</p>
+</li>
+<li><p>ISO 4287-1997，常用参数的定义，例如Rx给出的定义。</p>
+</li>
+<li><p>ISO 4287/1-1984，</p>
+</li>
+<li><p>ISO 4288-1996，产品几何技术规范，轮廓法-表面纹理评估的规则和程序</p>
+</li>
+<li><p>ISO 4288-1985，</p>
+</li>
+<li><p>ISO 1320-1978，</p>
+</li>
+<li><p>ISO 12085-1996，轮廓方法—图案参数</p>
+</li>
+</ul>
+<h3 id="表面粗糙度的符号、代号"><a href="#表面粗糙度的符号、代号" class="headerlink" title="表面粗糙度的符号、代号"></a>表面粗糙度的符号、代号</h3><h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>如下图所示，在表面符号的周围表示表面粗糙度值，截止值或基准长度，加工方法，晶粒方向，表面起伏等。</p>
+<p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201128211851279.png" alt="image-20201128211851279"></p>
+<ul>
+<li>a，Ra值</li>
+<li>b，加工方式</li>
+<li>c，临界值，评估长度</li>
+<li>c´,  参考长度，评估长度</li>
+<li>d，纹理方向</li>
+<li>f，Ra以外的参数（例如：参数/切断水平）</li>
+<li>g，表面起伏</li>
+</ul>
+<h4 id="基本符号样式-JIS-B-0610-与DIN-ISO-1302-DIN-4768"><a href="#基本符号样式-JIS-B-0610-与DIN-ISO-1302-DIN-4768" class="headerlink" title="基本符号样式 (JIS B 0610 与DIN ISO 1302, DIN 4768 )"></a>基本符号样式 (JIS B 0610 与DIN ISO 1302, DIN 4768 )</h4><p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201128212523571.png" alt="image-20201128212523571"></p>
+<h4 id="加工需去除材料-JIS-B-0610-与DIN-ISO-1302-DIN-4768"><a href="#加工需去除材料-JIS-B-0610-与DIN-ISO-1302-DIN-4768" class="headerlink" title="加工需去除材料 (JIS B 0610 与DIN ISO 1302, DIN 4768 )"></a>加工需去除材料 (JIS B 0610 与DIN ISO 1302, DIN 4768 )</h4><p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201128212639604.png" alt="image-20201128212639604"></p>
+<h4 id="加工时禁止去除材料-JIS-B-0610-与DIN-ISO-1302-DIN-4768"><a href="#加工时禁止去除材料-JIS-B-0610-与DIN-ISO-1302-DIN-4768" class="headerlink" title="加工时禁止去除材料(JIS B 0610 与DIN ISO 1302, DIN 4768 )"></a>加工时禁止去除材料(JIS B 0610 与DIN ISO 1302, DIN 4768 )</h4><p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201128212737091.png" alt="image-20201128212737091"></p>
+<h4 id="预设Ra的上限-JIS-B-0610-与DIN-ISO-1302-DIN-4768"><a href="#预设Ra的上限-JIS-B-0610-与DIN-ISO-1302-DIN-4768" class="headerlink" title="预设Ra的上限(JIS B 0610 与DIN ISO 1302, DIN 4768 )"></a>预设Ra的上限(JIS B 0610 与DIN ISO 1302, DIN 4768 )</h4><p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201128212913244.png" alt="image-20201128212913244"></p>
+<h4 id="标定纹理方向-JIS-B-0610-与DIN-ISO-1302-DIN-4768"><a href="#标定纹理方向-JIS-B-0610-与DIN-ISO-1302-DIN-4768" class="headerlink" title="标定纹理方向(JIS B 0610 与DIN ISO 1302, DIN 4768 )"></a>标定纹理方向(JIS B 0610 与DIN ISO 1302, DIN 4768 )</h4><p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201128213020074.png" alt="image-20201128213020074"></p>
+<h4 id="预设Ra的上限与下限-JIS-B-0610-与DIN-ISO-1302-DIN-4768"><a href="#预设Ra的上限与下限-JIS-B-0610-与DIN-ISO-1302-DIN-4768" class="headerlink" title="预设Ra的上限与下限(JIS B 0610 与DIN ISO 1302, DIN 4768 )"></a>预设Ra的上限与下限(JIS B 0610 与DIN ISO 1302, DIN 4768 )</h4><p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201128213048947.png" alt="image-20201128213048947"></p>
+<h4 id="标定加工方式-JIS-B-0610-与DIN-ISO-1302-DIN-4768"><a href="#标定加工方式-JIS-B-0610-与DIN-ISO-1302-DIN-4768" class="headerlink" title="标定加工方式(JIS B 0610 与DIN ISO 1302, DIN 4768 )"></a>标定加工方式(JIS B 0610 与DIN ISO 1302, DIN 4768 )</h4><p><img src="/posts/machining-01-surface-roughness-knowledge/image-20201128213122267.png" alt="image-20201128213122267"></p>
+<h3 id="表面粗糙度三角形符号与Ra，Rz和Ry对照表"><a href="#表面粗糙度三角形符号与Ra，Rz和Ry对照表" class="headerlink" title="表面粗糙度三角形符号与Ra，Rz和Ry对照表"></a>表面粗糙度三角形符号与Ra，Rz和Ry对照表</h3><p>三角形符号是是在加工设计是，对加工表面精度等级进行简单标记的一种方式。需要说明的是：从1994年修订版的JIS标准中取消了精加工符号（三角形▽和波〜）。在这里也就对三角形符号进行简单介绍。</p>
+<table>
+<thead>
+<tr>
+<th>Ra 单位µm</th>
+<th>Ry 单位µm</th>
+<th>RzJIS 单位µm</th>
+<th>三角形符号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0.0025<br>0.05<br>0.1<br>0.2</td>
+<td>0.1<br>0.2<br>0.4<br>0.8</td>
+<td>0.1<br>0.2<br>0.4<br>0.8</td>
+<td>&nabla;&nabla;&nabla;&nabla;</td>
+</tr>
+<tr>
+<td>0.4<br>0.8<br>1.6</td>
+<td>1.6<br>3.2<br>6.3</td>
+<td>1.6<br>3.2<br>6.3</td>
+<td>&nabla;&nabla;&nabla;</td>
+</tr>
+<tr>
+<td>3.2<br>6.3</td>
+<td>12.5<br>25</td>
+<td>12.5<br>25</td>
+<td>&nabla;&nabla;</td>
+</tr>
+<tr>
+<td>12.5<br>25</td>
+<td>50<br>100</td>
+<td>50<br>100</td>
+<td>&nabla;</td>
+</tr>
+</tbody></table>
+<h3 id="表面粗糙度对照表"><a href="#表面粗糙度对照表" class="headerlink" title="表面粗糙度对照表"></a>表面粗糙度对照表</h3><table>
+<thead>
+<tr>
+<th>Rz (µm)</th>
+<th>VDI-3400</th>
+<th>Ra (µm)</th>
+<th>RMS (µinch)</th>
+<th>Class ISO 1302</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0.08</td>
+<td>-</td>
+<td>0.0125</td>
+<td>0.5</td>
+<td></td>
+</tr>
+<tr>
+<td>0.16</td>
+<td>-</td>
+<td>0.025</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>0.32</td>
+<td>-</td>
+<td>0.05</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>0.64</td>
+<td>0</td>
+<td>0.10</td>
+<td>4.1</td>
+<td>N3</td>
+</tr>
+<tr>
+<td>0.70</td>
+<td>1</td>
+<td>0.11</td>
+<td>4.5</td>
+<td></td>
+</tr>
+<tr>
+<td>0.76</td>
+<td>2</td>
+<td>0.12</td>
+<td>4.9</td>
+<td></td>
+</tr>
+<tr>
+<td>0.90</td>
+<td>3</td>
+<td>0.14</td>
+<td>5.7</td>
+<td></td>
+</tr>
+<tr>
+<td>1.02</td>
+<td>4</td>
+<td>0.15</td>
+<td>6.6</td>
+<td></td>
+</tr>
+<tr>
+<td>1.15</td>
+<td>5</td>
+<td>0.17</td>
+<td>7.4</td>
+<td></td>
+</tr>
+<tr>
+<td>1.28</td>
+<td>6</td>
+<td>0.20</td>
+<td>8.2</td>
+<td>N4</td>
+</tr>
+<tr>
+<td>1.41</td>
+<td>7</td>
+<td>0.23</td>
+<td>9.0</td>
+<td></td>
+</tr>
+<tr>
+<td>1.60</td>
+<td>8</td>
+<td>0.25</td>
+<td>10.2</td>
+<td></td>
+</tr>
+<tr>
+<td>1.79</td>
+<td>9</td>
+<td>0.28</td>
+<td>11.5</td>
+<td></td>
+</tr>
+<tr>
+<td>2.05</td>
+<td>10</td>
+<td>0.32</td>
+<td>13.1</td>
+<td></td>
+</tr>
+<tr>
+<td>2.24</td>
+<td>11</td>
+<td>0.35</td>
+<td>14.3</td>
+<td></td>
+</tr>
+<tr>
+<td>2.56</td>
+<td>12</td>
+<td>0.40</td>
+<td>16.4</td>
+<td>N5</td>
+</tr>
+<tr>
+<td>2.88</td>
+<td>13</td>
+<td>0.45</td>
+<td>18.4</td>
+<td></td>
+</tr>
+<tr>
+<td>3.20</td>
+<td>14</td>
+<td>0.50</td>
+<td>20.5</td>
+<td></td>
+</tr>
+<tr>
+<td>3.58</td>
+<td>15</td>
+<td>0.56</td>
+<td>22.9</td>
+<td></td>
+</tr>
+<tr>
+<td>4.03</td>
+<td>16</td>
+<td>0.63</td>
+<td>25.8</td>
+<td></td>
+</tr>
+<tr>
+<td>4.48</td>
+<td>17</td>
+<td>0.70</td>
+<td>28.7</td>
+<td></td>
+</tr>
+<tr>
+<td>5.12</td>
+<td>18</td>
+<td>0.80</td>
+<td>32.8</td>
+<td></td>
+</tr>
+<tr>
+<td>5.76</td>
+<td>19</td>
+<td>0.90</td>
+<td>36.9</td>
+<td>N6</td>
+</tr>
+<tr>
+<td>6.40</td>
+<td>20</td>
+<td>1.00</td>
+<td>41.0</td>
+<td></td>
+</tr>
+<tr>
+<td>7.17</td>
+<td>21</td>
+<td>1.12</td>
+<td>45.8</td>
+<td></td>
+</tr>
+<tr>
+<td>8.06</td>
+<td>22</td>
+<td>1.26</td>
+<td>51.6</td>
+<td></td>
+</tr>
+<tr>
+<td>8.96</td>
+<td>23</td>
+<td>1.40</td>
+<td>57.3</td>
+<td></td>
+</tr>
+<tr>
+<td>10.24</td>
+<td>24</td>
+<td>1.60</td>
+<td>65.5</td>
+<td></td>
+</tr>
+<tr>
+<td>11.52</td>
+<td>25</td>
+<td>1.80</td>
+<td>73.7</td>
+<td>N7</td>
+</tr>
+<tr>
+<td>12.80</td>
+<td>26</td>
+<td>2.00</td>
+<td>81.9</td>
+<td></td>
+</tr>
+<tr>
+<td>14.08</td>
+<td>27</td>
+<td>2.20</td>
+<td>90.1</td>
+<td></td>
+</tr>
+<tr>
+<td>16.00</td>
+<td>28</td>
+<td>2.50</td>
+<td>102.4</td>
+<td></td>
+</tr>
+<tr>
+<td>17.92</td>
+<td>29</td>
+<td>2.80</td>
+<td>114.6</td>
+<td></td>
+</tr>
+<tr>
+<td>20.48</td>
+<td>30</td>
+<td>3.20</td>
+<td>131.1</td>
+<td>N8</td>
+</tr>
+<tr>
+<td>22.40</td>
+<td>31</td>
+<td>3.50</td>
+<td>143.4</td>
+<td></td>
+</tr>
+<tr>
+<td>25.60</td>
+<td>32</td>
+<td>4.00</td>
+<td>163.8</td>
+<td></td>
+</tr>
+<tr>
+<td>-</td>
+<td>33</td>
+<td>4.50</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td>32.00</td>
+<td>34</td>
+<td>5.00</td>
+<td>204.8</td>
+<td></td>
+</tr>
+<tr>
+<td>-</td>
+<td>35</td>
+<td>5.60</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td>40.32</td>
+<td>36</td>
+<td>6.30</td>
+<td>258.0</td>
+<td>N9</td>
+</tr>
+<tr>
+<td>-</td>
+<td>37</td>
+<td>7.00</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td>51.20</td>
+<td>38</td>
+<td>8.00</td>
+<td>327.7</td>
+<td></td>
+</tr>
+<tr>
+<td>-</td>
+<td>39</td>
+<td>9.00</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td>64.00</td>
+<td>40</td>
+<td>10.00</td>
+<td>409.6</td>
+<td></td>
+</tr>
+<tr>
+<td>-</td>
+<td>41</td>
+<td>11.20</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td>-</td>
+<td>42</td>
+<td>12.60</td>
+<td>-</td>
+<td>N10</td>
+</tr>
+<tr>
+<td>-</td>
+<td>43</td>
+<td>14.00</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td>-</td>
+<td>44</td>
+<td>16.00</td>
+<td>-</td>
+<td></td>
+</tr>
+<tr>
+<td>-</td>
+<td>45</td>
+<td>18.00</td>
+<td>-</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>*VDI：Verein Deutscher Ingenieure 德国工业协会</p>
+<p>*RMS：Root mean square 均方根</p>
+<h3 id="加工方式与加工精度对照表"><a href="#加工方式与加工精度对照表" class="headerlink" title="加工方式与加工精度对照表"></a>加工方式与加工精度对照表</h3><p>表内符号 &#9675; 默认加工(Standard)，&#9679;  精密加工 (Precision)，&#9671;  粗加工(Rough)，&#9672; 中等 (Medium)，&#9670; 精密(Fine)</p>
+<table style="border: 1px solid black;border-collapse: collapse;">  
+    <thead style="font-size:x-small">
+        <tr>
+            <th colspan="2" style="font-size:x-small;border: 1px solid black;border-collapse: collapse;">Ra算术平均</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">0.025</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">0.05</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">0.1</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">0.2</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">0.4</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">0.8</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">1.6</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">3.2</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">6.3</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">12.5</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">25</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">50</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">100</th>
+        </tr>
+        <tr>
+            <th colspan="2" style="font-size:x-small;border: 1px solid black;border-collapse: collapse;">Ry最大峰值</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">0.1</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">0.2</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">0.4</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">0.8</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">1.6</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">3.2</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">6.3</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">3.2</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">12.5</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">25</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">100</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">200</th>
+            <th style="border: 1px solid black;border-collapse: collapse;">400</th>
+        </tr>
+        <tr>
+            <th colspan="2" style="font-size:x-small;border: 1px solid black;border-collapse: collapse;">评定长度 mm</th>
+            <th colspan="4" style="text-align:center;border: 1px solid black;border-collapse: collapse;">0.25</th>
+            <th colspan="3" style="text-align:center;border: 1px solid black;border-collapse: collapse;">0.8</th>
+            <th colspan="2" style="text-align:center;border: 1px solid black;border-collapse: collapse;">2.5</th>
+            <th colspan="2" style="text-align:center;border: 1px solid black;border-collapse: collapse;">8</th>
+            <th colspan="2" style="text-align:center;border: 1px solid black;border-collapse: collapse;">25</th>
+        </tr>
+        <tr>
+            <th colspan="2" style="font-size:x-small;border: 1px solid black;border-collapse: collapse;">三角指示</th>
+            <th colspan="4" style="text-align:center;border: 1px solid black;border-collapse: collapse;">&nabla;&nabla;&nabla;&nabla;</th>
+            <th colspan="3" style="text-align:center;border: 1px solid black;border-collapse: collapse;">&nabla;&nabla;&nabla;</th>
+            <th colspan="2" style="text-align:center;border: 1px solid black;border-collapse: collapse;">&nabla;&nabla;</th>
+            <th colspan="2" style="text-align:center;border: 1px solid black;border-collapse: collapse;">&nabla;</th>
+            <th colspan="2" style="text-align:center;border: 1px solid black;border-collapse: collapse;">-</th>
+        </tr>
+    </thead>
+    <tbody style="font-size:x-small;background-color:white">
+        <tr>         
+            <td rowspan="35" style="font-size:x-small;transform: rotate(-90deg);white-space:nowrap;border: 1px solid black;border-collapse: collapse;">加工工艺</td>         
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">锻造（Forging）</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+        </tr>     
+        <tr>                 
+               <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">铸造（Casting）</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+        </tr>
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">压造（Die casting）</td>     
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">热轧（Hot rolling）</td> 
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">冷轧（Cold rolling）</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">拉丝（Drawing）</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">挤压（Extruding）</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">滚光（Tumbling ）</td>     
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr>
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">喷砂（Sandblasting）</td>     
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">轧制（Rolling）</td>     
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">平面铣（Face cutter grinding）</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">刨削（Planing）</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">刻蚀（Carving Slotting）</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">刀具磨削（Cutter grinding）</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">精镗（Precision boring）</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">锉（Filing）</td> 
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">圆磨（Round grinding）</td>    
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9670;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9670;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9672;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9672;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9671;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9671;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9671;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9671;</td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">镗孔（Boring）</td>     
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">钻孔（Drilling）</td>  
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">扩孔（Reaming）</td>  
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">拉刀研磨（Broach grinding）</td>   
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">剃齿（Shaving）</td>  
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">磨削（Grinding）</td>  
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9670;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9670;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9672;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9672;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9671;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9671;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9671;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">珩磨（Hone finishing）</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">超精研磨（Super finishing）</td>  
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">抛光（Buffing）</td>  
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">纸张研磨（Paper finishing）</td>  
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">抛光研磨（Lapping）</td>  
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr> 
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">液体珩磨（Liquid honing）</td>   
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr>
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">打磨抛光（Burnishing）</td>    
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr>
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">表面轧制（Surface rolling）</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr>
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">放电雕刻（Electric discharge carving）</td> 
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr>
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">线切割（Wire cut electric spark）</td>  
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr>
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">化学抛光（Chemical polishing）</td> 
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr>
+        <tr>                 
+            <td style="white-space:nowrap;border: 1px solid black;border-collapse: collapse;">电解磨损（Electrolytic abrasion）</td> 
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9679;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;">&#9675;</td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+            <td style="border: 1px solid black;border-collapse: collapse;"></td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>文中内容为个人总结，本人虽从事工业软件行业四年，机械加工方面的知识却不敢自称精通。目前正在总结相关知识，文章粗陋必有不足之处，也望各位不吝赐教，多多指正。若读者有别的见解与认识也欢迎关注我的个人微信公众号，一起讨论学习。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/加工工艺/" class="tag">#加工工艺</a><a href="/tags/表面粗糙度/" class="tag">#表面粗糙度</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/hexo-04-use-mermaid-and-matjax-with-hexo-tranquilpeak-theme.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Hexo 如何在tranquilpeak主题中使用mermaid语句与Latex语句</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/aws-cloudfront-01-create-cdn-network.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">AWS 使用CloudFront创建CDN网络</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

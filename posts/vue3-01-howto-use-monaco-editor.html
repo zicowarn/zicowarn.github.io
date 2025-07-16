@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>如何在Vue3 + Typescirpt项目中使用Monaco Editor - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="如何在Vue3 + Typescirpt项目中使用Monaco Editor - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/vue3-01-howto-use-monaco-editor.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2024-04-16T03:20:14.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Vue3开发-相关-知识总结/">Vue3开发 相关 - 知识总结</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>April</span>
+            <span>16,</span>
+            <span>2024</span>
+        </div>
+        
+
+        <h1 class="title">如何在Vue3 + Typescirpt项目中使用Monaco Editor</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：如何在Vue3 + Typescirpt项目中使用Monaco Editor，项目使用vite。</p>
+<p>Abstract: How to use Monaco Editor in Vue3 + Typescirpt project, project using vite packaging tool.</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h2 id="方案：monaco-editor-使用vite-plugin-monaco-editor"><a href="#方案：monaco-editor-使用vite-plugin-monaco-editor" class="headerlink" title="方案：monaco-editor 使用vite-plugin-monaco-editor"></a>方案：monaco-editor 使用vite-plugin-monaco-editor</h2><h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><ul>
+<li>monaco-editor：版本0.47.0</li>
+<li>vite-plugin-monaco-editor；版本1.1.0</li>
+</ul>
+<p>其中<code>vite-plugin-monaco-editor</code> 是为 Vite 专门设计的插件，它简化了在 Vite 项目中集成 Monaco Editor 的过程。以下是该插件的主要作用：</p>
+<h5 id="动态加载-Monaco-Editor"><a href="#动态加载-Monaco-Editor" class="headerlink" title="动态加载 Monaco Editor"></a>动态加载 Monaco Editor</h5><p>与 <code>monaco-editor-vite-plugin</code> 类似，<code>vite-plugin-monaco-editor</code> 也可以帮助你动态地加载 Monaco Editor 的模块，从而减少打包体积和提高加载速度。</p>
+<h5 id="简化配置"><a href="#简化配置" class="headerlink" title="简化配置"></a>简化配置</h5><p>该插件提供了一种更简单的方式来配置 Monaco Editor，包括但不限于指定默认语言、主题等。</p>
+<h5 id="自动资源管理"><a href="#自动资源管理" class="headerlink" title="自动资源管理"></a>自动资源管理</h5><p><code>vite-plugin-monaco-editor</code> 能够自动处理 Monaco Editor 的所有必要资源和依赖项，这包括 CSS 样式和语言定义，从而使引入和使用 Monaco Editor 变得非常方便。</p>
+<h5 id="热更新支持"><a href="#热更新支持" class="headerlink" title="热更新支持"></a>热更新支持</h5><p>该插件与 Vite 的热更新功能完美集成，这意味着在开发过程中对 Monaco Editor 进行的更改可以立即在浏览器中看到，极大地提高了开发效率。</p>
+<h5 id="TypeScript-支持"><a href="#TypeScript-支持" class="headerlink" title="TypeScript 支持"></a>TypeScript 支持</h5><p>由于 Vite 本身就对 TypeScript 有着很好的支持，因此使用 <code>vite-plugin-monaco-editor</code> 在 TypeScript 项目中使用 Monaco Editor 会变得非常简单和流畅。</p>
+<h5 id="更清晰的依赖管理"><a href="#更清晰的依赖管理" class="headerlink" title="更清晰的依赖管理"></a>更清晰的依赖管理</h5><p>该插件能够帮助你管理 Monaco Editor 的版本和依赖关系，确保所有的模块和资源都被正确地加载和引入。</p>
+<p>总体而言，<code>vite-plugin-monaco-editor</code> 提供了一种更加优雅和高效的方式来在 Vite 项目中集成和使用 Monaco Editor，减少了配置的复杂性，同时还提供了更好的性能和开发体验。</p>
+<h3 id="完成配置"><a href="#完成配置" class="headerlink" title="完成配置"></a>完成配置</h3><p>配置文件vite-config.ts，文件配置内容仅供参考，</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&#x27;vite&#x27;</span></span><br><span class="line"><span class="keyword">import</span> vue <span class="keyword">from</span> <span class="string">&#x27;@vitejs/plugin-vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> monacoEditorPlugin <span class="keyword">from</span> <span class="string">&#x27;vite-plugin-monaco-editor&#x27;</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> path <span class="keyword">from</span> <span class="string">&#x27;path&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// https://vitejs.dev/config/</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    <span class="title function_">vue</span>(),</span><br><span class="line">    (monacoEditorPlugin <span class="keyword">as</span> <span class="built_in">any</span>).<span class="title function_">default</span>(&#123;&#125;)</span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">base</span>: <span class="string">&#x27;./&#x27;</span>,</span><br><span class="line">  <span class="attr">resolve</span>: &#123;</span><br><span class="line">    <span class="attr">alias</span>: [&#123; <span class="attr">find</span>: <span class="string">&#x27;@&#x27;</span>, <span class="attr">replacement</span>: path.<span class="title function_">resolve</span>(__dirname, <span class="string">&#x27;src&#x27;</span>) &#125;],</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">server</span>: &#123;</span><br><span class="line">    <span class="attr">hmr</span>: &#123;</span><br><span class="line">      <span class="attr">overlay</span>: <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>直接使用monacoEditorPlugin()会提示编译错误，monacoEditorPlugin并不是函数。截至2024-04-16，项目monacoEditorPlugin is not a function #21未关闭。</p>
+<h3 id="设置相关customMonaco与customWorker"><a href="#设置相关customMonaco与customWorker" class="headerlink" title="设置相关customMonaco与customWorker"></a>设置相关customMonaco与customWorker</h3><p>在 Monaco Editor 中，<code>customMonaco</code> 和 <code>customWorker</code> 这两个属性是用于自定义 Monaco Editor 行为的关键属性，它们可以结合使用以实现更高度的自定义和控制。</p>
+<h4 id="customMonaco"><a href="#customMonaco" class="headerlink" title="customMonaco"></a><code>customMonaco</code></h4><p><code>customMonaco</code> 属性允许你提供一个自定义的 Monaco Editor 实例，这使你能够在单个应用中使用多个 Monaco Editor 实例或者提供全局配置。</p>
+<h4 id="customWorker"><a href="#customWorker" class="headerlink" title="customWorker"></a><code>customWorker</code></h4><p><code>customWorker</code> 属性用于自定义 Worker 的加载方式，允许你提供自定义的 Worker 加载逻辑。</p>
+<h3 id="关系"><a href="#关系" class="headerlink" title="关系"></a>关系</h3><p>这两个属性的关系通常是这样的：</p>
+<ul>
+<li><p><strong>独立使用</strong>：你可以单独使用 <code>customMonaco</code> 或 <code>customWorker</code>，根据你的需求进行配置。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">typescriptCopy codemonaco.editor.create(document.getElementById(&#x27;container&#x27;), &#123;</span><br><span class="line">  value: &#x27;function hello() &#123; alert(&quot;Hello, world!&quot;); &#125;&#x27;,</span><br><span class="line">  language: &#x27;javascript&#x27;,</span><br><span class="line">  customMonaco: customMonacoInstance,  // 使用自定义的 Monaco 实例</span><br><span class="line">  customWorker: customWorkerFunction,  // 使用自定义的 Worker 加载逻辑</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>结合使用</strong>：在某些场景下，你可能需要结合使用 <code>customMonaco</code> 和 <code>customWorker</code>，以实现更复杂的自定义需求。例如，你可能想要在自定义的 Monaco 实例中使用自定义的 Worker。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">typescriptCopy codeconst customMonacoInstance = monaco.editor.create(document.getElementById(&#x27;custom-container&#x27;));</span><br><span class="line"></span><br><span class="line">monaco.editor.create(document.getElementById(&#x27;container&#x27;), &#123;</span><br><span class="line">  value: &#x27;function hello() &#123; alert(&quot;Hello, world!&quot;); &#125;&#x27;,</span><br><span class="line">  language: &#x27;javascript&#x27;,</span><br><span class="line">  customMonaco: customMonacoInstance,  // 使用自定义的 Monaco 实例</span><br><span class="line">  customWorker: (moduleId) =&gt; &#123;</span><br><span class="line">    // 使用自定义的 Worker 加载逻辑</span><br><span class="line">    if (moduleId === &#x27;custom&#x27;) &#123;</span><br><span class="line">      return new Worker(&#x27;/path/to/customWorker.js&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line">    return monaco.editor.createWebWorker(&#123;</span><br><span class="line">      // 默认的 Worker 模块</span><br><span class="line">      label: &#x27;json&#x27;,</span><br><span class="line">      moduleId: &#x27;vs/language/json/json.worker&#x27;,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
+<li>在使用 <code>customMonaco</code> 和 <code>customWorker</code> 时，你需要确保它们的配置是兼容的，并且能够正确地与其他 Monaco Editor 的配置和行为结合。</li>
+<li>自定义 Monaco 实例和 Worker 应该能够满足你的具体需求，例如特定的功能、性能优化或集成其他工具和服务。</li>
+</ul>
+<p>通过合理地使用 <code>customMonaco</code> 和 <code>customWorker</code>，你可以实现对 Monaco Editor 的深度自定义，以满足特定的功能和性能需求。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Typescript/" class="tag">#Typescript</a><a href="/tags/Vue3/" class="tag">#Vue3</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/cpp-01-practice-pybind11-debug-link-issue.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">C++实践pybind11-Debug模式下无法正确链接lib库的问题</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/electron-01-howto-setup-developmentenv.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">如何搭建Vue3 + TypeScript + Electron开发环境</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

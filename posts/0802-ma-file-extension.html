@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Python 杂记之 文件扩展名的区别 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Python 杂记之 文件扩展名的区别 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/0802-ma-file-extension.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2018-12-05T00:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Python-相关-8-Python-杂记/">Python 相关 - 8. Python 杂记</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>December</span>
+            <span>5,</span>
+            <span>2018</span>
+        </div>
+        
+
+        <h1 class="title">Python 杂记之 文件扩展名的区别</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>虽然Python简单并且容易部署，平时开发时，除了常见的py和pyc文件后缀以外，其实python还有一些别的文件扩展名。我们这篇文章就归纳总结一下所有的与python相关的文件扩展名filename extension（又称后缀名）与各种文件扩展名的文件是如何产生，每种文件文件扩展名的作用。</p>
+<span id="more"></span>
+
+<h2 id="与Python有关扩展名"><a href="#与Python有关扩展名" class="headerlink" title="与Python有关扩展名"></a><strong>与Python有关扩展名</strong></h2><ul>
+<li><strong>.py</strong> - 最基本的文件扩展名</li>
+<li><strong>.py3</strong> - (极其少见) Python3 源码文件扩展名. Python3 的正式源码后缀名也为”.py” 不是 “.py3”, 但py3也曾在一些地方出现。</li>
+<li><strong>.pyc</strong> - 源码编译过的文件的扩展名 (字节码)。</li>
+<li><strong>.pyo</strong> - 与pyc一样也是编译过的文件的文件扩展名。优化编译后的程序（相比于.pyc文件更小），也可以提高加载速度。对于嵌入式系统，它可将所需模块编译成.pyo文件以减少容量需求。</li>
+<li><strong>.pyw</strong> - 和py相似，是源码扩展名，跟py扩展名的区别是在windows下双击pyw扩展名的源码会调用pythonw.exe执行源码，这种执行方式不会有命令行窗口，用于GUI程序发布时不需要看到控制台信息的情况。linux环境中，pyw和pyc没有区别。</li>
+<li><strong>.pyx</strong> - Cython 源码，与C/C++源码.c/.cpp相似，不像 Python 语言可直接解释使用的 .py 文件，.pyx 文件必须先被编译成 .c 文件，再编译成 .pyd (Windows 平台) 或 .so (Linux 平台) 文件，才可作为模块 import 导入使用。</li>
+<li><strong>.pyd</strong> - pyd并非从python程序生成，而是其他语言写成的可以被python调用的扩展，例如C++写的（Windows平台dll，Linux 平台.so）动态连接库供python调用。</li>
+<li><strong>.pxd</strong> - Cython 源码头文件，与C/C++源码.h相似。pxd 文件中有 Cython 模块要包含的 Cython 声明 (或代码段)。.pxd 文件可共享外部 C 语言声明，也能包含 C 编译器内联函数。.pxd 文件还可为 .pyx 文件模块提供 Cython 接口，以便其它 Cython 模块可使用比 Python 更高效的协议与之进行通信。可用 cimport 关键字将 .pxd 文件导入 .pyx 模块文件中。</li>
+<li><strong>.pxi</strong> - MyPy存根。</li>
+<li><strong>.pyi</strong> - 存根文件，替代.pxi。 (参考：PEP 484)，如果想在Python编译时实现类型检查，需要用MyPy。 MyPy包含生成.pyi文件的stubgen.py工具。</li>
+<li><strong>.pyz</strong> - Python脚本归档**（参考：PEP 441)**（这是一个包含标准Python脚本头之后的二进制形式的压缩Python脚本（ZIP）的脚本）</li>
+<li><strong>.pywz</strong> - 用于MS-Windows的Python脚本归档<strong>（**</strong>参考：PEP 441)**，如上.pyz。</li>
+<li><strong>.py[cod]</strong> - 版本管理工具Git的忽略文件.gitignore中的通配符，表示需要忽略的文件可能是.pyc，.pyo或.pyd。</li>
+<li><strong>.rpy</strong>- 包含应用程序或框架特定功能的RPython脚本或Python脚本</li>
+<li><strong>.pyde</strong> - 处理使用的Python脚本</li>
+<li><strong>.pyp</strong> - Py4D Python插件</li>
+<li><strong>.pyt</strong> - Python 工具箱 (.pyt) 只是一个基于 ASCII 的文件，该文件定义了工具箱和一个或多个工具。<strong>（参**</strong>考：ArcGIS)**</li>
+</ul>
+<h2 id="扩展名相互关系"><a href="#扩展名相互关系" class="headerlink" title="扩展名相互关系"></a><strong>扩展名相互关系</strong></h2><p>大部分情况下，我们创建的Python脚本都是以.py为文件扩展名。py文件可以通过python命令或者自己写的py脚本进行编译成pyc。使用命令的方法如下，在cmd输入以下内容。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python -m py_compile /path/to/mycode.py #若批量处理.py文件</span><br><span class="line">                                        #则替换为/path/to/&#123;需要生成.pyc的文件1,文件2,...&#125;.py</span><br><span class="line">                                        #或者/path/to/</span><br></pre></td></tr></table></figure>
+
+<p>也可以在python文件中实现上述过程。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#对于文件                                                      </span></span><br><span class="line"><span class="keyword">import</span> py_compile  </span><br><span class="line">py_compile.<span class="built_in">compile</span>(<span class="string">r&#x27;/path/to/mycode.py&#x27;</span>) <span class="comment">#.py文件             </span></span><br><span class="line"><span class="comment">#此处尽可能使用raw字符串，从而避免转义的麻烦。                        </span></span><br><span class="line"><span class="comment">#比如，这里不加“r”的话，你就得对斜杠进行转义  #对于文件夹                                                     </span></span><br><span class="line"><span class="keyword">import</span> compileall                                            </span><br><span class="line">compileall.compile_dir(<span class="string">&quot;mylib&quot;</span>, force=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>当然如果希望生成.pyo，则可以使用如下命令：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -O -m py_compile /path/to/mycode.py #文件或者目录</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>-O选项，将.pyc文件优化为.pyo文件，而不是将.py 文件优化编译为.pyo文件。优化编译后的文件略微小于.pyc文件， 减少储存的需求。</p>
+</blockquote>
+<p>编译过后的字节码文件.pyc可以反编译成.py文件。反编译软件叫Easy Python Decompiler，可以从网上自己下载，该工具很容易上手，可以反编译一个文件也可以是文件夹。</p>
+<p>虽然编译过后的二进制的字节码可以被反编译。但是如果你不希望自己的代码被别人直接读取，那么可以将字节码.pyc文件打包并公布。虽然与Python的开源精神不相符，但是也算是折中的安全机制。但是值得注意的是：.pyc文件与Python的版本有依赖。即，如果你用Python X编译的pyc文件不能再Python Y中使用，这里的X，Y为代指某些版本，无特定意义。如果强制加载将会引发ImportError异常，异常关键字为Bad magic Number。</p>
+<p>下列是部分版本的Magic Number，全部列表请（参考：<strong>Magic_Nr</strong>)：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">2.5b3: 62111</span><br><span class="line">2.5c1: 62121</span><br><span class="line">2.5c2: 62131</span><br><span class="line">2.6a0: 62151</span><br><span class="line">2.6a1: 62161</span><br><span class="line">2.7a0: 62171</span><br></pre></td></tr></table></figure>
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a><strong>小结</strong></h2><p>Python 3.x 的编译过程是与Python2.x 有区别的，Python 3.x 编译的pyc的时候，会在当前目录里生成一个名为<strong>pycache</strong>的文件夹，为什么会存在该文件夹？Python解释器会将 <em>.py 脚本文件进行编译，并将编译结果保存到<strong>pycache</strong>目录中。下次再执行时，如果解释器发现某个</em> .py 脚本没有修改过，就会跳过编译这一步，直接运行以前生成的保存在 <strong>pycache</strong>文件夹里的 *.pyc 文件。这样就可以大大缩短项目运行前的准备时间；如果你只需执行一个小工程，没关系 忽略这个文件夹就行。而此时你打包pyc的时候就会发现该文件不能正常地被加载，会提示一些错误，常见的错误是解释器和文件路径不匹配。</p>
+<p>为了避免上述的问题，我们可以在编译的时候输入特定的参数，如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m compileall -b test3</span><br></pre></td></tr></table></figure>
+
+<p>选项-b，指定编译pyc文件的输出到它们的原始位置。（即与Python2中相同）。</p>
+<p>这篇文章我们不过多讨论如何生成Pyd文件，和使用这样的文件，该部分内容，我将在以后的关于在python中使用C/C++代码的文章中详细解释。上述内容是自己在Python应用中遇到过的问题，总有不足之处，望见谅并指正。</p>
+<p>参考目录：</p>
+<p><strong>PEP：441：</strong><a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-0484/#stub-files">https://www.python.org/dev/peps/pep-0484/#stub-files</a></p>
+<p><strong>PEP：441：</strong><a target="_blank" rel="noopener" href="https://www.python.org/dev/peps/pep-0441/">https://www.python.org/dev/peps/pep-0441/</a></p>
+<p><strong>ERSI ArcGIS：</strong><a target="_blank" rel="noopener" href="http://desktop.arcgis.com/zh-cn/arcmap/10.3/analyze/creating-tools/a-quick-tour-of-python-toolboxes.htm">http://desktop.arcgis.com/zh-cn/arcmap/10.3/analyze/creating-tools/a-quick-tour-of-python-toolboxes.htm</a></p>
+<p><strong>Magic_Nr:</strong> <a target="_blank" rel="noopener" href="https://github.com/google/pytype/blob/master/pytype/pyc/">https://github.com/google/pytype/blob/master/pytype/pyc/</a> magic.py</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/杂记/" class="tag">#杂记</a><a href="/tags/文件扩展名/" class="tag">#文件扩展名</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/0803-ma-dynamic-classmethod-override.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Python 杂记之 如何动态重写类方法</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/0801-ma-zeropointone.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Python 杂记之 Python不认识0.1</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

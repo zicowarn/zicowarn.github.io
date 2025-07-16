@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>LabView难点之二 变量的处理 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="LabView难点之二 变量的处理 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/labview-02-variables.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2011-05-08T20:24:37.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/LabView-相关-实战经验/">LabView 相关 - 实战经验</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>May</span>
+            <span>9,</span>
+            <span>2011</span>
+        </div>
+        
+
+        <h1 class="title">LabView难点之二 变量的处理</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：本文主要分享一些在LabView时，有变量组处理的一些浅见。</p>
+<p>Abstract: This article mainly shares some insights on the processing of variable groups in LabView.</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h3 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h3><p>本地变量（Local Variable）和全局变量（Global Variable）是LabViEW 为改善图形化编程灵活性局限面专门设计的两个特殊节点，主要解决数据和对象在同意VI程序中的重用和在不同WI程序中的共享问题。LabViEW中的本地变量与全局变量与C语言中的局部变量与全局变量在有效作用范围上意义相同，但是LabViEW中的本地变量与全局变量的定义与使用更加复杂，稍有不慎，便容易引起程序隐性逻辑错误。</p>
+<p>数组，簇和波形数据是LabViEW中三类比较复杂的数据类型。其中的簇相当于C语言中的结构数据类型，波形数据则是LabViEW中专有的。</p>
+<h3 id="本地变量"><a href="#本地变量" class="headerlink" title="本地变量"></a>本地变量</h3><p>相当于传统编程语言中的局部变量，可以在同一程序内部使用。但是又有所不同。</p>
+<p>在LabVieW中，前面板的每个控制或指示在狂徒程序上都有一个对应的端口，控制通过这个端口将数据传送给框图程序的其他节点，框图程序也可以通过这个端口为指示赋值。端口是唯一的，一个控制或一个指示只有一个端口。有时候，编程的时候，经常需要在同一个VI的款图程序中的不同位置多次为指示赋值，或者多吃从控制中取出数据，或者是为控制赋值，从指示中取出数据。 显然，仅用一个端口是无法实现这些操作的。这就不同于传统的编程语言，在程序的任何地方需要这个变量的时，写个变量符号就能解决问题。</p>
+<p>创建本地变量的方法：</p>
+<ol>
+<li><p>从后面板中子模板中选择LocalVariable。</p>
+</li>
+<li><p>创建本地变量的第二种方法是在前面板对象，以及框图程序中对应端口右键中的列表选着创建一个Local Variable。</p>
+</li>
+</ol>
+<p>本地变量的使用：</p>
+<h3 id="例一"><a href="#例一" class="headerlink" title="例一"></a>例一</h3><p>用一个布尔开关同时控制两个While-Schleife.如图，前面板结构欠奉。</p>
+<p><img src="/posts/labview-02-variables/image-20201120053030027.png" alt="image-20201120053030027"></p>
+<p>有时候需要为一个控制赋值或者从一个指示中读出数据，但是通过前面板独享的端口不能为控制赋值，也不能从指示中读出数据。如图所示： 前面板结构欠奉。</p>
+<p><img src="/posts/labview-02-variables/image-20201120053059145.png" alt="image-20201120053059145"></p>
+<p>利用本地变量就可以解决这个问题。本地变量有Read和 Write两种属性。当属性为Read时，可以从本地变量中读出数据；当属性为Write时，可以给这个本地变量赋值。利用这种方法，就可以给控制赋值或从指示中读出数据。</p>
+<h3 id="例二"><a href="#例二" class="headerlink" title="例二"></a>例二</h3><p>利用本地变量给一个控制赋值，并从一个指示中读出数据。</p>
+<p>如图： 前面板结构欠奉。</p>
+<p><img src="/posts/labview-02-variables/image-20201120053300255.png" alt="image-20201120053300255"></p>
+<p>在本地变量的右键弹出选单中选择Change to Read或 Change to Write，可以改变本地变量的属性，当本地变量的属性为Read时，本地变量图标的边框用粗线来强调；当本地变量的属性为Write时，本地变量的边框则用细线强调。</p>
+<p>本地变量的特点：</p>
+<p>一个本地变量就是器相应前面板对象的一个数据拷贝，要占用一定的内存。所以，应该在程序中控制本地变量的数量。否则会占用大量的内存，从而降低程序运行的效率。同时，当程序中有多个本地变量时，因为LabViEW的并行执行性，可能会造成意想不到的错误。比如有这么一种情况。程序的某一处，用户从一个控制的本地变量中读出数据，在另一处，根据需要又为这个控制的另一个本地变量赋值。如果这两个过程刚好并行发生的，就有可能是读出的数据不是前面板对象原来的数据，而是赋值后的数据。这种不是明显的逻辑错误，很难发现，因此，在编程过程中要特别注意，避免发生。</p>
+<p>另外：布尔控件的Mechanical Action（机械动作）属性处于 Latch When Pressed（按下时锁存）、Latch When Released（释放时锁存）和Latch Until Released （锁存至按下）状态时，不能使用该布尔控件的本地变量，否则，LabViEW会报错。</p>
+<h3 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h3><p>全局变量是LabViEW中的一个对象，通过全局变量，可以在不同的VI之间进行数据的传递。LabViEW中的全局变量有自己的独特之处。</p>
+<p>全局变量的创建：</p>
+<ol>
+<li><p>在Function模板中添加Global Variable。</p>
+</li>
+<li><p>双击全局变量，打开其前面板。</p>
+</li>
+<li><p>在前面板中添加数据类型。</p>
+</li>
+<li><p>保存，创建完成。</p>
+</li>
+<li><p>使用选择Item。选择在特定节点中的对象。</p>
+</li>
+</ol>
+<p>全局变量的应用实例：</p>
+<p>在VI之间传递数据，如图。</p>
+<p><img src="/posts/labview-02-variables/image-20201120053407102.png" alt="image-20201120053407102"></p>
+<p>其中全局变量Global 3.vi在两个Schleifen之间起传输数据的作用。</p>
+<p>全局变量的特点：</p>
+<p>LabViEW中全局变量比起普通的编程语言要灵活的多，可以同时有几种数据类型。而全局变量虽然也是vi，但是比起SubVI，它不能进行编程，只能用于简单数据储存与传递。全局变量的优点是分别访问。</p>
+<p>但是也要注意，用全局变量传递数据，容易出现读写延迟造成数据丢失。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/LabView/" class="tag">#LabView</a><a href="/tags/Variables/" class="tag">#Variables</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/java-JNI-C-language-and-java.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">JAVA 通过JNI实现C语言设置Java二维字符串数组并返回该字符串数组</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/labview-01-arrary.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">LabView难点之一 Array的处理。</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

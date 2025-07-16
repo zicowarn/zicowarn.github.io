@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>C++实践pybind11-Debug模式下无法正确链接lib库的问题 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="C++实践pybind11-Debug模式下无法正确链接lib库的问题 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/cpp-01-practice-pybind11-debug-link-issue.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2025-03-23T03:20:14.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/C-实践-知识总结/">C++ 实践 - 知识总结</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>March</span>
+            <span>23,</span>
+            <span>2025</span>
+        </div>
+        
+
+        <h1 class="title">C++实践pybind11-Debug模式下无法正确链接lib库的问题</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：在使用 pybind11 构建 Python 扩展模块时，在 Debug 模式下无法正确链接 lib 库，遇到错误 <code>LINK : fatal error LNK1104: 无法打开文件“python313.lib”</code>。经过深入分析，我发现问题根源在于 pybind11 的头文件设计。本文将详细剖析原因，分享解决过程，并提供一个简单可行的方案。</p>
+<p>Abstract: When building Python extensions with pybind11, I was unable to link the lib libraries correctly in Debug mode, and encountered the error <code>LINK : fatal error LNK1104: Unable to open file “python313.lib”</code>. After in-depth analysis, I found that the root cause of the problem lies in the header file design of pybind11. In this article, I will analyze the cause in detail, share the solution process, and provide a simple and feasible solution.</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<hr>
+<h2 id="为什么-pybind11-在-Debug-模式下无法正确链接到-python3x-d-lib？原因与解决方案"><a href="#为什么-pybind11-在-Debug-模式下无法正确链接到-python3x-d-lib？原因与解决方案" class="headerlink" title="为什么 pybind11 在 Debug 模式下无法正确链接到 python3x_d.lib？原因与解决方案"></a>为什么 pybind11 在 Debug 模式下无法正确链接到 <code>python3x_d.lib</code>？原因与解决方案</h2><h3 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h3><p>在使用 pybind11 构建 Python 扩展模块时，我遇到了一个棘手的问题：在 Debug 模式下，链接器总是尝试链接 Release 版的 <code>python313.lib</code>，而不是预期的 Debug 版 <code>python313_d.lib</code>，导致错误 <code>LINK : fatal error LNK1104: 无法打开文件“python313.lib”</code>。经过深入分析，我发现问题根源在于 pybind11 的头文件设计。本文将详细剖析原因，分享解决过程，并提供一个简单可行的方案。</p>
+<hr>
+<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>我在 Windows 上使用 Visual Studio 2022 和 Python 3.13，通过 pybind11 创建一个扩展模块。构建配置明确设置为 Debug 模式（<code>CMAKE_BUILD_TYPE=Debug</code>），编译命令包含 <code>/D _DEBUG</code> 和 <code>/MDd</code>，预期链接到 <code>python313_d.lib</code>。但编译失败，错误信息表明链接器寻找的是 <code>python313.lib</code>。</p>
+<hr>
+<h3 id="分析过程"><a href="#分析过程" class="headerlink" title="分析过程"></a>分析过程</h3><h4 id="1-检查编译与链接配置"><a href="#1-检查编译与链接配置" class="headerlink" title="1. 检查编译与链接配置"></a>1. 检查编译与链接配置</h4><p>从 CMake 输出和编译命令看：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cl /c /Zi /Od /D _DEBUG /D &quot;CMAKE_INTDIR=\&quot;Debug\&quot;&quot; /MDd ... main.cpp</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>/D _DEBUG</code> 和 <code>/MDd</code> 确认是 Debug 模式。</li>
+<li>项目文件（<code>.vcxproj</code>）也指定了 <code>python313_d.lib</code>。</li>
+</ul>
+<p>但链接器输出显示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LINK : fatal error LNK1104: 无法打开文件“python313.lib”</span><br></pre></td></tr></table></figure>
+<p>这表明实际链接的是 <code>python313.lib</code>，与预期不符。</p>
+<h4 id="2-查看-Python-的配置逻辑"><a href="#2-查看-Python-的配置逻辑" class="headerlink" title="2. 查看 Python 的配置逻辑"></a>2. 查看 Python 的配置逻辑</h4><p>问题可能出在 Python 的头文件 <code>&lt;pyconfig.h&gt;</code> 中，它负责设置链接库：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifdef</span> MS_COREDLL</span></span><br><span class="line">    <span class="meta">#<span class="keyword">if</span> defined(_MSC_VER)</span></span><br><span class="line">        <span class="meta">#<span class="keyword">if</span> defined(_DEBUG)</span></span><br><span class="line">            <span class="meta">#<span class="keyword">pragma</span> comment(lib, <span class="string">&quot;python313_d.lib&quot;</span>)</span></span><br><span class="line">        <span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">            <span class="meta">#<span class="keyword">pragma</span> comment(lib, <span class="string">&quot;python313.lib&quot;</span>)</span></span><br><span class="line">        <span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">    <span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>_DEBUG</code> 定义时，应链接 <code>python313_d.lib</code>。</li>
+<li>但实际链接了 <code>python313.lib</code>，说明 <code>_DEBUG</code> 在关键时刻未生效。</li>
+</ul>
+<h4 id="3-发现-pybind11-的干扰"><a href="#3-发现-pybind11-的干扰" class="headerlink" title="3. 发现 pybind11 的干扰"></a>3. 发现 pybind11 的干扰</h4><p>深入检查后，我定位到 pybind11 的头文件（<code>pybind11/detail/common.h</code>）中的一段代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">if</span> defined(_MSC_VER)</span></span><br><span class="line">    <span class="meta">#<span class="keyword">if</span> defined(_DEBUG) &amp;&amp; !defined(Py_DEBUG)</span></span><br><span class="line">        <span class="comment">// Workaround for a VS 2022 issue.</span></span><br><span class="line">        <span class="meta">#<span class="keyword">include</span> <span class="string">&lt;yvals.h&gt;</span></span></span><br><span class="line">        <span class="meta">#<span class="keyword">if</span> _MSVC_STL_VERSION &gt;= 143</span></span><br><span class="line">            <span class="meta">#<span class="keyword">include</span> <span class="string">&lt;crtdefs.h&gt;</span></span></span><br><span class="line">        <span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">        <span class="meta">#<span class="keyword">define</span> PYBIND11_DEBUG_MARKER</span></span><br><span class="line">        <span class="meta">#<span class="keyword">undef</span> _DEBUG</span></span><br><span class="line">    <span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>关键点</strong>：如果 <code>_DEBUG</code> 定义且 <code>Py_DEBUG</code> 未定义，pybind11 会执行 <code>#undef _DEBUG</code>，清除 <code>_DEBUG</code> 宏。</li>
+<li><strong>后果</strong>：在包含 <code>&lt;Python.h&gt;</code>（含 <code>&lt;pyconfig.h&gt;</code>）时，<code>_DEBUG</code> 已不存在，导致 <code>&lt;pyconfig.h&gt;</code> 进入 <code>#else</code> 分支，设置 <code>#pragma comment(lib, &quot;python313.lib&quot;)</code>。</li>
+</ul>
+<h4 id="4-为什么-pybind11-要这样做？"><a href="#4-为什么-pybind11-要这样做？" class="headerlink" title="4. 为什么 pybind11 要这样做？"></a>4. 为什么 pybind11 要这样做？</h4><p>根据注释和 PR #3497（<a target="_blank" rel="noopener" href="https://github.com/pybind/pybind11/pull/3497%EF%BC%89%EF%BC%9A">https://github.com/pybind/pybind11/pull/3497）：</a></p>
+<ul>
+<li><strong>VS 2022 兼容性</strong>：在 Debug 模式下，VS 2022 的 STL（<code>_MSVC_STL_VERSION &gt;= 143</code>）与标准 Release 版 Python（无 <code>python3x_d.lib</code>）存在冲突。</li>
+<li><strong>解决方案</strong>：pybind11 取消 <code>_DEBUG</code>，强制链接 Release 库，避免用户需要自行编译 Debug 版 Python。</li>
+<li><strong>权衡</strong>：牺牲 Debug 模式特性，换取更广泛的兼容性。</li>
+</ul>
+<p>但我的环境有 <code>python313_d.lib</code>（可能是自定义构建的 Debug 版 Python），希望利用它，而 pybind11 的行为与此冲突。</p>
+<hr>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><h4 id="初步尝试"><a href="#初步尝试" class="headerlink" title="初步尝试"></a>初步尝试</h4><p>我尝试了几种方法：</p>
+<ol>
+<li>**定义 <code>Py_DEBUG</code>**：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> Py_DEBUG</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pybind11/pybind11.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>跳过 <code>#undef _DEBUG</code>，但可能引入 Debug 版 Python 的额外行为。</li>
+</ul>
+</li>
+<li><strong>禁用自动链接</strong>：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> Py_NO_ENABLE_SHARED</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pybind11/pybind11.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>需要在 CMake 手动指定链接库。</li>
+</ul>
+</li>
+</ol>
+<h4 id="最终方案：调整包含顺序"><a href="#最终方案：调整包含顺序" class="headerlink" title="最终方案：调整包含顺序"></a>最终方案：调整包含顺序</h4><p>最简单有效的办法是利用头文件包含顺序：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Python.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;pybind11/pybind11.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="built_in">PYBIND11_MODULE</span>(example, m) &#123;</span><br><span class="line">    m.<span class="built_in">def</span>(<span class="string">&quot;test&quot;</span>, []() &#123; <span class="keyword">return</span> <span class="string">&quot;Hello from Debug&quot;</span>; &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>原理</strong>：<ul>
+<li>先包含 <code>&lt;Python.h&gt;</code>（含 <code>&lt;pyconfig.h&gt;</code>），在 <code>_DEBUG</code> 未被清除时设置 <code>#pragma comment(lib, &quot;python313_d.lib&quot;)</code>。</li>
+<li>再包含 <code>&lt;pybind11/pybind11.h&gt;</code>，即使它清除 <code>_DEBUG</code>，链接器指令已生效。</li>
+</ul>
+</li>
+<li><strong>CMake 配置</strong>（可选）：<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(CMAKE_BUILD_TYPE <span class="keyword">STREQUAL</span> <span class="string">&quot;Debug&quot;</span>)</span><br><span class="line">    <span class="keyword">target_link_libraries</span>(example PRIVATE D:/path/to/python313_d.lib)</span><br><span class="line"><span class="keyword">endif</span>()</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><ul>
+<li>构建：<code>cmake --build . --verbose</code>，确认链接 <code>python313_d.lib</code>。</li>
+<li>测试：用 <code>python_d.exe</code> 加载模块，输出正常。</li>
+</ul>
+<hr>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><strong>问题原因</strong>：pybind11 在 <code>common.h</code> 中通过 <code>#undef _DEBUG</code> 清除 Debug 宏，导致 <code>&lt;pyconfig.h&gt;</code> 无法正确链接 <code>python3x_d.lib</code>，这是为了兼容 VS 2022 和标准 Python。</li>
+<li><strong>解决过程</strong>：从编译命令到头文件逻辑，逐步定位到 pybind11 的干扰。</li>
+<li><strong>解决方案</strong>：先包含 <code>&lt;Python.h&gt;</code> 确保链接正确，再引入 <code>&lt;pybind11/pybind11.h&gt;</code>，简单且符合规范。</li>
+<li><strong>适用场景</strong>：如果你有 Debug 版 Python（如 <code>python313_d.lib</code>），此方案能充分利用它；若无，可接受 pybind11 的默认行为。</li>
+</ul>
+<p>希望这篇文章能帮助遇到类似问题的开发者，避免调试中的弯路！欢迎交流你的经验。</p>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/C/" class="tag">#C++</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        <a class="next"></a>
+        
+        <a href="/posts/vue3-01-howto-use-monaco-editor.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">如何在Vue3 + Typescirpt项目中使用Monaco Editor</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

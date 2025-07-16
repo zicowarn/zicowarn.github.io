@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Python 杂记之 根据版本号自动调用泛函数 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Python 杂记之 根据版本号自动调用泛函数 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/0807-ma-auto-generic-function.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2019-04-25T00:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Python-相关-8-Python-杂记/">Python 相关 - 8. Python 杂记</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>April</span>
+            <span>25,</span>
+            <span>2019</span>
+        </div>
+        
+
+        <h1 class="title">Python 杂记之 根据版本号自动调用泛函数</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>在未来使用中，窗口的表现形式可能根据版本的不同而不同，但又需要同时要保证代码的向下兼容，也就说可以不断地添加了新的窗口，那老用户的老版本也应该能够继续使用。所以要根据版本信息进行代码（至少是窗体生成部分的代码）的调度。</p>
+<span id="more"></span>
+
+<ol>
+<li><p>调度方式1， 传统设计理念中，也就是预定义一部分类方法，在根据实际需求，用字典索引的方式查找类方法或者函数。如下，</p>
+<ul>
+<li><p>可以如下方式进行调度:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">p1</span>(<span class="params">args</span>):</span><br><span class="line">    whatever</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">p2</span>(<span class="params">more args</span>):</span><br><span class="line">    whatever</span><br><span class="line"></span><br><span class="line">myDict = &#123;</span><br><span class="line">    <span class="string">&quot;P1&quot;</span>: p1,</span><br><span class="line">    <span class="string">&quot;P2&quot;</span>: p2,</span><br><span class="line">    ...</span><br><span class="line">    <span class="string">&quot;Pn&quot;</span>: pn</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">myMain</span>(<span class="params">name</span>):</span><br><span class="line">    myDict[name]()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>或者以下列方式进行调度：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">myMain</span>(<span class="params">key</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">ExecP1</span>():</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">ExecP2</span>():</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">ExecP3</span>():</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">ExecPn</span>():</span><br><span class="line">        <span class="keyword">pass</span> </span><br><span class="line">    <span class="built_in">locals</span>()[<span class="string">&#x27;Exec&#x27;</span> + key]()</span><br></pre></td></tr></table></figure>
+
+<p>两种的调度思路是一致的。</p>
+</li>
+</ul>
+</li>
+<li><p>调度方式2， Python标准库种有一个functools模块，该模块可以为可调用对象定义高阶函数和操作。即，依据现有函数定义新的函数。我们实现的方式运用了partial函数和singledispatch函数，parital由于定义偏函数，也就是为了固定函数或者方法的一个参数，在该实现方式种用于向Event的Handler传递第二个参数。singledispatch是用于函数调度，即将函数装饰为泛函数。其根据参数的数据类型实现函数的自主调度。因为我们要实现类方法根据不同的版本进行自主调度，就意味着需要将版本作为一种新的数据类型。</p>
+<ul>
+<li>基本代码如下：</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> wx </span><br><span class="line"><span class="keyword">import</span> wx.adv </span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> modules </span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> singledispatch, update_wrapper, partial</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">methdispatch</span>(<span class="params">func</span>):</span><br><span class="line">  dispatcher = singledispatch(func) </span><br><span class="line">  <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">_args, **kw</span>): </span><br><span class="line">    <span class="keyword">return</span> dispatcher.dispatch(args[<span class="number">1</span>].**<span class="keyword">class</span>**)(_args, **kw) </span><br><span class="line">  wrapper.register = dispatcher.register </span><br><span class="line">  update_wrapper(wrapper, func) </span><br><span class="line">  <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line">thisModule = modules[__name__]</span><br><span class="line"> <span class="comment"># assign the new types inodule level m</span></span><br><span class="line"> <span class="built_in">setattr</span>(thisModule, <span class="string">&#x27;v1_20&#x27;</span>, <span class="built_in">type</span>(<span class="string">&#x27;v1_20&#x27;</span>, (<span class="built_in">object</span>,), &#123;&#125;))</span><br><span class="line"> <span class="built_in">setattr</span>(thisModule, <span class="string">&#x27;v1_30&#x27;</span>, <span class="built_in">type</span>(<span class="string">&#x27;v1_30&#x27;</span>, (<span class="built_in">object</span>,), &#123;&#125;))</span><br><span class="line"> <span class="built_in">setattr</span>(thisModule, <span class="string">&#x27;v1_40&#x27;</span>, <span class="built_in">type</span>(<span class="string">&#x27;v1_40&#x27;</span>, (<span class="built_in">object</span>,), &#123;&#125;))</span><br><span class="line"> <span class="built_in">setattr</span>(thisModule, <span class="string">&#x27;v1_50&#x27;</span>, <span class="built_in">type</span>(<span class="string">&#x27;v1_50&#x27;</span>, (<span class="built_in">object</span>,), &#123;&#125;))</span><br><span class="line"> <span class="built_in">setattr</span>(thisModule, <span class="string">&#x27;v1_60&#x27;</span>, <span class="built_in">type</span>(<span class="string">&#x27;v1_60&#x27;</span>, (<span class="built_in">object</span>,), &#123;&#125;))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ClassDialog</span>(wx.Dialog):</span><br><span class="line"></span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, parent, title=<span class="string">&quot;Test Demo&quot;</span>, size=wx.DefaultSize, pos=wx.DefaultPosition, style=wx.DEFAULT_DIALOG_STYLE, strVersion=<span class="string">&quot;v1_20&quot;</span>, name=<span class="string">&quot;TestDemo&quot;</span></span>):</span><br><span class="line">         <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">         strVersion, format v1_20</span></span><br><span class="line"><span class="string">         &quot;&quot;&quot;</span></span><br><span class="line">         wx.Dialog.__init__(self, parent, wx.ID_ANY, title,</span><br><span class="line">                                size=size,</span><br><span class="line">                                pos=pos,</span><br><span class="line">                                style=style,</span><br><span class="line">                                name=name)</span><br><span class="line">         <span class="keyword">try</span>:</span><br><span class="line">             self.objVersion = <span class="built_in">eval</span>(strVersion)()</span><br><span class="line">         <span class="keyword">except</span>:</span><br><span class="line">             self.objVersion = <span class="literal">None</span></span><br><span class="line">         self.CreateWidgets(self.objVersion)</span><br><span class="line"></span><br><span class="line"><span class="meta">     @methdispatch</span></span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">CreateWidgets</span>(<span class="params">self, objVersion</span>):  <span class="comment"># @UnusedVariable</span></span><br><span class="line">         self.panel = wx.Panel(self)</span><br><span class="line">         vBoxSizer = wx.BoxSizer(wx.VERTICAL)</span><br><span class="line">         self.quote = wx.StaticText(self.panel, label=<span class="string">&quot;Your quote: Default &quot;</span>, pos=(<span class="number">20</span>, <span class="number">30</span>))</span><br><span class="line">         vBoxSizer.Add(self.quote, <span class="number">5</span>)</span><br><span class="line">         self.btn = wx.Button(self.panel, wx.ID_ANY, size=wx.DefaultSize, label=<span class="string">&quot;Test&quot;</span>)</span><br><span class="line">         vBoxSizer.Add(self.btn, <span class="number">1</span>)</span><br><span class="line">         self.panel.SetSizer(vBoxSizer)</span><br><span class="line">         self.btn.Bind(wx.EVT_BUTTON, partial(self.OnButtonClicked, self.objVersion))</span><br><span class="line"></span><br><span class="line"><span class="meta">     @CreateWidgets.register(<span class="params">v1_20</span>)  </span><span class="comment"># @UndefinedVariable</span></span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">_</span>(<span class="params">self, objVersion</span>):  <span class="comment"># @UnusedVariable</span></span><br><span class="line">         self.panel = wx.Panel(self)</span><br><span class="line">         vBoxSizer = wx.BoxSizer(wx.VERTICAL)</span><br><span class="line">         self.quote = wx.StaticText(self.panel, label=<span class="string">&quot;Your quote: 1.20 &quot;</span>, pos=(<span class="number">20</span>, <span class="number">30</span>))</span><br><span class="line">         vBoxSizer.Add(self.quote, <span class="number">5</span>)</span><br><span class="line">         self.btn = wx.Button(self.panel, wx.ID_ANY, size=wx.DefaultSize, label=<span class="string">&quot;Test&quot;</span>)</span><br><span class="line">         vBoxSizer.Add(self.btn, <span class="number">1</span>)</span><br><span class="line">         self.panel.SetSizer(vBoxSizer)</span><br><span class="line">         self.btn.Bind(wx.EVT_BUTTON, partial(self.OnButtonClicked, self.objVersion))</span><br><span class="line"></span><br><span class="line"><span class="meta">     @CreateWidgets.register(<span class="params">v1_30</span>)  </span><span class="comment"># @UndefinedVariable</span></span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">_</span>(<span class="params">self, objVersion</span>):  <span class="comment"># @UnusedVariable @DuplicatedSignature</span></span><br><span class="line">         self.panel = wx.Panel(self)</span><br><span class="line">         vBoxSizer = wx.BoxSizer(wx.VERTICAL)</span><br><span class="line">         self.quote = wx.StaticText(self.panel, label=<span class="string">&quot;Your quote: 1.30 &quot;</span>, pos=(<span class="number">20</span>, <span class="number">30</span>))</span><br><span class="line">         vBoxSizer.Add(self.quote, <span class="number">5</span>)</span><br><span class="line">         self.btn = wx.Button(self.panel, wx.ID_ANY, size=wx.DefaultSize, label=<span class="string">&quot;Test&quot;</span>)</span><br><span class="line">         vBoxSizer.Add(self.btn, <span class="number">1</span>)</span><br><span class="line">         self.panel.SetSizer(vBoxSizer)</span><br><span class="line">         self.btn.Bind(wx.EVT_BUTTON, partial(self.OnButtonClicked, self.objVersion))</span><br><span class="line"></span><br><span class="line"><span class="meta">     @methdispatch </span></span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">OnButtonClicked</span>(<span class="params">self, objVersion, event</span>):  <span class="comment"># @UnusedVariable</span></span><br><span class="line">         <span class="built_in">print</span>(<span class="string">&quot;aaaaa&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">     @OnButtonClicked.register(<span class="params">v1_20</span>)  </span><span class="comment"># @UndefinedVariable</span></span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">_</span>(<span class="params">self, objVersion, event</span>):  <span class="comment"># @UndefinedVariable @DuplicatedSignature @UnusedVariable</span></span><br><span class="line">         <span class="built_in">print</span>(event.EventObject.Name)</span><br><span class="line">         <span class="built_in">print</span>(<span class="string">&quot;bbbbb&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> <span class="keyword">class</span> <span class="title class_">SubClassDialog</span>(<span class="title class_ inherited__">ClassDialog</span>):</span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, parent, title=<span class="string">&quot;Test Demo&quot;</span>, size=wx.DefaultSize, pos=wx.DefaultPosition, style=wx.DEFAULT_DIALOG_STYLE, strVersion=<span class="string">&quot;v1_20&quot;</span>, name=<span class="string">&quot;TestDemo&quot;</span></span>):</span><br><span class="line">         <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">         strVersion, format v1_20</span></span><br><span class="line"><span class="string">         &quot;&quot;&quot;</span></span><br><span class="line">         ClassDialog.__init__(self, parent, title=title, size=size, pos=pos, style=style, strVersion=strVersion, name=name)  <span class="comment"># @UndefinedVariable</span></span><br><span class="line"></span><br><span class="line"><span class="meta">     @ClassDialog.CreateWidgets.register(<span class="params">v1_40</span>)  </span><span class="comment"># @UndefinedVariable</span></span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">_</span>(<span class="params">self, objVersion</span>):  <span class="comment"># @DuplicatedSignature @UnusedVariable</span></span><br><span class="line">         <span class="built_in">print</span>(<span class="string">&quot;1.40&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">     @ClassDialog.CreateWidgets.register(<span class="params">v1_50</span>)  </span><span class="comment"># @UndefinedVariable</span></span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">_</span>(<span class="params">self, objVersion</span>):  <span class="comment"># @DuplicatedSignature @UnusedVariable</span></span><br><span class="line">         <span class="built_in">print</span>(<span class="string">&quot;1.50&quot;</span>)</span><br><span class="line"></span><br><span class="line"> <span class="keyword">class</span> <span class="title class_">MyFrame</span>(wx.Frame):</span><br><span class="line">     <span class="string">&quot;&quot;&quot; We simply derive a new class of Frame. &quot;&quot;&quot;</span></span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, parent, title</span>):  <span class="comment"># @DuplicatedSignature</span></span><br><span class="line">         wx.Frame.__init__(self, parent, title=title, size=(<span class="number">200</span>,<span class="number">100</span>))</span><br><span class="line">         dlg=SubClassDialog(self, strVersion=<span class="string">&quot;v1_x0&quot;</span>)</span><br><span class="line">         res = dlg.ShowModal()</span><br><span class="line">         <span class="comment">#self.Show(True)</span></span><br><span class="line"></span><br><span class="line"> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">     app = wx.App(<span class="literal">False</span>)</span><br><span class="line">     frame = MyFrame(<span class="literal">None</span>, <span class="string">&#x27;Small editor&#x27;</span>)  <span class="comment"># @UnusedVariable</span></span><br><span class="line">     app.MainLoop()</span><br><span class="line"></span><br><span class="line"> <span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">     main()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p> 在日常实践种singledispatch都是用来调度函数的，如果直接用在类方法上，会出现输入参数异常的问题。在这里我们就需要重新定义singledispatch进而得到一个methdispatch的函数。因为类方法的第一个参数为self即实例，所以我们要在函数种dispatch()第二个个参数。检查其数据类型然后调度注册的函数。</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">methdispatch</span>(<span class="params">func</span>):</span><br><span class="line">    dispatcher = singledispatch(func)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">wrapper</span>(<span class="params">*args, **kw</span>):</span><br><span class="line">        <span class="keyword">return</span> dispatcher.dispatch(args[<span class="number">1</span>].__class__)(*args, **kw)</span><br><span class="line">    wrapper.register = dispatcher.register</span><br><span class="line">    update_wrapper(wrapper, func)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br></pre></td></tr></table></figure>
+
+<p> 为了实现类方法依照版本类型自主调度，上文中说到，我们要将版本注册成新的数据类型，或者类。在未来任何需要新的版本，都要将该版本好吧注册成新的类，代码如下：</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">thisModule = modules[__name__]</span><br><span class="line"><span class="comment"># assign the new types inodule level m</span></span><br><span class="line"><span class="built_in">setattr</span>(thisModule, <span class="string">&#x27;v1_20&#x27;</span>, <span class="built_in">type</span>(<span class="string">&#x27;v1_20&#x27;</span>, (<span class="built_in">object</span>,), &#123;&#125;))</span><br><span class="line"><span class="built_in">setattr</span>(thisModule, <span class="string">&#x27;v1_30&#x27;</span>, <span class="built_in">type</span>(<span class="string">&#x27;v1_30&#x27;</span>, (<span class="built_in">object</span>,), &#123;&#125;))</span><br><span class="line"><span class="built_in">setattr</span>(thisModule, <span class="string">&#x27;v1_40&#x27;</span>, <span class="built_in">type</span>(<span class="string">&#x27;v1_40&#x27;</span>, (<span class="built_in">object</span>,), &#123;&#125;))</span><br><span class="line"><span class="built_in">setattr</span>(thisModule, <span class="string">&#x27;v1_50&#x27;</span>, <span class="built_in">type</span>(<span class="string">&#x27;v1_50&#x27;</span>, (<span class="built_in">object</span>,), &#123;&#125;))</span><br><span class="line"><span class="built_in">setattr</span>(thisModule, <span class="string">&#x27;v1_60&#x27;</span>, <span class="built_in">type</span>(<span class="string">&#x27;v1_60&#x27;</span>, (<span class="built_in">object</span>,), &#123;&#125;))</span><br></pre></td></tr></table></figure>
+
+<p> 普通的类方法可以用如下的代码实现调度，如果采用上述的方式进行版本数据类型的声明，一些IDE并不能够自动找到新注册的数据类型，就会出现该类型未找到的错，如果使用Eclipse就需要添加特别注释@UndefinedVariable：</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@CreateWidgets.register(<span class="params">v1_30</span>)  </span><span class="comment"># @UndefinedVariable</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_</span>(<span class="params">self, objVersion</span>):  <span class="comment"># @UnusedVariable @DuplicatedSignature</span></span><br><span class="line">    self.panel = wx.Panel(self)</span><br><span class="line">    vBoxSizer = wx.BoxSizer(wx.VERTICAL)</span><br><span class="line">    self.quote = wx.StaticText(self.panel, label=<span class="string">&quot;Your quote: 1.30 &quot;</span>, pos=(<span class="number">20</span>, <span class="number">30</span>))</span><br><span class="line">    vBoxSizer.Add(self.quote, <span class="number">5</span>)</span><br><span class="line">    self.btn = wx.Button(self.panel, wx.ID_ANY, size=wx.DefaultSize, label=<span class="string">&quot;Test&quot;</span>)</span><br><span class="line">    vBoxSizer.Add(self.btn, <span class="number">1</span>)</span><br><span class="line">    self.panel.SetSizer(vBoxSizer)</span><br><span class="line">    self.btn.Bind(wx.EVT_BUTTON, partial(self.OnButtonClicked, self.objVersion))</span><br></pre></td></tr></table></figure>
+
+<p> 针对一些特别的类方法如，事件处理函数，就要用到partial函数，代码如下。需要注意的是在这里partial固定的是类方法OnButtonClicked的第一个参数，第二个参数是Event。 理解了这些，我们就可以根据版本的不同调度同一事件的不同时间的处理方法了。</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.btn.Bind(wx.EVT_BUTTON, partial(self.OnButtonClicked, self.objVersion))</span><br></pre></td></tr></table></figure>
+
+<p> 注册同一事件处理函数的泛函数方法如下，泛函数的名称可以自由定义，但是_在这里确实是一个很好的选择，如果某一版本的泛函数没被注册，就会使用函数的本体:</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@methdispatch </span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">OnButtonClicked</span>(<span class="params">self, objVersion, event</span>):  <span class="comment"># @UnusedVariable</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;aaaaa&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@OnButtonClicked.register(<span class="params">v1_20</span>)  </span><span class="comment"># @UndefinedVariable</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_</span>(<span class="params">self, objVersion, event</span>):  <span class="comment"># @DuplicatedSignature @UnusedVariable</span></span><br><span class="line">    <span class="built_in">print</span>(event.EventObject.Name)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;bbbbb&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p> 上述的内容都是在一个Python种的使用情况，下面我们介绍一下如何跨模块实现上述内容，在跨模块使用该调度方式的时候，需要注意要从基本模块加载版本的数据类型，在注册泛函数的时候写法也于在同一模块种的不同，本例种：@ClassDialog.CreateWidgets.register(v1_60)，从类名，类方法名再进而注册版本类型。</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> wx</span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> partial</span><br><span class="line"><span class="keyword">from</span> test <span class="keyword">import</span> ClassDialog, v1_60 <span class="comment"># @UnusedImport @UnresolvedImport</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SubClassDialogInExtraModule</span>(<span class="title class_ inherited__">ClassDialog</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, parent, title=<span class="string">&quot;Test Demo&quot;</span>, size=wx.DefaultSize, pos=wx.DefaultPosition, style=wx.DEFAULT_DIALOG_STYLE, strVersion=<span class="string">&quot;v1_20&quot;</span>, name=<span class="string">&quot;TestDemo&quot;</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        strVersion, format v1_20</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        ClassDialog.__init__(self, parent, title=title, size=size, pos=pos, style=style, strVersion=strVersion, name=name)  <span class="comment"># @UndefinedVariable</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">    @ClassDialog.CreateWidgets.register(<span class="params">v1_60</span>)  </span><span class="comment"># @UndefinedVariable</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_</span>(<span class="params">self, objVersion</span>):  <span class="comment"># @UnusedVariable @DuplicatedSignature</span></span><br><span class="line">        self.panel = wx.Panel(self)</span><br><span class="line">        vBoxSizer = wx.BoxSizer(wx.VERTICAL)</span><br><span class="line">        self.quote = wx.StaticText(self.panel, label=<span class="string">&quot;Your quote: 1.60 &quot;</span>, pos=(<span class="number">20</span>, <span class="number">30</span>))</span><br><span class="line">        vBoxSizer.Add(self.quote, <span class="number">5</span>)</span><br><span class="line">        self.btn = wx.Button(self.panel, wx.ID_ANY, size=wx.DefaultSize, label=<span class="string">&quot;Test&quot;</span>)</span><br><span class="line">        vBoxSizer.Add(self.btn, <span class="number">1</span>)</span><br><span class="line">        self.panel.SetSizer(vBoxSizer)</span><br><span class="line">        self.btn.Bind(wx.EVT_BUTTON, partial(self.OnButtonClicked, self.objVersion))</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyFrame</span>(wx.Frame):</span><br><span class="line">    <span class="string">&quot;&quot;&quot; We simply derive a new class of Frame. &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, parent, title</span>):  <span class="comment"># @DuplicatedSignature</span></span><br><span class="line">        wx.Frame.__init__(self, parent, title=title, size=(<span class="number">200</span>,<span class="number">100</span>))</span><br><span class="line">        dlg=SubClassDialogInExtraModule(self, strVersion=<span class="string">&quot;v1_60&quot;</span>)</span><br><span class="line">        res = dlg.ShowModal()  <span class="comment"># @UnusedVariable</span></span><br><span class="line">        <span class="comment">#self.Show(True)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    app = wx.App(<span class="literal">False</span>)</span><br><span class="line">    frame = MyFrame(<span class="literal">None</span>, <span class="string">&#x27;Small editor&#x27;</span>)  <span class="comment"># @UnusedVariable</span></span><br><span class="line">    app.MainLoop()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<p> 上述就是使用functools种的两个函数实现依据不同版本调度不同的泛函数的全部内容</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/杂记/" class="tag">#杂记</a><a href="/tags/自动调用/" class="tag">#自动调用</a><a href="/tags/泛函数/" class="tag">#泛函数</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/inno-01-run-as-admin.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Inno Setup 如何以管理员的身份运行</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/0805-ma-compability-issue.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Python 杂记之 不同版本间剪切板代码兼容性问题</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

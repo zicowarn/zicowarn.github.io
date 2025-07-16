@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>AWS 如何使用IAM创建一个最小访问权限的用户并使用aws-cli来部署lambda函数程序包 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="AWS 如何使用IAM创建一个最小访问权限的用户并使用aws-cli来部署lambda函数程序包 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/aws-common-02-awscli-configuration.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2020-09-24T12:39:50.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/AWS-相关-基本知识/">AWS 相关 - 基本知识</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>September</span>
+            <span>24,</span>
+            <span>2020</span>
+        </div>
+        
+
+        <h1 class="title">AWS 如何使用IAM创建一个最小访问权限的用户并使用aws-cli来部署lambda函数程序包</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a> </p>
+<p>摘要：如何配置aws-cli？如何使用aws-cli来部署lamdba函数的程序包？配置aws-cli时，用户访问权限的策略应该是什么样的？如何创建一个最小访问权限的用户，在保证安全的同时实现lambda程序包的部署？这样的用户的访问策略是什么样的？</p>
+<p>Abstract: How to configure aws-cli? How to use aws-cli to deploy lamdba function package? When configuring aws-cli, what should be the user access policy? How to create a user with minimal access rights to complete the lambda package deployment task while ensuring security? What is the access strategy for such users?</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a> </p>
+<h3 id="任务背景"><a href="#任务背景" class="headerlink" title="任务背景"></a>任务背景</h3><p>AWS的用户和用户权限可以通过AWS IAM来创建和实现，本文主要尝试的是在IAM中，在为aws cli创建编程访问类型用户时，如果仅用于部署aws lambda函数，那么用户的访问权限应该如何限制。如何在保证安全的下，完成一个最小权限的用户用于部署aws lamdba函数。之所以需要设计一个最小访问权限的用户，是为了以后使用github中的actions实现函数代码的自动持续部署。</p>
+<h3 id="准备用户"><a href="#准备用户" class="headerlink" title="准备用户"></a>准备用户</h3><p>AWS IAM 提供两种用户访问类型，<strong>编程访问类型</strong>与<strong>AWS 管理控制台访问</strong>，基本的差别如下，在本文中需要的是编程访问类型，以此类型，我们先创建一个用户，用户名暂定test，在创建用户时，我们先不为其设置访问权限。</p>
+<ul>
+<li>编程访问：为 AWS API、CLI、SDK 和其他开发工具启用 <strong>访问密钥 ID</strong> 和 <strong>私有访问密钥</strong> 。</li>
+<li>AWS 管理控制台访问： 启用密码 、使得用户可以登录到 AWS 管理控制台。</li>
+</ul>
+<h3 id="访问策略"><a href="#访问策略" class="headerlink" title="访问策略"></a>访问策略</h3><p>AWS IAM提供两种访问策略，托管策略（AWS托管和用户托管）和内联策略。<em>AWS托管策略</em> 是由 AWS 创建和管理的独立策略。这里的<em>独立策略</em> 意味着策略有自己的 Amazon 资源名称 (ARN)，其中包含策略名称。自己不能更改 AWS 托管策略中定义的权限。内联策略 是用户自己创建与管理的独立策略，内联策略应该算得上是<em>用户托管策略</em>的一种特殊使用方式，内联策略是嵌入在 IAM 身份（用户、组或角色）中的策略。也就是说，策略是身份的固有组成部分。内联策略与应用它的身份之间维持严格的一对一关系，如果要确保策略中的权限不会无意中分配给预期身份之外的身份，则可使用内联策略。请参看下方三种策略的对比示意图，</p>
+<p><img src="/posts/aws-common-02-awscli-configuration/aws-common-02-01.png"></p>
+<p>我们先看一下AWS托管策略，试着分析一下策略运行的服务是否符合我们对最小用户访问策略的预期。</p>
+<h5 id="AWSLambdaFullAccess"><a href="#AWSLambdaFullAccess" class="headerlink" title="AWSLambdaFullAccess"></a>AWSLambdaFullAccess</h5><p>为AWS托管策略，该托管策略允许访问18个服务（AWS的服务共计239）。其中包括了，其中针对lambda服务的策略有50个，提供了lambda相关的所有权限，该策略能够最终能够实现使用github的actions来自动持续部署代码的任务需求，但是并不是所要求的最小访问策略。</p>
+<h5 id="AWSCodeDeployRoleForLambda"><a href="#AWSCodeDeployRoleForLambda" class="headerlink" title="AWSCodeDeployRoleForLambda"></a>AWSCodeDeployRoleForLambda</h5><p>为AWS托管策略，该托管策略允许访问4个服务（AWS的服务共计239）。</p>
+<ul>
+<li>CloudWatch 仅读</li>
+<li>Lambda 读写<ul>
+<li>GetAlias    仅读</li>
+<li>GetProvisionedConcurrencyConfig   仅读</li>
+<li>UpdateAlias  仅写</li>
+</ul>
+</li>
+<li>S3 仅读</li>
+<li>SNS 仅写</li>
+</ul>
+<h5 id="AWSLambdaExecute"><a href="#AWSLambdaExecute" class="headerlink" title="AWSLambdaExecute"></a>AWSLambdaExecute</h5><p>为AWS托管策略，主要对S3资源的读写和运行日志CloudWatch Logs的读写访问。</p>
+<h5 id="AWSLambdaRole"><a href="#AWSLambdaRole" class="headerlink" title="AWSLambdaRole"></a>AWSLambdaRole</h5><p>为AWS托管策略，赋予的是调用invoke函数的权限</p>
+<h5 id="AWSLambdaReadOnlyAccess"><a href="#AWSLambdaReadOnlyAccess" class="headerlink" title="AWSLambdaReadOnlyAccess"></a>AWSLambdaReadOnlyAccess</h5><p>为AWS托管策略，顾名思义，该策略主要提供的是<strong>仅读</strong>资源访问权限。</p>
+<p>当然涉及lambda函数的权限还有很多，分析相关权限后发现AWS的托管权限，都没有与任务完全匹配的。因为部署lambda函数这个操作，对aws lambda服务这部的权限，至少应该有CreateFunction这个操作的写入权限，和UpdateFunctionCode这个操作的写入权限。另外对于IAM这项服务，也应该至少有ListRoles这个列表读取权限，以这些信息为基础，我们创建一个用户托管策略，该策略名称定为UserCustomDeployLambdaFunctionCode，策略具体内容如下，</p>
+<h5 id="UserCustomDeployLambdaFunctionCode"><a href="#UserCustomDeployLambdaFunctionCode" class="headerlink" title="UserCustomDeployLambdaFunctionCode"></a>UserCustomDeployLambdaFunctionCode</h5><ul>
+<li>IAM 列表<ul>
+<li>ListRoles 所有资源</li>
+</ul>
+</li>
+<li>Lambda 仅写<ul>
+<li>CreateFunction 所有资源</li>
+<li>UpdateFunctionCode 所有资源</li>
+</ul>
+</li>
+</ul>
+<p>该用户策略权限的JSON文件如下，可以直接使用JSON文件来创建该用户托管策略。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;Version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2020-10-17&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Statement&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;Sid&quot;</span><span class="punctuation">:</span> <span class="string">&quot;VisualEditor0&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;Effect&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Allow&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;Action&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                <span class="string">&quot;lambda:CreateFunction&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="string">&quot;lambda:UpdateFunctionCode&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="string">&quot;iam:ListRoles&quot;</span></span><br><span class="line">            <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;Resource&quot;</span><span class="punctuation">:</span> <span class="string">&quot;*&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p>创建这个用户托管策略时，我们没有对资源进行限制。在后期，可以限定访问资源，实现基于资源的用户托管策略。</p>
+<p>用户策略限定好之后，就需要给之前创建的test用户添加这个托管策略。添加完策略之后就可以尝试使用aws cli来部署lambda 函数代码了，这也是为了以后使用github actions时需要做的前期准备工作。</p>
+<h3 id="配置AWS-CLI"><a href="#配置AWS-CLI" class="headerlink" title="配置AWS CLI"></a>配置AWS CLI</h3><p>使用aws cli之前需要对其进行配置。AWS 的CLI配置官方教程也有介绍，基本上按照官方教程即可完成配置，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">username@mac ~ % aws configure</span><br><span class="line">AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE</span><br><span class="line">AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY</span><br><span class="line">Default region name [None]: us-west-2</span><br><span class="line">Default output format [None]: json</span><br></pre></td></tr></table></figure>
+
+<p>完成配置后我们就可以准备部署代码了，这里假设，已经使用aws lambda 网页端创建了一个名为test的lambda函数，函数的runtime为Python 3.6。函数的处理程序为lambda_function.lambda_handler，即我们需要创建的py文件为lambda_function.py, 文件内容如下，</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">lambda_handler</span>(<span class="params">event, context</span>):</span><br><span class="line">    <span class="comment"># TODO implement</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="string">&#x27;statusCode&#x27;</span>: <span class="number">200</span>,</span><br><span class="line">        <span class="string">&#x27;body&#x27;</span>: json.dumps(<span class="string">&#x27;Hello from Lambda!&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>python文件创建完之后就需要对其进行打包，生成名为test.zip的压缩文档，这个zip压缩文档现在就可以理解为一个程序包。创建程序包相关命令如下，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">username@mac aws-cli-test % nano lambda_function.py</span><br><span class="line">username@mac aws-cli-test % <span class="built_in">ls</span></span><br><span class="line">lambda_function.py</span><br><span class="line">username@mac aws-cli-test % zip test.zip lambda_function.py</span><br><span class="line">  adding: lambda_function.py (deflated 19%)</span><br><span class="line">username@mac aws-cli-test % <span class="built_in">ls</span></span><br><span class="line">lambda_function.py test.zip</span><br><span class="line">username@mac aws-cli-test % </span><br></pre></td></tr></table></figure>
+
+<p>程序包创建结束后，就可以尝试使用aws-cli来部署这个lambda函数的程序包了，相关命令和输出结果如下，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">username@mac aws-cli-test % aws lambda update-function-code --function-name <span class="built_in">test</span> --zip-file fileb://test.zip    </span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;FunctionName&quot;</span>: <span class="string">&quot;test&quot;</span>,</span><br><span class="line">    <span class="string">&quot;FunctionArn&quot;</span>: <span class="string">&quot;arn:aws:lambda:ap-northeast-1:XXXXXXXXXX:function:test&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Runtime&quot;</span>: <span class="string">&quot;python3.6&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Role&quot;</span>: <span class="string">&quot;arn:aws:iam::XXXXXXXXXX:role/service-role/test-role-mu5rmz0t&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Handler&quot;</span>: <span class="string">&quot;lambda_function.lambda_handler&quot;</span>,</span><br><span class="line">    <span class="string">&quot;CodeSize&quot;</span>: 321,</span><br><span class="line">    <span class="string">&quot;Description&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Timeout&quot;</span>: 3,</span><br><span class="line">    <span class="string">&quot;MemorySize&quot;</span>: 128,</span><br><span class="line">    <span class="string">&quot;LastModified&quot;</span>: <span class="string">&quot;2020-09-22T06:02:26.878+0000&quot;</span>,</span><br><span class="line">    <span class="string">&quot;CodeSha256&quot;</span>: <span class="string">&quot;XXXXXXXXXXCCCCCCCCCCCCCCCCCCC/zBBvIU4+1oAzeo=&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Version&quot;</span>: <span class="string">&quot;<span class="variable">$LATEST</span>&quot;</span>,</span><br><span class="line">    <span class="string">&quot;TracingConfig&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;Mode&quot;</span>: <span class="string">&quot;PassThrough&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;RevisionId&quot;</span>: <span class="string">&quot;87a0f614-401d-420f-a338-78a54bd8ba40&quot;</span>,</span><br><span class="line">    <span class="string">&quot;State&quot;</span>: <span class="string">&quot;Active&quot;</span>,</span><br><span class="line">    <span class="string">&quot;LastUpdateStatus&quot;</span>: <span class="string">&quot;Successful&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>返回的更新结果为”Successful”，说明更新成功，然后可以在aws lambda网页版的页面上看到更新的lambda函数内容，如下图，</p>
+<p><img src="/posts/aws-common-02-awscli-configuration/aws-common-02-02.png"></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>至此，创建一个用户托管策略，来实现一个最小用户访问权限，并使用这样一个用户终端里借助aws-cli实现lambda函数的程序包的部署内容也就结束了。aws lambda也是刚刚开始接触，文中定有不足之处，也希望经验丰富的朋友多多指教，感兴趣的朋友可以关注我的个人公众号一起来讨论学习。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/AWS/" class="tag">#AWS</a><a href="/tags/lambda/" class="tag">#lambda</a><a href="/tags/aws-cli/" class="tag">#aws-cli</a><a href="/tags/IAM/" class="tag">#IAM</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/angular-01-use-ngfor-a-json-object.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Angular 如何使用结构型指令*ngFor历遍json对象</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/0809-python-hwoto-install-pyevn-virtualenv.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">Python 杂记之 如何使用pyenv管理python版本管理与如何使用virtualenv创建python虚拟运行环境</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

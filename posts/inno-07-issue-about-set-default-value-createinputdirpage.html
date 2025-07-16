@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Inno Setup 如何创建自定义的路径输入页面 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Inno Setup 如何创建自定义的路径输入页面 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/inno-07-issue-about-set-default-value-createinputdirpage.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2022-12-03T10:11:08.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Inno-Setup-相关-实战经验/">Inno Setup 相关 - 实战经验</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>December</span>
+            <span>3,</span>
+            <span>2022</span>
+        </div>
+        
+
+        <h1 class="title">Inno Setup 如何创建自定义的路径输入页面</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a> </p>
+<p>摘要：Inno Setup 使用过程中，如何窗口自定义输入路径的引导页面？如何在自定义页面中添加控件和控件的事件处理函数？如何在页面中使用添加图形文件？</p>
+<p>Abstract: How to use Inno Setup and how to create a custom input path for the window guide page? How to add controls to a custom page and event handling functions for the controls? How to use add graphics files to a page?</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a> </p>
+<h2 id="Inno-Setup-如何创建自定义的路径输入页面"><a href="#Inno-Setup-如何创建自定义的路径输入页面" class="headerlink" title="Inno Setup 如何创建自定义的路径输入页面"></a>Inno Setup 如何创建自定义的路径输入页面</h2><h3 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h3><p>如需要创建CreateInputDirPage，需要在[Setup]字段完成如下设定：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[Setup]</span></span><br><span class="line"><span class="attr">ArchitecturesInstallIn64BitMode</span> = x64</span><br></pre></td></tr></table></figure>
+
+<p>如果 <strong>ArchitecturesInstallIn64BitMode</strong> 不被设定，则CreateInputDirPage页面的Caption值和默认路径值DatabaseDirPage.Values 都不会被接受。</p>
+<p><img src="/posts/inno-07-issue-about-set-default-value-createinputdirpage/1341600246854_.pic_hd.jpg" alt="img"></p>
+<p>然后修改过程<strong>InitializeWizard</strong>，修改完代码如下：</p>
+<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">procedure</span> <span class="title">InitializeWizard</span>;</span></span><br><span class="line"><span class="keyword">var</span></span><br><span class="line">  <span class="keyword">Index</span>: Integer;</span><br><span class="line">  Offset: Integer;</span><br><span class="line">  BitmapImage: TBitmapImage;</span><br><span class="line">  BitmapImage2: TBitmapImage;</span><br><span class="line">  sOldDBPath: <span class="keyword">String</span>;</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  ExtractTemporaryFile(<span class="string">&#x27;DatabaseIcon225x225.bmp&#x27;</span>);</span><br><span class="line">  DatabaseDirPage := CreateInputDirPage(wpSelectDir,</span><br><span class="line">    <span class="string">&#x27;Page Caption&#x27;</span>, </span><br><span class="line">    <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Page Sub Caption&#x27;</span>,</span><br><span class="line">    False,</span><br><span class="line">    <span class="string">&#x27;New path&#x27;</span>);</span><br><span class="line">  <span class="keyword">Index</span> := DatabaseDirPage.Add(CustomMessage(<span class="string">&#x27;InPageEditLabel&#x27;</span>));</span><br><span class="line">  sOldPath := GetOldSettingPath();</span><br><span class="line">  <span class="keyword">If</span> sOldPath = <span class="string">&#x27;&#x27;</span> <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">      DatabaseDirPage.Values[<span class="number">0</span>] := ExpandConstant(<span class="string">&#x27;&#123;commonappdata&#125;\&#123;#AppPath&#125;\DB\&#x27;</span>);</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">else</span> </span><br><span class="line">    <span class="keyword">begin</span></span><br><span class="line">      <span class="comment">// Set initial value (optional)</span></span><br><span class="line">      DatabaseDirPage.Values[<span class="number">0</span>] := sOldDBPath;</span><br><span class="line">    <span class="keyword">End</span>;</span><br><span class="line">  DatabaseDirPage.Edits[<span class="keyword">Index</span>].Enabled := False;</span><br><span class="line">  DatabaseDirPage.Buttons[<span class="keyword">Index</span>].Enabled := False;</span><br><span class="line">  DatabaseDirPage.Buttons[<span class="number">0</span>].OnClick := @DirBrowseButtonClick;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// add an icon in database dir page before sub caption label</span></span><br><span class="line">  BitmapImage2 := TBitmapImage.Create(WizardForm);</span><br><span class="line">  <span class="keyword">with</span> BitmapImage2 <span class="keyword">do</span></span><br><span class="line">  <span class="keyword">begin</span></span><br><span class="line">    Parent := DatabaseDirPage.Surface;</span><br><span class="line">    Bitmap.LoadFromFile(ExpandConstant(<span class="string">&#x27;&#123;tmp&#125;\DatabaseIcon225x225.bmp&#x27;</span>));</span><br><span class="line">    AutoSize := True;</span><br><span class="line">    AutoSize := False;</span><br><span class="line">    Height := ScaleX(<span class="number">26</span>);</span><br><span class="line">    Width := ScaleY(<span class="number">26</span>);</span><br><span class="line">    Stretch := True;</span><br><span class="line">    Left := ScaleX(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    DatabaseDirPage.SubCaptionLabel.Left := Width + ScaleX(<span class="number">10</span>);</span><br><span class="line">    DatabaseDirPage.SubCaptionLabel.Top := DatabaseDirPage.SubCaptionLabel.Top + Height - DatabaseDirPage.Buttons[<span class="number">0</span>].Height;</span><br><span class="line">    Top := WizardForm.SelectTasksPage.Top + ScaleY(<span class="number">0</span>);</span><br><span class="line">    DatabaseDirPage.PromptLabels[<span class="number">0</span>].Top := DatabaseDirPage.PromptLabels[<span class="number">0</span>].Top + ScaleY(<span class="number">15</span>);</span><br><span class="line">    DatabaseDirPage.Edits[<span class="number">0</span>].Top := DatabaseDirPage.Edits[<span class="number">0</span>].Top + ScaleY(<span class="number">20</span>);</span><br><span class="line">    DatabaseDirPage.Buttons[<span class="number">0</span>].Top := DatabaseDirPage.Buttons[<span class="number">0</span>].Top + ScaleY(<span class="number">20</span>);</span><br><span class="line">  <span class="keyword">end</span>;</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码段中，需要介绍的是下面一行，该行主要定义了按钮点击之后的事件处理函数<strong>DirBrowseButtonClick</strong>，使用@符号进行引用标识。</p>
+<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DatabaseDirPage.Buttons[<span class="number">0</span>].OnClick := @DirBrowseButtonClick;</span><br></pre></td></tr></table></figure>
+
+<p>下面的代码，定义了页面中图片的位置，图片的缩放操作。</p>
+<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">BitmapImage2 := TBitmapImage.Create(WizardForm);</span><br><span class="line">  <span class="keyword">with</span> BitmapImage2 <span class="keyword">do</span></span><br><span class="line">  <span class="keyword">begin</span></span><br><span class="line">    Parent := DatabaseDirPage.Surface;</span><br><span class="line">    Bitmap.LoadFromFile(ExpandConstant(<span class="string">&#x27;&#123;tmp&#125;\DatabaseIcon225x225.bmp&#x27;</span>));</span><br><span class="line">    AutoSize := True;</span><br><span class="line">    AutoSize := False;</span><br><span class="line">    Height := ScaleX(<span class="number">26</span>);</span><br><span class="line">    Width := ScaleY(<span class="number">26</span>);</span><br><span class="line">    Stretch := True;</span><br><span class="line">    Left := ScaleX(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    DatabaseDirPage.SubCaptionLabel.Left := Width + ScaleX(<span class="number">10</span>);</span><br><span class="line">    DatabaseDirPage.SubCaptionLabel.Top := DatabaseDirPage.SubCaptionLabel.Top + Height - DatabaseDirPage.Buttons[<span class="number">0</span>].Height;</span><br><span class="line">    Top := WizardForm.SelectTasksPage.Top + ScaleY(<span class="number">0</span>);</span><br><span class="line">    DatabaseDirPage.PromptLabels[<span class="number">0</span>].Top := DatabaseDirPage.PromptLabels[<span class="number">0</span>].Top + ScaleY(<span class="number">15</span>);</span><br><span class="line">    DatabaseDirPage.Edits[<span class="number">0</span>].Top := DatabaseDirPage.Edits[<span class="number">0</span>].Top + ScaleY(<span class="number">20</span>);</span><br><span class="line">    DatabaseDirPage.Buttons[<span class="number">0</span>].Top := DatabaseDirPage.Buttons[<span class="number">0</span>].Top + ScaleY(<span class="number">20</span>);</span><br><span class="line">  <span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果在使用的过程中，发现页面加载过渡不顺畅，那么可以在函数function InitializeSetup()中展开图像文件，</p>
+<figure class="highlight pascal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExtractTemporaryFile(<span class="string">&#x27;DatabaseIcon225x225.bmp&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="本文小结"><a href="#本文小结" class="headerlink" title="本文小结"></a>本文小结</h3><p>这些背景知识是自己在完成该项任务的一开始具有的疑问，进而在茫茫文海中查阅，再收集整理成文的，这利于自己，也方便你我。如果你有问题或者不同的见解，欢迎关注我的微信公众号，然后留言讨论。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Inno-Setup/" class="tag">#Inno Setup</a><a href="/tags/自定义页面/" class="tag">#自定义页面</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/inno-08-use-DLLS-user32dll.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Inno Setup 如何将使用DLL库 user32.dll中相关函数</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/machining-05-metal-tools-steels.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">机械加工 工具钢材一览表</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>

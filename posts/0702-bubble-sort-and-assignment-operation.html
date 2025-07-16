@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  
+  <title>Python 应用之如何实现冒泡排序算法探讨与指派运算替代方法 - Barbossa Wang 个人技术博客</title>
+  
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+  
+  
+    <link rel='manifest' href='/manifest.json'>
+  
+
+  
+  
+  
+  <meta property="og:title" content="Python 应用之如何实现冒泡排序算法探讨与指派运算替代方法 - Barbossa Wang 个人技术博客" />
+  
+  <meta property="og:type" content="article" />
+  
+  <meta property="og:url" content="https://zicowarn.github.io/posts/0702-bubble-sort-and-assignment-operation.html" />
+  
+  <meta property="og:image" content="assets/images/favicon.png" />
+  
+  <meta property="og:article:published_time" content="2015-10-08T20:18:34.000Z" />
+  
+  <meta property="og:article:author" content="Barbossa Wang" />
+  
+  
+
+  
+<link rel="stylesheet" href="/css/var.css">
+
+  
+<link rel="stylesheet" href="/css/main.css">
+
+  
+<link rel="stylesheet" href="/css/typography.css">
+
+  
+<link rel="stylesheet" href="/css/code-highlighting.css">
+
+  
+<link rel="stylesheet" href="/css/components.css">
+
+  
+<link rel="stylesheet" href="/css/nav.css">
+
+  
+<link rel="stylesheet" href="/css/paginator.css">
+
+  
+<link rel="stylesheet" href="/css/footer.css">
+
+  
+<link rel="stylesheet" href="/css/post-list.css">
+
+  
+  
+<link rel="stylesheet" href="/css/rainbow-banner.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/toc.css">
+
+  
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/post.css">
+
+  
+  
+  
+  
+  
+
+  
+<meta name="generator" content="Hexo 5.4.2"></head>
+    <body
+        data-color-scheme="auto"
+        data-uppercase-categories="true"
+        
+        data-rainbow-banner="true"
+        data-rainbow-banner-shown="auto"
+        data-rainbow-banner-month="6"
+        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+        
+        data-config-root="/"
+        
+        data-toc="true"
+        data-toc-max-depth="2"
+        
+        
+    >
+        <nav id="theme-nav">
+    <div class="inner">
+        <a class="title" href="/">Blog</a>
+        <div class="nav-arrow"></div>
+        <div class="nav-items">
+            <a class="nav-item nav-item-home" href="/">主页</a>
+            
+            
+            <a class="nav-item" href="/archives">Archives</a>
+            
+            
+            
+            <a class="nav-item" href="/tags">Tags</a>
+            
+            
+            
+            <a class="nav-item" href="/categories">Categories</a>
+            
+            
+            
+            <a class="nav-item" href="/about">About</a>
+            
+            
+            
+            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
+            
+            
+            
+            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
+            
+            
+        </div>
+    </div>
+</nav>
+        
+<article class="post">
+    <div class="meta">
+        
+        <div class="categories text-uppercase">
+        
+            <a href="/categories/Python-相关-7-Python-应用/">Python 相关 - 7. Python 应用</a>
+        
+        </div>
+        
+
+        
+        <div class="date" id="date">
+            <span>October</span>
+            <span>9,</span>
+            <span>2015</span>
+        </div>
+        
+
+        <h1 class="title">Python 应用之如何实现冒泡排序算法探讨与指派运算替代方法</h1>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="content">
+        <p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<p>摘要：本文主要讨论在Python实际应用中如何实现冒泡排序算法探讨与指派运算替代方法</p>
+<p>Abstract: This article mainly discusses how to implement the bubble sorting algorithm in the actual application of Python and the alternative method of assignment operation</p>
+<span id="more"></span>
+
+<p>作者: Jim Wang 公众号:  <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+<h3 id="冒泡排序算法"><a href="#冒泡排序算法" class="headerlink" title="冒泡排序算法"></a>冒泡排序算法</h3><ol>
+<li><p>比较相邻的元素。如果第一个比第二个大，就交换他们两个。</p>
+</li>
+<li><p>对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对。这步做完后，最后的元素会是最大的数。</p>
+</li>
+<li><p>针对所有的元素重复以上的步骤，除了最后一个。</p>
+</li>
+<li><p>持续每次对越来越少的元素重复上面的步骤，直到没有任何一对数字需要比较。</p>
+</li>
+</ol>
+<h3 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h3><p>三个函数，对比一下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">list_sort_new</span>(<span class="params">list_in</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(list_in)-<span class="number">1</span>, <span class="number">0</span> ,-<span class="number">1</span>):</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, j):</span><br><span class="line">	    <span class="keyword">if</span> list_in[i]&gt;list_in[i+<span class="number">1</span>]:</span><br><span class="line">	        list_in[i],list_in[i+<span class="number">1</span>] = list_in[i+<span class="number">1</span>],list_in[i]</span><br><span class="line">    <span class="keyword">return</span> list_in</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">list_sort_old</span>(<span class="params">list_in</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(list_in)-<span class="number">1</span>, <span class="number">0</span> ,-<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, j):</span><br><span class="line">	    <span class="keyword">if</span> list_in[i]&gt;list_in[i+<span class="number">1</span>]:</span><br><span class="line">		list_temp = list_in[i]</span><br><span class="line">		list_in[i] = list_in[i+<span class="number">1</span>]</span><br><span class="line">		list_in[i+<span class="number">1</span>] = list_temp</span><br><span class="line">    <span class="keyword">return</span> list_in</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">list_sort_test</span>(<span class="params">list_in</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(list_in)-<span class="number">1</span>, <span class="number">0</span> ,-<span class="number">1</span>):</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, j):</span><br><span class="line">	    <span class="keyword">if</span> list_in[i]&gt;list_in[i+<span class="number">1</span>]:</span><br><span class="line">		<span class="built_in">print</span> <span class="string">&quot;before&gt;&gt; &quot;</span> + <span class="built_in">str</span>(list_in[i])</span><br><span class="line">		list_in[i] = list_in[i+<span class="number">1</span>]</span><br><span class="line">		<span class="built_in">print</span> <span class="string">&quot;after&gt;&gt; &quot;</span> + <span class="built_in">str</span>(list_in[i])</span><br><span class="line">		list_in[i+<span class="number">1</span>] = list_in[i]</span><br><span class="line">		<span class="built_in">print</span> <span class="string">&quot;and&gt; &quot;</span> + <span class="built_in">str</span>(list_in[i+<span class="number">1</span>])</span><br><span class="line">    <span class="keyword">return</span> list_in</span><br><span class="line"> </span><br><span class="line">list_test = [<span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">44</span>, <span class="number">22</span>, <span class="number">53</span>, <span class="number">25</span>, <span class="number">26</span>]</span><br><span class="line"><span class="built_in">print</span> list_test</span><br><span class="line"><span class="built_in">print</span> <span class="string">&quot;*&quot;</span>*<span class="number">20</span></span><br><span class="line"><span class="built_in">print</span>(list_sort_test(list_test))</span><br></pre></td></tr></table></figure>
+
+<p>其中函数list_sort_new()和list_sort_old()都能实现你的目的，其中list_sort_new()中使用了指派运算， 就相当于c语言的i++。 list_sort_old()替代了list_sort_new()中的指派运算，其中j的for实现了全部比较，而倒序减少了不必要的比较，list_sort_test()表明了，为什么需要一个变量来充当缓存。</p>
+<p>欢迎大家关注本人个人公众号评论。才疏学浅，欢迎交流提意见彼此提高。需要声明一下51cto博客作者zuiwuxin就是作者本人，所以不存在版权问题。以后该博客将作为个人文章的主要发布地。</p>
+<hr>
+
+    </div>
+
+    
+    <div class="about">
+        <h1>关于本文</h1>
+        <div class="details">
+            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
+        </div>
+        
+        <p class="tags">
+            
+            <i class="icon"></i>
+            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/实战经验/" class="tag">#实战经验</a><a href="/tags/冒泡算法/" class="tag">#冒泡算法</a><a href="/tags/指派运算/" class="tag">#指派运算</a>
+        </p>
+        
+    </div>
+    
+
+    <div class="container post-prev-next">
+        
+        <a href="/posts/perl-01-reopen-stdin-during-program-operation.html" class="next">
+            <div>
+                <div class="text">
+                    <p class="label">下一篇</p>
+                    <h3 class="title">Perl 关于在程序运行过程中重新开启标准输入的问题</h3>
+                </div>
+            </div>
+        </a>
+        
+        
+        <a href="/posts/linux-0101-autossh-realizes-booting-to-create-ssh-tunnel.html" class="prev">
+            <div>
+                <div class="text">
+                    <p class="label">上一篇</p>
+                    <h3 class="title">linux 使用autossh实现开机创建ssh tunnel的方法以及shell脚本</>
+                </div>
+            </div>
+        </a>
+        
+    </div>
+
+    
+        
+        
+    
+</article>
+
+        <footer>
+    <div class="inner">
+        <div class="links">
+            
+            <div class="group">
+                <h2 class="title">Blog</h2>
+                
+                <a href="/" class="item">Blog</a>
+                
+                <a href="/archives" class="item">Archives</a>
+                
+                <a href="/tags" class="item">Tags</a>
+                
+                <a href="/categories" class="item">Categories</a>
+                
+                <a href="/search" class="item">Search</a>
+                
+                <a href="/about" class="item">About</a>
+                
+                <a href="/atom.xml" class="item">RSS</a>
+                
+            </div>
+            
+            <div class="group">
+                <h2 class="title">Me</h2>
+                
+                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+                
+                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
+                
+                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+                
+            </div>
+            
+        </div>
+        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+        
+        
+            <br>
+            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+                <label>
+                    <input type="radio" value="light">
+                    <span>Light</span>
+                </label>
+                <label>
+                    <input type="radio" value="dark">
+                    <span>Dark</span>
+                </label>
+                <label>
+                    <input type="radio" value="auto">
+                    <span>Auto</span>
+                </label>
+            </div>
+        
+    </div>
+</footer>
+
+
+        
+<script src="/js/main.js"></script>
+
+        
+        
+        
+
+        
+        <script src="https://unpkg.com/scrollreveal"></script>
+        <script>
+            window.addEventListener('load', () => {
+                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
+                ScrollReveal().reveal('.post-list-item .cover-img img')
+                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
+            })
+        </script>
+        
+    </body>
+</html>
