@@ -1,33 +1,49 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-    <head prefix="og: https://ogp.me/ns#">
+  <head prefix="og: https://ogp.me/ns#">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   
   <title>AWS 使用CloudFront创建CDN网络 - Barbossa Wang 个人技术博客</title>
   
-    <link rel="shortcut icon" href="/assets/images/favicon.png">
+    <link rel="shortcut icon" href="/favicon.png">
   
   
-    <link rel='manifest' href='/manifest.json'>
+  <link rel='manifest' href='/manifest.json'>
   
+
+  <meta name="description" content="如何使用aws CloudFront 与 aws S3 bucket的组合，创建自己的CDN网络">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AWS 使用CloudFront创建CDN网络">
+<meta property="og:url" content="https://zicowarn.github.io/posts/aws-cloudfront-01-create-cdn-network.html">
+<meta property="og:site_name" content="Barbossa Wang 个人技术博客">
+<meta property="og:description" content="如何使用aws CloudFront 与 aws S3 bucket的组合，创建自己的CDN网络">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zicowarn.github.io/posts/aws-cloudfront-01-create-cdn-network/%E5%8E%9F%E7%90%86.gif">
+<meta property="og:image" content="https://zicowarn.github.io/posts/aws-cloudfront-01-create-cdn-network/cloudf(2).png">
+<meta property="og:image" content="https://zicowarn.github.io/posts/aws-cloudfront-01-create-cdn-network/image-20201107182108663.png">
+<meta property="og:image" content="https://zicowarn.github.io/posts/aws-cloudfront-01-create-cdn-network/image-20201107184032233.png">
+<meta property="og:image" content="https://zicowarn.github.io/posts/aws-cloudfront-01-create-cdn-network/image-20201109015314326.png">
+<meta property="article:published_time" content="2020-11-07T01:39:50.000Z">
+<meta property="article:modified_time" content="2025-07-16T09:44:32.511Z">
+<meta property="article:author" content="Barbossa Wang">
+<meta property="article:tag" content="AWS">
+<meta property="article:tag" content="CloudFront">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zicowarn.github.io/posts/aws-cloudfront-01-create-cdn-network/%E5%8E%9F%E7%90%86.gif">
+
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  
+  
+<link rel="stylesheet" href="https://unpkg.com/simple-icons-font@15/font/simple-icons.min.css">
 
   
   
   
-  <meta property="og:title" content="AWS 使用CloudFront创建CDN网络 - Barbossa Wang 个人技术博客" />
-  
-  <meta property="og:type" content="article" />
-  
-  <meta property="og:url" content="https://zicowarn.github.io/posts/aws-cloudfront-01-create-cdn-network.html" />
-  
-  <meta property="og:image" content="assets/images/favicon.png" />
-  
-  <meta property="og:article:published_time" content="2020-11-07T01:39:50.000Z" />
-  
-  <meta property="og:article:author" content="Barbossa Wang" />
-  
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-icons@1/font/bootstrap-icons.min.css">
+
   
 
   
@@ -43,8 +59,36 @@
 <link rel="stylesheet" href="/css/code-highlighting.css">
 
   
-<link rel="stylesheet" href="/css/components.css">
+  
+  
+<link rel="stylesheet" href="/css/components/card.css">
 
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/components/button.css">
+
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/components/badge.css">
+
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/components/utilities.css">
+
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/components/carousel.css">
+
+  
+  
   
 <link rel="stylesheet" href="/css/nav.css">
 
@@ -78,85 +122,110 @@
   
   
   
+  
+  
+<link rel="stylesheet" href="/css/scroll-reveal.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/view-transition.css">
+
+  
+  
+
+  
+
+  
+<script src="/js/head.js"></script>
 
   
 <meta name="generator" content="Hexo 5.4.2"></head>
-    <body
-        data-color-scheme="auto"
-        data-uppercase-categories="true"
-        
-        data-rainbow-banner="true"
-        data-rainbow-banner-shown="auto"
-        data-rainbow-banner-month="6"
-        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
-        
-        data-config-root="/"
-        
-        data-toc="true"
-        data-toc-max-depth="2"
-        
-        
-    >
-        <nav id="theme-nav">
-    <div class="inner">
-        <a class="title" href="/">Blog</a>
-        <div class="nav-arrow"></div>
-        <div class="nav-items">
-            <a class="nav-item nav-item-home" href="/">主页</a>
-            
-            
-            <a class="nav-item" href="/archives">Archives</a>
-            
-            
-            
-            <a class="nav-item" href="/tags">Tags</a>
-            
-            
-            
-            <a class="nav-item" href="/categories">Categories</a>
-            
-            
-            
-            <a class="nav-item" href="/about">About</a>
-            
-            
-            
-            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
-            
-            
-            
-            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
-            
-            
-        </div>
+
+  <body
+    data-color-scheme="auto"
+    data-uppercase-categories="true"
+    
+    data-rainbow-banner="true"
+    data-rainbow-banner-shown="auto"
+    data-rainbow-banner-month="6"
+    data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+    
+    data-config-root="/"
+    
+    data-toc="true"
+    data-toc-max-depth="2"
+    
+    
+    
+    data-scroll-reveal-disappear="false"
+    data-scroll-reveal-query=".scroll-reveal, .post-list-item, .card, .content p img, .content .block-large img"
+    
+    data-nav-blur-gradient="true"
+  >
+    
+<script src="/js/body-top.js"></script>
+
+    <a href="#main-content" id="skip-to-content">跳至主要内容</a>
+    
+
+<div class="nav-mask">
+  <div order="1"></div>
+  <div order="2"></div>
+  <div order="3"></div>
+  <div order="4"></div>
+  <div order="5"></div>
+  <div order="6"></div>
+</div>
+
+<nav id="theme-nav">
+  <div class="inner">
+    <a class="title" href="/">Blog</a>
+    <div class="nav-arrow"></div>
+    <div class="nav-items">
+      <a class="nav-item nav-item-home" href="/" style="--index: 0">主页</a>
+
+      
+      <a class="nav-item" href="/archives" style="--index: 1">Archives</a>
+      
+      <a class="nav-item" href="/tags" style="--index: 2">Tags</a>
+      
+      <a class="nav-item" href="/categories" style="--index: 3">Categories</a>
+      
+      <a class="nav-item" href="/about" style="--index: 4">About</a>
+      
+      <a class="nav-item" target="_blank" rel="noopener" href="https://github.com/zicowarn" style="--index: 5">GitHub</a>
+      
+      <a class="nav-item is-icon" href="/search" style="--index: 6"><i class="bi bi-search"></i></a>
+      
     </div>
+  </div>
 </nav>
-        
+
+    <main id="main-content" data-pagefind-body>
+      
 <article class="post">
-    <div class="meta">
-        
-        <div class="categories text-uppercase">
-        
-            <a href="/categories/AWS-相关-实战经验/">AWS 相关 - 实战经验</a>
-        
-        </div>
-        
-
-        
-        <div class="date" id="date">
-            <span>November</span>
-            <span>7,</span>
-            <span>2020</span>
-        </div>
-        
-
-        <h1 class="title">AWS 使用CloudFront创建CDN网络</h1>
+  
+  <div class="meta">
+    
+    <div class="categories text-uppercase">
+    
+      <a href="/categories/AWS-相关-实战经验/">AWS 相关 - 实战经验</a>
+    
     </div>
+    
 
-    <div class="divider"></div>
+    
+    <time class="date" datetime="2020-11-07T09:39:50+08:00">
+      2020-11-07
+    </time>
+    
 
-    <div class="content">
-        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a> </p>
+    <h1 class="title" data-pagefind-meta="title">AWS 使用CloudFront创建CDN网络</h1>
+  </div>
+
+  <div class="content">
+    <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a> </p>
 <p>摘要：为了解决部分内容网络分发时高延时的问题，为了提高网页加载速度，提高内容分发速度进而给客户跟好的使用体验，会考虑到CDN网络。如何使用aws CloudFront 与 aws S3 bucket的组合，创建自己的CDN网络，会在本文中介绍相关内容。</p>
 <p>Abstract: In order to solve the problem of high latency in the distribution of some content on the network, in order to increase the loading speed of web pages, increase the speed of content distribution, and provide customers with a better user experience, the CDN network will be considered. How to use the combination of aws CloudFront and aws S3 bucket to create your own CDN network will be introduced in this article.</p>
 <span id="more"></span>
@@ -253,127 +322,127 @@
 <p>选用默认配置项即可完成CloudFront的基本配置，有关，如何使用备用域名和开启CORS的内容会在其他文章中介绍。文章部分选项在自己的项目中有用到，会被详细介绍。还有部分选项没有使用到，就使用官方文档中的描述。总的来说使用aws的CloudFront完成CDN网络的搭建比自己单独建设相关网络要简便的多。由于目前还在免费使用周期，也就没有费用上的对比。aws 相关服务也是刚刚开始接触，文中定有不足之处，也希望经验丰富的朋友多多指教，感兴趣的朋友可以关注我的个人公众号一起来讨论学习。</p>
 <hr>
 
-    </div>
+  </div>
 
-    
-    <div class="about">
-        <h1>关于本文</h1>
-        <div class="details">
-            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
-        </div>
-        
-        <p class="tags">
-            
-            <i class="icon"></i>
-            <a href="/tags/AWS/" class="tag">#AWS</a><a href="/tags/CloudFront/" class="tag">#CloudFront</a>
-        </p>
-        
+  
+  <div class="about" data-pagefind-ignore>
+    <h1>关于本文</h1>
+    <div class="details">
+      <p>由 Barbossa Wang 撰写，采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议。</p>
     </div>
     
-
-    <div class="container post-prev-next">
-        
-        <a href="/posts/machining-01-surface-roughness-knowledge.html" class="next">
-            <div>
-                <div class="text">
-                    <p class="label">下一篇</p>
-                    <h3 class="title">机械加工 之表面粗糙度的定义与总结</h3>
-                </div>
-            </div>
-        </a>
-        
-        
-        <a href="/posts/angular-01-use-ngfor-a-json-object.html" class="prev">
-            <div>
-                <div class="text">
-                    <p class="label">上一篇</p>
-                    <h3 class="title">Angular 如何使用结构型指令*ngFor历遍json对象</>
-                </div>
-            </div>
-        </a>
-        
-    </div>
-
+    <p class="tags">
+      <i class="bi bi-tags icon"></i>
+      
+      <a href="/tags/AWS/" class="tag">#AWS</a>
+      
+      <a href="/tags/CloudFront/" class="tag">#CloudFront</a>
+      
+    </p>
     
-        
-        
     
+  </div>
+  
+
+  <div class="container post-prev-next" data-pagefind-ignore>
+    
+    <a href="/posts/machining-01-surface-roughness-knowledge.html" class="next">
+      <div class="text">
+        <p class="label">下一篇</p>
+        <h3 class="title">机械加工 之表面粗糙度的定义与总结</h3>
+      </div>
+    </a>
+    
+    
+    <a href="/posts/angular-01-use-ngfor-a-json-object.html" class="prev">
+      <div class="text">
+        <p class="label">上一篇</p>
+        <h3 class="title">Angular 如何使用结构型指令*ngFor历遍json对象</h3>
+      </div>
+    </a>
+    
+  </div>
+
+  
+    
+    
+  
 </article>
 
-        <footer>
-    <div class="inner">
-        <div class="links">
-            
-            <div class="group">
-                <h2 class="title">Blog</h2>
-                
-                <a href="/" class="item">Blog</a>
-                
-                <a href="/archives" class="item">Archives</a>
-                
-                <a href="/tags" class="item">Tags</a>
-                
-                <a href="/categories" class="item">Categories</a>
-                
-                <a href="/search" class="item">Search</a>
-                
-                <a href="/about" class="item">About</a>
-                
-                <a href="/atom.xml" class="item">RSS</a>
-                
-            </div>
-            
-            <div class="group">
-                <h2 class="title">Me</h2>
-                
-                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
-                
-                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
-                
-                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
-                
-            </div>
-            
-        </div>
-        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+
+    </main>
+    <footer>
+  <div class="inner">
+    <div class="links">
+      
+      <div class="group">
+        <h2 class="title">Blog</h2>
         
+        <a href="/" class="item">Home</a>
         
-            <br>
-            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
-                <label>
-                    <input type="radio" value="light">
-                    <span>Light</span>
-                </label>
-                <label>
-                    <input type="radio" value="dark">
-                    <span>Dark</span>
-                </label>
-                <label>
-                    <input type="radio" value="auto">
-                    <span>Auto</span>
-                </label>
-            </div>
+        <a href="/archives" class="item">Archives</a>
         
+        <a href="/tags" class="item">Tags</a>
+        
+        <a href="/categories" class="item">Categories</a>
+        
+        <a href="/search" class="item">Search</a>
+        
+        <a href="/atom.xml" class="item">RSS</a>
+        
+      </div>
+      
+      <div class="group">
+        <h2 class="title">Me</h2>
+        
+        <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+        
+        <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedin</a>
+        
+        <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+        
+      </div>
+      
     </div>
+    <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动</span>
+    
+    
+      <br>
+      <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+        <label>
+          <input type="radio" value="light">
+          <span>浅色</span>
+        </label>
+        <label>
+          <input type="radio" value="dark">
+          <span>深色</span>
+        </label>
+        <label>
+          <input type="radio" value="auto">
+          <span>自动</span>
+        </label>
+      </div>
+    
+  </div>
 </footer>
 
 
-        
+    
 <script src="/js/main.js"></script>
 
-        
-        
-        
 
-        
-        <script src="https://unpkg.com/scrollreveal"></script>
-        <script>
-            window.addEventListener('load', () => {
-                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
-                ScrollReveal().reveal('.post-list-item .cover-img img')
-                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
-            })
-        </script>
-        
-    </body>
+    
+
+    
+    
+<script src="/js/scroll-reveal.js"></script>
+
+    
+
+    
+
+    
+
+    
+  </body>
 </html>

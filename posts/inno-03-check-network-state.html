@@ -1,33 +1,44 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-    <head prefix="og: https://ogp.me/ns#">
+  <head prefix="og: https://ogp.me/ns#">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   
   <title>Inno Setup 检查网络连接的Pascal代码 - Barbossa Wang 个人技术博客</title>
   
-    <link rel="shortcut icon" href="/assets/images/favicon.png">
+    <link rel="shortcut icon" href="/favicon.png">
   
   
-    <link rel='manifest' href='/manifest.json'>
+  <link rel='manifest' href='/manifest.json'>
   
+
+  <meta name="description" content="作者: Jim Wang 公众号: 巴博萨船长 InnoSetup 检查网络连接1. 循环检查网络连接直至连接成共，代码如下：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Inno Setup 检查网络连接的Pascal代码">
+<meta property="og:url" content="https://zicowarn.github.io/posts/inno-03-check-network-state.html">
+<meta property="og:site_name" content="Barbossa Wang 个人技术博客">
+<meta property="og:description" content="作者: Jim Wang 公众号: 巴博萨船长 InnoSetup 检查网络连接1. 循环检查网络连接直至连接成共，代码如下：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-07-05T00:11:08.000Z">
+<meta property="article:modified_time" content="2025-07-16T09:44:32.537Z">
+<meta property="article:author" content="Barbossa Wang">
+<meta property="article:tag" content="Inno Setup">
+<meta property="article:tag" content="网络连接">
+<meta property="article:tag" content="Pascal">
+<meta name="twitter:card" content="summary">
+
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  
+  
+<link rel="stylesheet" href="https://unpkg.com/simple-icons-font@15/font/simple-icons.min.css">
 
   
   
   
-  <meta property="og:title" content="Inno Setup 检查网络连接的Pascal代码 - Barbossa Wang 个人技术博客" />
-  
-  <meta property="og:type" content="article" />
-  
-  <meta property="og:url" content="https://zicowarn.github.io/posts/inno-03-check-network-state.html" />
-  
-  <meta property="og:image" content="assets/images/favicon.png" />
-  
-  <meta property="og:article:published_time" content="2019-07-05T00:11:08.000Z" />
-  
-  <meta property="og:article:author" content="Barbossa Wang" />
-  
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-icons@1/font/bootstrap-icons.min.css">
+
   
 
   
@@ -43,8 +54,36 @@
 <link rel="stylesheet" href="/css/code-highlighting.css">
 
   
-<link rel="stylesheet" href="/css/components.css">
+  
+  
+<link rel="stylesheet" href="/css/components/card.css">
 
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/components/button.css">
+
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/components/badge.css">
+
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/components/utilities.css">
+
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/components/carousel.css">
+
+  
+  
   
 <link rel="stylesheet" href="/css/nav.css">
 
@@ -78,85 +117,110 @@
   
   
   
+  
+  
+<link rel="stylesheet" href="/css/scroll-reveal.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/view-transition.css">
+
+  
+  
+
+  
+
+  
+<script src="/js/head.js"></script>
 
   
 <meta name="generator" content="Hexo 5.4.2"></head>
-    <body
-        data-color-scheme="auto"
-        data-uppercase-categories="true"
-        
-        data-rainbow-banner="true"
-        data-rainbow-banner-shown="auto"
-        data-rainbow-banner-month="6"
-        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
-        
-        data-config-root="/"
-        
-        data-toc="true"
-        data-toc-max-depth="2"
-        
-        
-    >
-        <nav id="theme-nav">
-    <div class="inner">
-        <a class="title" href="/">Blog</a>
-        <div class="nav-arrow"></div>
-        <div class="nav-items">
-            <a class="nav-item nav-item-home" href="/">主页</a>
-            
-            
-            <a class="nav-item" href="/archives">Archives</a>
-            
-            
-            
-            <a class="nav-item" href="/tags">Tags</a>
-            
-            
-            
-            <a class="nav-item" href="/categories">Categories</a>
-            
-            
-            
-            <a class="nav-item" href="/about">About</a>
-            
-            
-            
-            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
-            
-            
-            
-            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
-            
-            
-        </div>
+
+  <body
+    data-color-scheme="auto"
+    data-uppercase-categories="true"
+    
+    data-rainbow-banner="true"
+    data-rainbow-banner-shown="auto"
+    data-rainbow-banner-month="6"
+    data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+    
+    data-config-root="/"
+    
+    data-toc="true"
+    data-toc-max-depth="2"
+    
+    
+    
+    data-scroll-reveal-disappear="false"
+    data-scroll-reveal-query=".scroll-reveal, .post-list-item, .card, .content p img, .content .block-large img"
+    
+    data-nav-blur-gradient="true"
+  >
+    
+<script src="/js/body-top.js"></script>
+
+    <a href="#main-content" id="skip-to-content">跳至主要内容</a>
+    
+
+<div class="nav-mask">
+  <div order="1"></div>
+  <div order="2"></div>
+  <div order="3"></div>
+  <div order="4"></div>
+  <div order="5"></div>
+  <div order="6"></div>
+</div>
+
+<nav id="theme-nav">
+  <div class="inner">
+    <a class="title" href="/">Blog</a>
+    <div class="nav-arrow"></div>
+    <div class="nav-items">
+      <a class="nav-item nav-item-home" href="/" style="--index: 0">主页</a>
+
+      
+      <a class="nav-item" href="/archives" style="--index: 1">Archives</a>
+      
+      <a class="nav-item" href="/tags" style="--index: 2">Tags</a>
+      
+      <a class="nav-item" href="/categories" style="--index: 3">Categories</a>
+      
+      <a class="nav-item" href="/about" style="--index: 4">About</a>
+      
+      <a class="nav-item" target="_blank" rel="noopener" href="https://github.com/zicowarn" style="--index: 5">GitHub</a>
+      
+      <a class="nav-item is-icon" href="/search" style="--index: 6"><i class="bi bi-search"></i></a>
+      
     </div>
+  </div>
 </nav>
-        
+
+    <main id="main-content" data-pagefind-body>
+      
 <article class="post">
-    <div class="meta">
-        
-        <div class="categories text-uppercase">
-        
-            <a href="/categories/Inno-Setup-相关-实战经验/">Inno Setup 相关 - 实战经验</a>
-        
-        </div>
-        
-
-        
-        <div class="date" id="date">
-            <span>July</span>
-            <span>5,</span>
-            <span>2019</span>
-        </div>
-        
-
-        <h1 class="title">Inno Setup 检查网络连接的Pascal代码</h1>
+  
+  <div class="meta">
+    
+    <div class="categories text-uppercase">
+    
+      <a href="/categories/Inno-Setup-相关-实战经验/">Inno Setup 相关 - 实战经验</a>
+    
     </div>
+    
 
-    <div class="divider"></div>
+    
+    <time class="date" datetime="2019-07-05T08:11:08+08:00">
+      2019-07-05
+    </time>
+    
 
-    <div class="content">
-        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+    <h1 class="title" data-pagefind-meta="title">Inno Setup 检查网络连接的Pascal代码</h1>
+  </div>
+
+  <div class="content">
+    <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
 <h2 id="InnoSetup-检查网络连接"><a href="#InnoSetup-检查网络连接" class="headerlink" title="InnoSetup 检查网络连接"></a>InnoSetup 检查网络连接</h2><h3 id="1-循环检查网络连接直至连接成共，代码如下："><a href="#1-循环检查网络连接直至连接成共，代码如下：" class="headerlink" title="1. 循环检查网络连接直至连接成共，代码如下："></a>1. 循环检查网络连接直至连接成共，代码如下：</h3><span id="more"></span>
 
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">function IsNetWorkActivatedRepeated: boolean;</span><br><span class="line">var</span><br><span class="line">  WinHttpReq: Variant;</span><br><span class="line">  Connected: Boolean;</span><br><span class="line">begin</span><br><span class="line">  Connected := False;</span><br><span class="line">  repeat</span><br><span class="line">    Log(&#x27;Checking connection to the server&#x27;);</span><br><span class="line">    try</span><br><span class="line">      WinHttpReq := CreateOleObject(&#x27;WinHttp.WinHttpRequest.5.1&#x27;);</span><br><span class="line">      &#123; Use your real server host name &#125;</span><br><span class="line">      WinHttpReq.Open(&#x27;GET&#x27;, &#x27;https://www.camtek.de/&#x27;, False);</span><br><span class="line">      WinHttpReq.Send(&#x27;&#x27;);</span><br><span class="line">      Log(&#x27;Connected to the server; status: &#x27; + IntToStr(WinHttpReq.Status) + &#x27; &#x27; +</span><br><span class="line">          WinHttpReq.StatusText);</span><br><span class="line">      Connected := True;</span><br><span class="line">    except</span><br><span class="line">      Log(&#x27;Error connecting to the server: &#x27; + GetExceptionMessage);</span><br><span class="line">      if WizardSilent then</span><br><span class="line">      begin</span><br><span class="line">        Log(&#x27;Connection to the server is not available, aborting silent installation&#x27;);</span><br><span class="line">        Result := False;</span><br><span class="line">        Exit;</span><br><span class="line">      end</span><br><span class="line">        else</span><br><span class="line">      if MsgBox(&#x27;Cannot reach server. Please check your Internet connection.&#x27;,</span><br><span class="line">                mbError, MB_RETRYCANCEL) = IDRETRY then</span><br><span class="line">      begin</span><br><span class="line">        Log(&#x27;Retrying&#x27;);</span><br><span class="line">      end</span><br><span class="line">        else</span><br><span class="line">      begin</span><br><span class="line">        Log(&#x27;Aborting&#x27;);</span><br><span class="line">        Result := False;</span><br><span class="line">        Exit;</span><br><span class="line">      end;</span><br><span class="line">    end;</span><br><span class="line">  until Connected;</span><br><span class="line"></span><br><span class="line">  Result := True;</span><br><span class="line">end;</span><br></pre></td></tr></table></figure>
@@ -165,127 +229,129 @@
 
 <hr>
 
-    </div>
+  </div>
 
-    
-    <div class="about">
-        <h1>关于本文</h1>
-        <div class="details">
-            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
-        </div>
-        
-        <p class="tags">
-            
-            <i class="icon"></i>
-            <a href="/tags/Inno-Setup/" class="tag">#Inno Setup</a><a href="/tags/网络连接/" class="tag">#网络连接</a><a href="/tags/Pascal/" class="tag">#Pascal</a>
-        </p>
-        
+  
+  <div class="about" data-pagefind-ignore>
+    <h1>关于本文</h1>
+    <div class="details">
+      <p>由 Barbossa Wang 撰写，采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议。</p>
     </div>
     
-
-    <div class="container post-prev-next">
-        
-        <a href="/posts/inno-04-registry-hcr.html" class="next">
-            <div>
-                <div class="text">
-                    <p class="label">下一篇</p>
-                    <h3 class="title">Inno Setup Windows 注册表关键字HKEY\_CLASSES\_ROOT相关内容</h3>
-                </div>
-            </div>
-        </a>
-        
-        
-        <a href="/posts/inno-02-installdotnet.html" class="prev">
-            <div>
-                <div class="text">
-                    <p class="label">上一篇</p>
-                    <h3 class="title">Inno Setup 在x86和x64环境下安装-NET安装包</>
-                </div>
-            </div>
-        </a>
-        
-    </div>
-
+    <p class="tags">
+      <i class="bi bi-tags icon"></i>
+      
+      <a href="/tags/Inno-Setup/" class="tag">#Inno Setup</a>
+      
+      <a href="/tags/%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5/" class="tag">#网络连接</a>
+      
+      <a href="/tags/Pascal/" class="tag">#Pascal</a>
+      
+    </p>
     
-        
-        
     
+  </div>
+  
+
+  <div class="container post-prev-next" data-pagefind-ignore>
+    
+    <a href="/posts/inno-04-registry-hcr.html" class="next">
+      <div class="text">
+        <p class="label">下一篇</p>
+        <h3 class="title">Inno Setup Windows 注册表关键字HKEY\_CLASSES\_ROOT相关内容</h3>
+      </div>
+    </a>
+    
+    
+    <a href="/posts/inno-02-installdotnet.html" class="prev">
+      <div class="text">
+        <p class="label">上一篇</p>
+        <h3 class="title">Inno Setup 在x86和x64环境下安装-NET安装包</h3>
+      </div>
+    </a>
+    
+  </div>
+
+  
+    
+    
+  
 </article>
 
-        <footer>
-    <div class="inner">
-        <div class="links">
-            
-            <div class="group">
-                <h2 class="title">Blog</h2>
-                
-                <a href="/" class="item">Blog</a>
-                
-                <a href="/archives" class="item">Archives</a>
-                
-                <a href="/tags" class="item">Tags</a>
-                
-                <a href="/categories" class="item">Categories</a>
-                
-                <a href="/search" class="item">Search</a>
-                
-                <a href="/about" class="item">About</a>
-                
-                <a href="/atom.xml" class="item">RSS</a>
-                
-            </div>
-            
-            <div class="group">
-                <h2 class="title">Me</h2>
-                
-                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
-                
-                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
-                
-                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
-                
-            </div>
-            
-        </div>
-        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+
+    </main>
+    <footer>
+  <div class="inner">
+    <div class="links">
+      
+      <div class="group">
+        <h2 class="title">Blog</h2>
         
+        <a href="/" class="item">Home</a>
         
-            <br>
-            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
-                <label>
-                    <input type="radio" value="light">
-                    <span>Light</span>
-                </label>
-                <label>
-                    <input type="radio" value="dark">
-                    <span>Dark</span>
-                </label>
-                <label>
-                    <input type="radio" value="auto">
-                    <span>Auto</span>
-                </label>
-            </div>
+        <a href="/archives" class="item">Archives</a>
         
+        <a href="/tags" class="item">Tags</a>
+        
+        <a href="/categories" class="item">Categories</a>
+        
+        <a href="/search" class="item">Search</a>
+        
+        <a href="/atom.xml" class="item">RSS</a>
+        
+      </div>
+      
+      <div class="group">
+        <h2 class="title">Me</h2>
+        
+        <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+        
+        <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedin</a>
+        
+        <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+        
+      </div>
+      
     </div>
+    <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动</span>
+    
+    
+      <br>
+      <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+        <label>
+          <input type="radio" value="light">
+          <span>浅色</span>
+        </label>
+        <label>
+          <input type="radio" value="dark">
+          <span>深色</span>
+        </label>
+        <label>
+          <input type="radio" value="auto">
+          <span>自动</span>
+        </label>
+      </div>
+    
+  </div>
 </footer>
 
 
-        
+    
 <script src="/js/main.js"></script>
 
-        
-        
-        
 
-        
-        <script src="https://unpkg.com/scrollreveal"></script>
-        <script>
-            window.addEventListener('load', () => {
-                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
-                ScrollReveal().reveal('.post-list-item .cover-img img')
-                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
-            })
-        </script>
-        
-    </body>
+    
+
+    
+    
+<script src="/js/scroll-reveal.js"></script>
+
+    
+
+    
+
+    
+
+    
+  </body>
 </html>

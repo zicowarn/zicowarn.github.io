@@ -1,34 +1,62 @@
 .hero {
-    height: calc(100vh - 56px);
-    display: grid;
-    place-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  padding-top: 160px;
+  padding-bottom: 160px;
+  white-space: pre-wrap;
 }
-
-.hero .group {
-    width: 100%;
-}
-
-.hero .sub {
-    text-transform: uppercase;
-    font-size: 24px;
-    color: var(--black-4);
-    font-weight: 100;
-    margin: 0;
-    transition: font-size 0.5s;
-}
-
-.hero .large {
-    font-size: 128px;
-    color: var(--black-2);
-    margin: 0;
-    transition: font-size 0.5s;
-}
-
-@media screen and (max-width: 800px) {
-    .hero .sub {
-        font-size: 16px;
+@supports (animation-timeline: scroll()) {
+  .hero.exit-while-scroll {
+    --range: calc(var(--current-hero-height) * 0.5px);
+  }
+  @keyframes hero-exit-with-blur {
+    0% {
+      margin-top: 56px;
     }
-    .hero .large {
-        font-size: 84px;
+    100% {
+      opacity: 0;
+      margin-top: calc(var(--range) + 56px);
+      margin-bottom: calc(-1 * var(--range));
+      scale: 0.9;
+      filter: var(--filter-blur);
     }
+  }
+  @keyframes hero-exit {
+    0% {
+      margin-top: 56px;
+    }
+    100% {
+      opacity: 0;
+      margin-top: calc(var(--range) + 56px);
+      margin-bottom: calc(-1 * var(--range));
+      scale: 0.9;
+    }
+  }
+  .hero.exit-while-scroll {
+    will-change: filter, margin-top, margin-bottom, opacity, scale;
+    animation-name: hero-exit;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: scroll();
+    animation-range: 0 var(--range);
+    transform-origin: left -100%;
+  }
+  .hero.exit-while-scroll.with-blur {
+    animation-name: hero-exit-with-blur;
+  }
+}
+.hero .title {
+  font-size: 22px;
+  color: var(--color-text-secondary);
+  font-weight: 200;
+  margin: 0;
+  transition: font-size 0.5s;
+}
+.hero .description {
+  font-size: 20px;
+  font-weight: normal;
+  margin: 0;
+  transition: font-size 0.5s;
 }

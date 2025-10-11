@@ -1,33 +1,47 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-    <head prefix="og: https://ogp.me/ns#">
+  <head prefix="og: https://ogp.me/ns#">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   
   <title>CSS 如何运用CSS来隐藏页面文本 - Barbossa Wang 个人技术博客</title>
   
-    <link rel="shortcut icon" href="/assets/images/favicon.png">
+    <link rel="shortcut icon" href="/favicon.png">
   
   
-    <link rel='manifest' href='/manifest.json'>
+  <link rel='manifest' href='/manifest.json'>
   
+
+  <meta name="description" content="CSS来隐藏页面文本 CSS to hide text">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS 如何运用CSS来隐藏页面文本">
+<meta property="og:url" content="https://zicowarn.github.io/posts/css-01-use-css-hide-content.html">
+<meta property="og:site_name" content="Barbossa Wang 个人技术博客">
+<meta property="og:description" content="CSS来隐藏页面文本 CSS to hide text">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zicowarn.github.io/posts/css-01-use-css-hide-content/css-01-03.png">
+<meta property="og:image" content="https://zicowarn.github.io/posts/css-01-use-css-hide-content/css-01-02.png">
+<meta property="og:image" content="https://zicowarn.github.io/posts/css-01-use-css-hide-content/css-01-04.png">
+<meta property="article:published_time" content="2020-08-29T09:13:51.000Z">
+<meta property="article:modified_time" content="2025-07-16T09:44:32.529Z">
+<meta property="article:author" content="Barbossa Wang">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="CSS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://zicowarn.github.io/posts/css-01-use-css-hide-content/css-01-03.png">
+
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  
+  
+<link rel="stylesheet" href="https://unpkg.com/simple-icons-font@15/font/simple-icons.min.css">
 
   
   
   
-  <meta property="og:title" content="CSS 如何运用CSS来隐藏页面文本 - Barbossa Wang 个人技术博客" />
-  
-  <meta property="og:type" content="article" />
-  
-  <meta property="og:url" content="https://zicowarn.github.io/posts/css-01-use-css-hide-content.html" />
-  
-  <meta property="og:image" content="assets/images/favicon.png" />
-  
-  <meta property="og:article:published_time" content="2020-08-29T09:13:51.000Z" />
-  
-  <meta property="og:article:author" content="Barbossa Wang" />
-  
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-icons@1/font/bootstrap-icons.min.css">
+
   
 
   
@@ -43,8 +57,36 @@
 <link rel="stylesheet" href="/css/code-highlighting.css">
 
   
-<link rel="stylesheet" href="/css/components.css">
+  
+  
+<link rel="stylesheet" href="/css/components/card.css">
 
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/components/button.css">
+
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/components/badge.css">
+
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/components/utilities.css">
+
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/components/carousel.css">
+
+  
+  
   
 <link rel="stylesheet" href="/css/nav.css">
 
@@ -78,85 +120,110 @@
   
   
   
+  
+  
+<link rel="stylesheet" href="/css/scroll-reveal.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/view-transition.css">
+
+  
+  
+
+  
+
+  
+<script src="/js/head.js"></script>
 
   
 <meta name="generator" content="Hexo 5.4.2"></head>
-    <body
-        data-color-scheme="auto"
-        data-uppercase-categories="true"
-        
-        data-rainbow-banner="true"
-        data-rainbow-banner-shown="auto"
-        data-rainbow-banner-month="6"
-        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
-        
-        data-config-root="/"
-        
-        data-toc="true"
-        data-toc-max-depth="2"
-        
-        
-    >
-        <nav id="theme-nav">
-    <div class="inner">
-        <a class="title" href="/">Blog</a>
-        <div class="nav-arrow"></div>
-        <div class="nav-items">
-            <a class="nav-item nav-item-home" href="/">主页</a>
-            
-            
-            <a class="nav-item" href="/archives">Archives</a>
-            
-            
-            
-            <a class="nav-item" href="/tags">Tags</a>
-            
-            
-            
-            <a class="nav-item" href="/categories">Categories</a>
-            
-            
-            
-            <a class="nav-item" href="/about">About</a>
-            
-            
-            
-            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
-            
-            
-            
-            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
-            
-            
-        </div>
+
+  <body
+    data-color-scheme="auto"
+    data-uppercase-categories="true"
+    
+    data-rainbow-banner="true"
+    data-rainbow-banner-shown="auto"
+    data-rainbow-banner-month="6"
+    data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+    
+    data-config-root="/"
+    
+    data-toc="true"
+    data-toc-max-depth="2"
+    
+    
+    
+    data-scroll-reveal-disappear="false"
+    data-scroll-reveal-query=".scroll-reveal, .post-list-item, .card, .content p img, .content .block-large img"
+    
+    data-nav-blur-gradient="true"
+  >
+    
+<script src="/js/body-top.js"></script>
+
+    <a href="#main-content" id="skip-to-content">跳至主要内容</a>
+    
+
+<div class="nav-mask">
+  <div order="1"></div>
+  <div order="2"></div>
+  <div order="3"></div>
+  <div order="4"></div>
+  <div order="5"></div>
+  <div order="6"></div>
+</div>
+
+<nav id="theme-nav">
+  <div class="inner">
+    <a class="title" href="/">Blog</a>
+    <div class="nav-arrow"></div>
+    <div class="nav-items">
+      <a class="nav-item nav-item-home" href="/" style="--index: 0">主页</a>
+
+      
+      <a class="nav-item" href="/archives" style="--index: 1">Archives</a>
+      
+      <a class="nav-item" href="/tags" style="--index: 2">Tags</a>
+      
+      <a class="nav-item" href="/categories" style="--index: 3">Categories</a>
+      
+      <a class="nav-item" href="/about" style="--index: 4">About</a>
+      
+      <a class="nav-item" target="_blank" rel="noopener" href="https://github.com/zicowarn" style="--index: 5">GitHub</a>
+      
+      <a class="nav-item is-icon" href="/search" style="--index: 6"><i class="bi bi-search"></i></a>
+      
     </div>
+  </div>
 </nav>
-        
+
+    <main id="main-content" data-pagefind-body>
+      
 <article class="post">
-    <div class="meta">
-        
-        <div class="categories text-uppercase">
-        
-            <a href="/categories/CSS-相关-实战经验/">CSS 相关 - 实战经验</a>
-        
-        </div>
-        
-
-        
-        <div class="date" id="date">
-            <span>August</span>
-            <span>29,</span>
-            <span>2020</span>
-        </div>
-        
-
-        <h1 class="title">CSS 如何运用CSS来隐藏页面文本</h1>
+  
+  <div class="meta">
+    
+    <div class="categories text-uppercase">
+    
+      <a href="/categories/CSS-相关-实战经验/">CSS 相关 - 实战经验</a>
+    
     </div>
+    
 
-    <div class="divider"></div>
+    
+    <time class="date" datetime="2020-08-29T17:13:51+08:00">
+      2020-08-29
+    </time>
+    
 
-    <div class="content">
-        <p>摘要：究竟什么样的应用场景中才需要使用CSS来隐藏文本，为什么不直接修改HTML来删除想要隐藏的内容呢？使用CSS来隐藏页面文本，究竟是如何实现的？为什么要在项目中这么做，究竟为何？究竟什么是Kellum方法，该方法的使用范围与方法的局限性是？</p>
+    <h1 class="title" data-pagefind-meta="title">CSS 如何运用CSS来隐藏页面文本</h1>
+  </div>
+
+  <div class="content">
+    <p>摘要：究竟什么样的应用场景中才需要使用CSS来隐藏文本，为什么不直接修改HTML来删除想要隐藏的内容呢？使用CSS来隐藏页面文本，究竟是如何实现的？为什么要在项目中这么做，究竟为何？究竟什么是Kellum方法，该方法的使用范围与方法的局限性是？</p>
 <p>Abstract: What kind of application scenarios need to use CSS to hide text, why not directly modify the HTML to delete the content that you want to hide? How to use CSS to hide page text? Why do I do this in my own project? When is the Kellum method, the scope of use of the method and the limitations of the method?</p>
 <span id="more"></span>
 
@@ -209,127 +276,127 @@
 <p>Replacing the -9999px hack (new image replacement) : <a target="_blank" rel="noopener" href="http://www.zeldman.com/2012/03/01/replacing-the-9999px-hack-new-image-replacement/">http://www.zeldman.com/2012/03/01/replacing-the-9999px-hack-new-image-replacement/</a></p>
 <hr>
 
-    </div>
+  </div>
 
-    
-    <div class="about">
-        <h1>关于本文</h1>
-        <div class="details">
-            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
-        </div>
-        
-        <p class="tags">
-            
-            <i class="icon"></i>
-            <a href="/tags/前端/" class="tag">#前端</a><a href="/tags/CSS/" class="tag">#CSS</a>
-        </p>
-        
+  
+  <div class="about" data-pagefind-ignore>
+    <h1>关于本文</h1>
+    <div class="details">
+      <p>由 Barbossa Wang 撰写，采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议。</p>
     </div>
     
-
-    <div class="container post-prev-next">
-        
-        <a href="/posts/hexo-02-embed-html-and-downloads-code.html" class="next">
-            <div>
-                <div class="text">
-                    <p class="label">下一篇</p>
-                    <h3 class="title">Hexo 解决嵌入的html被渲染的问题和code_dir的配置项的用法</h3>
-                </div>
-            </div>
-        </a>
-        
-        
-        <a href="/posts/0808-ma-run-vcvars-set-devenv-ci.html" class="prev">
-            <div>
-                <div class="text">
-                    <p class="label">上一篇</p>
-                    <h3 class="title">Python 杂记之 如何在实现子进程到父进程的环境变量更新</>
-                </div>
-            </div>
-        </a>
-        
-    </div>
-
+    <p class="tags">
+      <i class="bi bi-tags icon"></i>
+      
+      <a href="/tags/%E5%89%8D%E7%AB%AF/" class="tag">#前端</a>
+      
+      <a href="/tags/CSS/" class="tag">#CSS</a>
+      
+    </p>
     
-        
-        
     
+  </div>
+  
+
+  <div class="container post-prev-next" data-pagefind-ignore>
+    
+    <a href="/posts/hexo-02-embed-html-and-downloads-code.html" class="next">
+      <div class="text">
+        <p class="label">下一篇</p>
+        <h3 class="title">Hexo 解决嵌入的html被渲染的问题和code_dir的配置项的用法</h3>
+      </div>
+    </a>
+    
+    
+    <a href="/posts/0808-ma-run-vcvars-set-devenv-ci.html" class="prev">
+      <div class="text">
+        <p class="label">上一篇</p>
+        <h3 class="title">Python 杂记之 如何在实现子进程到父进程的环境变量更新</h3>
+      </div>
+    </a>
+    
+  </div>
+
+  
+    
+    
+  
 </article>
 
-        <footer>
-    <div class="inner">
-        <div class="links">
-            
-            <div class="group">
-                <h2 class="title">Blog</h2>
-                
-                <a href="/" class="item">Blog</a>
-                
-                <a href="/archives" class="item">Archives</a>
-                
-                <a href="/tags" class="item">Tags</a>
-                
-                <a href="/categories" class="item">Categories</a>
-                
-                <a href="/search" class="item">Search</a>
-                
-                <a href="/about" class="item">About</a>
-                
-                <a href="/atom.xml" class="item">RSS</a>
-                
-            </div>
-            
-            <div class="group">
-                <h2 class="title">Me</h2>
-                
-                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
-                
-                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
-                
-                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
-                
-            </div>
-            
-        </div>
-        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+
+    </main>
+    <footer>
+  <div class="inner">
+    <div class="links">
+      
+      <div class="group">
+        <h2 class="title">Blog</h2>
         
+        <a href="/" class="item">Home</a>
         
-            <br>
-            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
-                <label>
-                    <input type="radio" value="light">
-                    <span>Light</span>
-                </label>
-                <label>
-                    <input type="radio" value="dark">
-                    <span>Dark</span>
-                </label>
-                <label>
-                    <input type="radio" value="auto">
-                    <span>Auto</span>
-                </label>
-            </div>
+        <a href="/archives" class="item">Archives</a>
         
+        <a href="/tags" class="item">Tags</a>
+        
+        <a href="/categories" class="item">Categories</a>
+        
+        <a href="/search" class="item">Search</a>
+        
+        <a href="/atom.xml" class="item">RSS</a>
+        
+      </div>
+      
+      <div class="group">
+        <h2 class="title">Me</h2>
+        
+        <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+        
+        <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedin</a>
+        
+        <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+        
+      </div>
+      
     </div>
+    <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动</span>
+    
+    
+      <br>
+      <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+        <label>
+          <input type="radio" value="light">
+          <span>浅色</span>
+        </label>
+        <label>
+          <input type="radio" value="dark">
+          <span>深色</span>
+        </label>
+        <label>
+          <input type="radio" value="auto">
+          <span>自动</span>
+        </label>
+      </div>
+    
+  </div>
 </footer>
 
 
-        
+    
 <script src="/js/main.js"></script>
 
-        
-        
-        
 
-        
-        <script src="https://unpkg.com/scrollreveal"></script>
-        <script>
-            window.addEventListener('load', () => {
-                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
-                ScrollReveal().reveal('.post-list-item .cover-img img')
-                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
-            })
-        </script>
-        
-    </body>
+    
+
+    
+    
+<script src="/js/scroll-reveal.js"></script>
+
+    
+
+    
+
+    
+
+    
+  </body>
 </html>

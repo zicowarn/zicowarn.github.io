@@ -1,33 +1,44 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-    <head prefix="og: https://ogp.me/ns#">
+  <head prefix="og: https://ogp.me/ns#">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   
   <title>Python 运算符 - Barbossa Wang 个人技术博客</title>
   
-    <link rel="shortcut icon" href="/assets/images/favicon.png">
+    <link rel="shortcut icon" href="/favicon.png">
   
   
-    <link rel='manifest' href='/manifest.json'>
+  <link rel='manifest' href='/manifest.json'>
   
+
+  <meta name="description" content="作者: Jim Wang 公众号: 巴博萨船长 Python运算符简介程序语言运算符就是对数据操作的表示方法，即数据是如何处理的。理解运算符，在查看代码的时候就能理解代码中数据是如何加工处理的，掌握运算符就能过对数据按照自己所想操作加工处理。一般的教程或者学习资料会将操作符分为：算术运算符、连接运算符、关系运算符、赋值运算符和逻辑运算符。这也是普遍的共识。在本文中，我们稍作改变，我们分组分章节介绍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 运算符">
+<meta property="og:url" content="https://zicowarn.github.io/posts/030201-operator.html">
+<meta property="og:site_name" content="Barbossa Wang 个人技术博客">
+<meta property="og:description" content="作者: Jim Wang 公众号: 巴博萨船长 Python运算符简介程序语言运算符就是对数据操作的表示方法，即数据是如何处理的。理解运算符，在查看代码的时候就能理解代码中数据是如何加工处理的，掌握运算符就能过对数据按照自己所想操作加工处理。一般的教程或者学习资料会将操作符分为：算术运算符、连接运算符、关系运算符、赋值运算符和逻辑运算符。这也是普遍的共识。在本文中，我们稍作改变，我们分组分章节介绍">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-11-20T07:11:08.000Z">
+<meta property="article:modified_time" content="2025-07-16T09:44:32.496Z">
+<meta property="article:author" content="Barbossa Wang">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="实战经验">
+<meta property="article:tag" content="运算符">
+<meta name="twitter:card" content="summary">
+
+  <link rel="preconnect" href="https://rsms.me/">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  
+  
+<link rel="stylesheet" href="https://unpkg.com/simple-icons-font@15/font/simple-icons.min.css">
 
   
   
   
-  <meta property="og:title" content="Python 运算符 - Barbossa Wang 个人技术博客" />
-  
-  <meta property="og:type" content="article" />
-  
-  <meta property="og:url" content="https://zicowarn.github.io/posts/030201-operator.html" />
-  
-  <meta property="og:image" content="assets/images/favicon.png" />
-  
-  <meta property="og:article:published_time" content="2018-11-20T07:11:08.000Z" />
-  
-  <meta property="og:article:author" content="Barbossa Wang" />
-  
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-icons@1/font/bootstrap-icons.min.css">
+
   
 
   
@@ -43,8 +54,36 @@
 <link rel="stylesheet" href="/css/code-highlighting.css">
 
   
-<link rel="stylesheet" href="/css/components.css">
+  
+  
+<link rel="stylesheet" href="/css/components/card.css">
 
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/components/button.css">
+
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/components/badge.css">
+
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/components/utilities.css">
+
+  
+  
+  
+  
+<link rel="stylesheet" href="/css/components/carousel.css">
+
+  
+  
   
 <link rel="stylesheet" href="/css/nav.css">
 
@@ -78,85 +117,110 @@
   
   
   
+  
+  
+<link rel="stylesheet" href="/css/scroll-reveal.css">
+
+  
+  
+  
+<link rel="stylesheet" href="/css/view-transition.css">
+
+  
+  
+
+  
+
+  
+<script src="/js/head.js"></script>
 
   
 <meta name="generator" content="Hexo 5.4.2"></head>
-    <body
-        data-color-scheme="auto"
-        data-uppercase-categories="true"
-        
-        data-rainbow-banner="true"
-        data-rainbow-banner-shown="auto"
-        data-rainbow-banner-month="6"
-        data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
-        
-        data-config-root="/"
-        
-        data-toc="true"
-        data-toc-max-depth="2"
-        
-        
-    >
-        <nav id="theme-nav">
-    <div class="inner">
-        <a class="title" href="/">Blog</a>
-        <div class="nav-arrow"></div>
-        <div class="nav-items">
-            <a class="nav-item nav-item-home" href="/">主页</a>
-            
-            
-            <a class="nav-item" href="/archives">Archives</a>
-            
-            
-            
-            <a class="nav-item" href="/tags">Tags</a>
-            
-            
-            
-            <a class="nav-item" href="/categories">Categories</a>
-            
-            
-            
-            <a class="nav-item" href="/about">About</a>
-            
-            
-            
-            <a class="nav-item nav-item-github nav-item-icon" href="https://github.com/zicowarn" target="_blank" aria-label="GitHub">&nbsp;</a>
-            
-            
-            
-            <a class="nav-item nav-item-search nav-item-icon" href="/search" target="_blank" aria-label="Search">&nbsp;</a>
-            
-            
-        </div>
+
+  <body
+    data-color-scheme="auto"
+    data-uppercase-categories="true"
+    
+    data-rainbow-banner="true"
+    data-rainbow-banner-shown="auto"
+    data-rainbow-banner-month="6"
+    data-rainbow-banner-colors="#e50000,#ff8d00,#ffee00,#008121,#004cff,#760188"
+    
+    data-config-root="/"
+    
+    data-toc="true"
+    data-toc-max-depth="2"
+    
+    
+    
+    data-scroll-reveal-disappear="false"
+    data-scroll-reveal-query=".scroll-reveal, .post-list-item, .card, .content p img, .content .block-large img"
+    
+    data-nav-blur-gradient="true"
+  >
+    
+<script src="/js/body-top.js"></script>
+
+    <a href="#main-content" id="skip-to-content">跳至主要内容</a>
+    
+
+<div class="nav-mask">
+  <div order="1"></div>
+  <div order="2"></div>
+  <div order="3"></div>
+  <div order="4"></div>
+  <div order="5"></div>
+  <div order="6"></div>
+</div>
+
+<nav id="theme-nav">
+  <div class="inner">
+    <a class="title" href="/">Blog</a>
+    <div class="nav-arrow"></div>
+    <div class="nav-items">
+      <a class="nav-item nav-item-home" href="/" style="--index: 0">主页</a>
+
+      
+      <a class="nav-item" href="/archives" style="--index: 1">Archives</a>
+      
+      <a class="nav-item" href="/tags" style="--index: 2">Tags</a>
+      
+      <a class="nav-item" href="/categories" style="--index: 3">Categories</a>
+      
+      <a class="nav-item" href="/about" style="--index: 4">About</a>
+      
+      <a class="nav-item" target="_blank" rel="noopener" href="https://github.com/zicowarn" style="--index: 5">GitHub</a>
+      
+      <a class="nav-item is-icon" href="/search" style="--index: 6"><i class="bi bi-search"></i></a>
+      
     </div>
+  </div>
 </nav>
-        
+
+    <main id="main-content" data-pagefind-body>
+      
 <article class="post">
-    <div class="meta">
-        
-        <div class="categories text-uppercase">
-        
-            <a href="/categories/Python-相关-3-基本语法/">Python 相关 - 3. 基本语法</a>
-        
-        </div>
-        
-
-        
-        <div class="date" id="date">
-            <span>November</span>
-            <span>20,</span>
-            <span>2018</span>
-        </div>
-        
-
-        <h1 class="title">Python 运算符</h1>
+  
+  <div class="meta">
+    
+    <div class="categories text-uppercase">
+    
+      <a href="/categories/Python-相关-3-基本语法/">Python 相关 - 3. 基本语法</a>
+    
     </div>
+    
 
-    <div class="divider"></div>
+    
+    <time class="date" datetime="2018-11-20T15:11:08+08:00">
+      2018-11-20
+    </time>
+    
 
-    <div class="content">
-        <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
+    <h1 class="title" data-pagefind-meta="title">Python 运算符</h1>
+  </div>
+
+  <div class="content">
+    <p>作者: Jim Wang 公众号: <a class="main-button-link" href="#wechat" rel="noopener">巴博萨船长</a></p>
 <h2 id="Python运算符简介"><a href="#Python运算符简介" class="headerlink" title="Python运算符简介"></a>Python运算符简介</h2><p>程序语言运算符就是对数据操作的表示方法，即数据是如何处理的。理解运算符，在查看代码的时候就能理解代码中数据是如何加工处理的，掌握运算符就能过对数据按照自己所想操作加工处理。一般的教程或者学习资料会将操作符分为：算术运算符、连接运算符、关系运算符、赋值运算符和逻辑运算符。这也是普遍的共识。在本文中，我们稍作改变，我们分组分章节介绍，之所以这样，也是一些运算符好之间也有一定的关系。Python中有一种比较特殊的运算符，即身份运算，会单独介绍一下。位运算从本质上来讲也属于算术表达的一种，但是由于其比较特殊，常在硬件设计方面应用较多，日常的应用设计很少遇到，所以在文中也用单独的章节介绍。</p>
 <span id="more"></span>
 
@@ -336,127 +400,129 @@
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>编程语言的运算符，是学习编程语言的基础。熟练掌握才能进行其他方面知识的学习。目前网络中存在很多Python的教程，本人也无意重复别人做过的事情，只是将自己在学习这门编程语言的时的一些感悟，也对某一部分内容的个人见解与内容的延伸以文字的方式记录下来，这样在查看别的文章的时候，如果遇到一些基本知识的内容，就可以在不跳转别的教程网站的情况下，解决学习中遇到的问题，方便读者也方便自己。欢迎订阅我的个人微信公众号。</p>
 <hr>
 
-    </div>
+  </div>
 
-    
-    <div class="about">
-        <h1>关于本文</h1>
-        <div class="details">
-            <p>由 Barbossa Wang 撰写, 采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议.</p>
-        </div>
-        
-        <p class="tags">
-            
-            <i class="icon"></i>
-            <a href="/tags/Python/" class="tag">#Python</a><a href="/tags/实战经验/" class="tag">#实战经验</a><a href="/tags/运算符/" class="tag">#运算符</a>
-        </p>
-        
+  
+  <div class="about" data-pagefind-ignore>
+    <h1>关于本文</h1>
+    <div class="details">
+      <p>由 Barbossa Wang 撰写，采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc/4.0">CC BY-NC 4.0</a> 许可协议。</p>
     </div>
     
-
-    <div class="container post-prev-next">
-        
-        <a href="/posts/030301-if-elsif-else.html" class="next">
-            <div>
-                <div class="text">
-                    <p class="label">下一篇</p>
-                    <h3 class="title">Python 条件语句if-elif-else</h3>
-                </div>
-            </div>
-        </a>
-        
-        
-        <a href="/posts/030104-variable-dict-tips.html" class="prev">
-            <div>
-                <div class="text">
-                    <p class="label">上一篇</p>
-                    <h3 class="title">Python 变量之字典与实战经验</>
-                </div>
-            </div>
-        </a>
-        
-    </div>
-
+    <p class="tags">
+      <i class="bi bi-tags icon"></i>
+      
+      <a href="/tags/Python/" class="tag">#Python</a>
+      
+      <a href="/tags/%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/" class="tag">#实战经验</a>
+      
+      <a href="/tags/%E8%BF%90%E7%AE%97%E7%AC%A6/" class="tag">#运算符</a>
+      
+    </p>
     
-        
-        
     
+  </div>
+  
+
+  <div class="container post-prev-next" data-pagefind-ignore>
+    
+    <a href="/posts/030301-if-elsif-else.html" class="next">
+      <div class="text">
+        <p class="label">下一篇</p>
+        <h3 class="title">Python 条件语句if-elif-else</h3>
+      </div>
+    </a>
+    
+    
+    <a href="/posts/030104-variable-dict-tips.html" class="prev">
+      <div class="text">
+        <p class="label">上一篇</p>
+        <h3 class="title">Python 变量之字典与实战经验</h3>
+      </div>
+    </a>
+    
+  </div>
+
+  
+    
+    
+  
 </article>
 
-        <footer>
-    <div class="inner">
-        <div class="links">
-            
-            <div class="group">
-                <h2 class="title">Blog</h2>
-                
-                <a href="/" class="item">Blog</a>
-                
-                <a href="/archives" class="item">Archives</a>
-                
-                <a href="/tags" class="item">Tags</a>
-                
-                <a href="/categories" class="item">Categories</a>
-                
-                <a href="/search" class="item">Search</a>
-                
-                <a href="/about" class="item">About</a>
-                
-                <a href="/atom.xml" class="item">RSS</a>
-                
-            </div>
-            
-            <div class="group">
-                <h2 class="title">Me</h2>
-                
-                <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
-                
-                <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedIn</a>
-                
-                <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
-                
-            </div>
-            
-        </div>
-        <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动 </span>
+
+    </main>
+    <footer>
+  <div class="inner">
+    <div class="links">
+      
+      <div class="group">
+        <h2 class="title">Blog</h2>
         
+        <a href="/" class="item">Home</a>
         
-            <br>
-            <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
-                <label>
-                    <input type="radio" value="light">
-                    <span>Light</span>
-                </label>
-                <label>
-                    <input type="radio" value="dark">
-                    <span>Dark</span>
-                </label>
-                <label>
-                    <input type="radio" value="auto">
-                    <span>Auto</span>
-                </label>
-            </div>
+        <a href="/archives" class="item">Archives</a>
         
+        <a href="/tags" class="item">Tags</a>
+        
+        <a href="/categories" class="item">Categories</a>
+        
+        <a href="/search" class="item">Search</a>
+        
+        <a href="/atom.xml" class="item">RSS</a>
+        
+      </div>
+      
+      <div class="group">
+        <h2 class="title">Me</h2>
+        
+        <a target="_blank" rel="noopener" href="https://github.com/zicowarn" class="item">GitHub</a>
+        
+        <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/zhichao-wang-a16662109" class="item">linkedin</a>
+        
+        <a href="mailto:mr.will.com@outlook.com" class="item">Email</a>
+        
+      </div>
+      
     </div>
+    <span>&copy; 2025 Barbossa Wang<br>由 <a href="http://hexo.io/" target="_blank">Hexo</a> 驱动</span>
+    
+    
+      <br>
+      <div class="color-scheme-toggle" role="radiogroup" id="theme-color-scheme-toggle">
+        <label>
+          <input type="radio" value="light">
+          <span>浅色</span>
+        </label>
+        <label>
+          <input type="radio" value="dark">
+          <span>深色</span>
+        </label>
+        <label>
+          <input type="radio" value="auto">
+          <span>自动</span>
+        </label>
+      </div>
+    
+  </div>
 </footer>
 
 
-        
+    
 <script src="/js/main.js"></script>
 
-        
-        
-        
 
-        
-        <script src="https://unpkg.com/scrollreveal"></script>
-        <script>
-            window.addEventListener('load', () => {
-                ScrollReveal({ delay: 250, reset: true, easing: 'cubic-bezier(0, 0, 0, 1)' })
-                ScrollReveal().reveal('.post-list-item .cover-img img')
-                ScrollReveal().reveal('.post-list-item, .card, .content p img, .content .block-large img', { distance: '60px', origin: 'bottom', duration: 800 })
-            })
-        </script>
-        
-    </body>
+    
+
+    
+    
+<script src="/js/scroll-reveal.js"></script>
+
+    
+
+    
+
+    
+
+    
+  </body>
 </html>
