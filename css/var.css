@@ -35,22 +35,6 @@
     "Segoe UI Symbol";
 }
 
-:root {
-  --filter-blur: blur(32px);
-  --radius-tiny: 4px;
-  --radius-small: 8px;
-  --radius-medium: 12px;
-  --radius-large: 16px;
-  --radius-full: 999px;
-  --font-sans-serif: Inter, sans-serif, system-ui;
-  --font-sans-serif-feature-settings: "liga" 1, "calt" 1; /* fix for Chrome */
-}
-@supports (font-variation-settings: normal) {
-  :root {
-    --font-sans-serif: InterVariable, sans-serif, system-ui;
-  }
-}
-
 body[data-color-scheme=auto],
 body[data-color-scheme=light] {
   --color-background-underlying: #ffffff;
